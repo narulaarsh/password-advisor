@@ -40,9 +40,9 @@ Streamlit apps need a long-running Python server. Vercel runs short serverless f
    STUDY_ETHICS_REFERENCE = "<approval or exemption reference>"
    STUDY_AUTO_SLOT = "1"
    STUDY_DATABASE_URL = "postgresql://<user>:<password>@<host>:5432/<db>"
-   STUDY_ALLOCATION_CSV = """
-   <paste the full contents of data/private/allocation.csv here>
-   """
+   STUDY_ALLOCATION_SEED = "<long random secret; keep private>"
+   STUDY_ALLOCATION_SLOTS = "320"
+   # Alternatively: STUDY_ALLOCATION_CSV = """<contents of data/private/allocation.csv>"""
    ```
 
 5. **Dry run.** First run the app without `STUDY_MODE` (demo mode) and complete it once. Then switch to the secrets above and complete one real session yourself. Finally, empty the three tables (`study_events`, `study_questionnaire`, `study_slots`) so that the participants start from S001.
