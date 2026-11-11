@@ -33,3 +33,36 @@ def test_no_clear_if_user_copied_something_else():
     # Clipboard should NOT be cleared because current content is different from original secret
     assert pyperclip.paste() == "UserCopiedNewThing"
     pyperclip.copy("")  # cleanup
+
+
+
+from vault.clipboard import _mac_concealed_copy as real_concealed_copy  # captured before fixtures patch it
+
+
+def test_concealed_copy_passes_secret_on_stdin_not_argv(monkeypatch):
+    import vault.clipboard as vc
+    calls = []
+
+    class Result:
+        returncode, stdout = 0, b"ok\n"
+
+    monkeypatch.setattr(vc.sys, "platform", "darwin")
+    monkeypatch.setattr(vc.subprocess, "run", lambda args, **kw: calls.append((args, kw)) or Result())
+    assert real_concealed_copy("FictionalSecret#1") is True
+    args, kwargs = calls[0]
+    assert "FictionalSecret#1" not in " ".join(args)
+    assert kwargs["input"] == b"FictionalSecret#1"
+    assert "org.nspasteboard.ConcealedType" in args[-1]
+
+
+def test_concealed_copy_falls_back_off_macos_or_on_failure(monkeypatch):
+    import vault.clipboard as vc
+
+    class Failed:
+        returncode, stdout = 1, b""
+
+    monkeypatch.setattr(vc.sys, "platform", "linux")
+    assert real_concealed_copy("x") is False
+    monkeypatch.setattr(vc.sys, "platform", "darwin")
+    monkeypatch.setattr(vc.subprocess, "run", lambda *a, **k: Failed())
+    assert real_concealed_copy("x") is False

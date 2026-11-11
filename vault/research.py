@@ -83,3 +83,97 @@ def features(row):
 
 def fixed_score(vector, legacy=False):
     return calculate_risk_score(*vector, config=LEGACY if legacy else AuditConfig())
+
+
+# ── Review 2 Amendment 1: stronger rule-based attacker (S6) ────────────────────
+LEET_SUBSETS = ({}, {'a': '@'}, {'e': '3'}, {'a': '@', 'e': '3'},
+                {'a': '@', 'e': '3', 'i': '1', 'o': '0', 's': '$', 't': '7'})
+S6_SUFFIXES = ('', '!', '1', '123', '!1', '#', '@')
+
+
+def _leet(word, mapping):
+    return ''.join(mapping.get(c, mapping.get(c.lower(), c)) for c in word)
+
+
+def _cases(word):
+    return (word.lower(), word[:1].upper() + word[1:].lower(), word.upper())
+
+
+def guesses_s6(profile, previous, budget=1000):
+    """Deterministic rule-based attacker S6 (Review 2 Amendment 1). Never sees the target.
+
+    Stronger than S1-S5 but written by the same authors as the synthetic fixture, so
+    it is not an independent attacker. Tiers are tried in order; guesses are distinct.
+    """
+    if budget < 1:
+        raise ValueError('Invalid budget')
+    words = [str(profile.get(k, '')) for k in ('first_name', 'surname', 'city')]
+    words = [w for w in words if w]
+    year = str(profile.get('birth_year', '') or '')
+    years = [y for y in (year, year[-2:]) if y]
+    forms = []
+    for w in words:
+        for base in (w, w[:5], w[:4], w[:3], w[::-1]):
+            if len(base) >= 3 and base not in forms:
+                forms.append(base)
+    variants = []
+    for base in forms:
+        for cased in _cases(base):
+            for mapping in LEET_SUBSETS:
+                v = _leet(cased, mapping)
+                if v not in variants:
+                    variants.append(v)
+    join_parts = []
+    for base in forms[:]:
+        for cased in _cases(base)[:2]:
+            for mapping in LEET_SUBSETS[:4]:
+                v = _leet(cased, mapping)
+                if v not in join_parts:
+                    join_parts.append(v)
+    join_parts += years
+
+    def tiers():
+        for word in COMMON:  # general knowledge, as S1's first tier
+            for suffix in ('', '123!', '123', '1', '!'):
+                yield word + suffix
+        if previous:  # history
+            yield previous
+            for cased in (previous.lower(), previous.upper(), previous[:1].upper() + previous[1:]):
+                yield cased
+            for m in re.finditer(r'\d{4}', previous):
+                for delta in (1, -1, 2, -2, 3, -3):
+                    yield previous[:m.start()] + str(int(m.group()) + delta) + previous[m.end():]
+            stem = previous.rstrip('!#@$0123456789')
+            for suffix in S6_SUFFIXES + tuple(years) + tuple(y + '!' for y in years):
+                yield previous + suffix
+                yield stem + suffix
+        for v in variants:  # single token with short suffixes and the birth year
+            for suffix in S6_SUFFIXES + tuple(years) + tuple(y + '!' for y in years):
+                yield v + suffix
+        for a, b in itertools.permutations(join_parts, 2):  # two-token joins
+            if a in years and b in years:
+                continue
+            for sep in ('', '-', '_', '.'):
+                for suffix in ('', '!'):
+                    yield a + sep + b + suffix
+        for v in variants:  # numeric suffixes
+            for n in itertools.chain(range(100), range(1950, 2031)):
+                yield v + str(n)
+                yield v + str(n) + '!'
+        if previous:
+            for n in range(10000):
+                yield stem + str(n) + '!'
+
+    seen = set()
+    for item in tiers():
+        if item not in seen:
+            seen.add(item)
+            yield item
+            if len(seen) >= budget:
+                return
+
+
+def zxcvbn_meter_score(password, user_inputs=None):
+    """Published meter baseline (Wheeler 2016): higher = riskier (negative log10 guesses)."""
+    import zxcvbn
+    return -float(zxcvbn.zxcvbn(password, user_inputs=list(user_inputs or []))['guesses_log10'])

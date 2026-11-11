@@ -24,6 +24,8 @@ def timed(m, t, p, repeats=5):
 
 
 def main(out=ROOT / 'results/review2/argon2_calibration.json'):
+    out = Path(out)
+    out.parent.mkdir(parents=True, exist_ok=True)
     fixed = [timed(65536, 3, 4), timed(262144, 3, 4), timed(262144, 9, 4)]
     runs = [calibrate_argon2_parameters() for _ in range(5)]
     report = dict(platform=platform.platform(), python=sys.version.split()[0], fixed_parameters=fixed,
@@ -33,4 +35,7 @@ def main(out=ROOT / 'results/review2/argon2_calibration.json'):
 
 
 if __name__ == '__main__':
-    main()
+    import argparse
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--out', type=Path, default=ROOT / 'results/review2/argon2_calibration.json')
+    main(parser.parse_args().out)

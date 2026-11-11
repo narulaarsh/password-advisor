@@ -1,0 +1,172 @@
+{
+  "primary_outcome": "S5@1000",
+  "thresholds": {
+    "B8a_zxcvbn_meter": 0.15737449416127913,
+    "B8b_zxcvbn_user_inputs": 0.15737449416127913
+  },
+  "methods": {
+    "B8a_zxcvbn_meter": {
+      "n": 3674,
+      "tp": 334,
+      "fp": 0,
+      "tn": 1491,
+      "fn": 1849,
+      "precision": 1.0,
+      "recall": 0.15300045808520385,
+      "f1": 0.26539531187922133,
+      "fpr": 0.0,
+      "balanced_accuracy": 0.5765002290426019,
+      "pr_auc": 0.5874682271142598,
+      "roc_auc": 0.31368544140088656,
+      "threshold": 0.15737449416127913,
+      "validation_fpr": 0.0,
+      "brier_not_applicable": 0.5119051721270991,
+      "bootstrap_ci95": {
+        "recall": [
+          0.15174920490686053,
+          0.15427251732101616
+        ],
+        "fpr": [
+          0.0,
+          0.0
+        ],
+        "precision": [
+          1.0,
+          1.0
+        ],
+        "recall_minus_cav": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "B8b_zxcvbn_user_inputs": {
+      "n": 3674,
+      "tp": 668,
+      "fp": 0,
+      "tn": 1491,
+      "fn": 1515,
+      "precision": 1.0,
+      "recall": 0.3060009161704077,
+      "f1": 0.4686075061381972,
+      "fpr": 0.0,
+      "balanced_accuracy": 0.6530004580852038,
+      "pr_auc": 0.8179367180963872,
+      "roc_auc": 0.7221562694229202,
+      "threshold": 0.15737449416127913,
+      "validation_fpr": 0.0,
+      "brier_not_applicable": 0.4528721673875105,
+      "bootstrap_ci95": {
+        "recall": [
+          0.30349840981372106,
+          0.3085450346420323
+        ],
+        "fpr": [
+          0.0,
+          0.0
+        ],
+        "precision": [
+          1.0,
+          1.0
+        ],
+        "recall_minus_cav": [
+          0.15174920490686053,
+          0.15427251732101616
+        ]
+      }
+    },
+    "CAV_current": {
+      "n": 3674,
+      "tp": 334,
+      "fp": 0,
+      "tn": 1491,
+      "fn": 1849,
+      "precision": 1.0,
+      "recall": 0.15300045808520385,
+      "f1": 0.26539531187922133,
+      "fpr": 0.0,
+      "balanced_accuracy": 0.5765002290426019,
+      "pr_auc": 0.781172181776144,
+      "roc_auc": 0.7423789953033209,
+      "brier": 0.33334859866630373,
+      "threshold": 0.6,
+      "validation_fpr": 0.0,
+      "bootstrap_ci95": {
+        "recall": [
+          0.15174920490686053,
+          0.15427251732101616
+        ],
+        "fpr": [
+          0.0,
+          0.0
+        ],
+        "precision": [
+          1.0,
+          1.0
+        ],
+        "recall_minus_cav": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "B7_logistic": {
+      "n": 3674,
+      "tp": 1097,
+      "fp": 72,
+      "tn": 1419,
+      "fn": 1086,
+      "precision": 0.9384088964927289,
+      "recall": 0.5025194686211636,
+      "f1": 0.6545346062052507,
+      "fpr": 0.0482897384305835,
+      "balanced_accuracy": 0.7271148650952901,
+      "pr_auc": 0.9558886502456989,
+      "roc_auc": 0.9483036561098152,
+      "brier": 0.043547641989405673,
+      "threshold": 0.838648503374621,
+      "validation_fpr": 0.04882943143812709,
+      "bootstrap_ci95": {
+        "recall": [
+          0.4965484709013069,
+          0.5079665010223011
+        ],
+        "fpr": [
+          0.03867019448213478,
+          0.05791464646464647
+        ],
+        "precision": [
+          0.9264954051796157,
+          0.9505143114023933
+        ],
+        "recall_minus_cav": [
+          0.3434579516371466,
+          0.3553535458122329
+        ]
+      }
+    }
+  },
+  "recall_by_scenario_at_1000": {
+    "S1": {
+      "B8a_zxcvbn_meter": 1.0,
+      "B8b_zxcvbn_user_inputs": 1.0
+    },
+    "S2": {
+      "B8a_zxcvbn_meter": 0.0,
+      "B8b_zxcvbn_user_inputs": 0.0
+    },
+    "S3": {
+      "B8a_zxcvbn_meter": 0.0,
+      "B8b_zxcvbn_user_inputs": 0.5
+    },
+    "S4": {
+      "B8a_zxcvbn_meter": 0.0,
+      "B8b_zxcvbn_user_inputs": 0.18063818280151434
+    },
+    "S5": {
+      "B8a_zxcvbn_meter": 0.15300045808520385,
+      "B8b_zxcvbn_user_inputs": 0.3060009161704077
+    }
+  },
+  "zxcvbn_seconds_all_rows": 7.25
+}

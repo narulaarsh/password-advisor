@@ -1,0 +1,25 @@
+{
+  "platform": "macOS-27.3-arm64-arm-64bit-Mach-O",
+  "method": "vault.clipboard.copy_with_auto_clear on the real pasteboard (AppKit via osascript, marked concealed; pyperclip fallback)",
+  "timer_seconds": 2,
+  "results": {
+    "secret_cleared_after_timer": {
+      "present_immediately": true,
+      "cleared": true,
+      "clipboard_empty_after_clear": true,
+      "pasteboard_types_after_copy": [
+        "NSStringPboardType",
+        "org.nspasteboard.ConcealedType",
+        "public.utf8-plain-text"
+      ]
+    },
+    "user_replacement_preserved": true,
+    "concealed_type_marked": true
+  },
+  "user_clipboard_text_restored": true,
+  "limitations": [
+    "Clipboard history kept by the OS or third-party managers was not inspected",
+    "The concealed marker is a convention: only clipboard managers that honour it skip the item",
+    "One host and one run"
+  ]
+}

@@ -11,6 +11,8 @@ def offline_services(monkeypatch):
     clipboard={'text':''}
     monkeypatch.setattr(pyperclip,'copy',lambda value:clipboard.update(text=value))
     monkeypatch.setattr(pyperclip,'paste',lambda:clipboard['text'])
+    import vault.clipboard
+    monkeypatch.setattr(vault.clipboard,'_mac_concealed_copy',lambda text:False)  # never touch the real pasteboard
     clear_hibp_cache()
     known={'password':4000000,'123456':5000000,'password123':2000000,'password123!':1000000}
     original_get=requests.get

@@ -1,0 +1,104 @@
+{
+  "provenance": "tcpdump capture on the default interface; only HIBP-related findings retained; raw capture deleted",
+  "platform": "macOS-27.3-arm64-arm-64bit-Mach-O",
+  "interface_type": "default route interface",
+  "checks": 10,
+  "check_results": {
+    "breached": 0,
+    "not_found": 10,
+    "unknown": 0
+  },
+  "seconds": 6.8,
+  "packets_captured": 720,
+  "hibp_addresses_resolved": 2,
+  "dns_queries_for_hibp": {},
+  "other_dns_queries_seen_not_recorded": 0,
+  "tls_server_names": {
+    "api.pwnedpasswords.com": 10
+  },
+  "tls_connections": 10,
+  "connection_sizes": [
+    {
+      "up_bytes": 1844,
+      "down_bytes": 47684,
+      "up_packets": 30,
+      "down_packets": 48,
+      "duration_ms": 314.3
+    },
+    {
+      "up_bytes": 1844,
+      "down_bytes": 45865,
+      "up_packets": 24,
+      "down_packets": 44,
+      "duration_ms": 868.9
+    },
+    {
+      "up_bytes": 1844,
+      "down_bytes": 46949,
+      "up_packets": 23,
+      "down_packets": 45,
+      "duration_ms": 453.4
+    },
+    {
+      "up_bytes": 1844,
+      "down_bytes": 46661,
+      "up_packets": 27,
+      "down_packets": 45,
+      "duration_ms": 222.9
+    },
+    {
+      "up_bytes": 1844,
+      "down_bytes": 47464,
+      "up_packets": 26,
+      "down_packets": 48,
+      "duration_ms": 207.9
+    },
+    {
+      "up_bytes": 1844,
+      "down_bytes": 46932,
+      "up_packets": 16,
+      "down_packets": 47,
+      "duration_ms": 950.0
+    },
+    {
+      "up_bytes": 1844,
+      "down_bytes": 48079,
+      "up_packets": 27,
+      "down_packets": 45,
+      "duration_ms": 354.8
+    },
+    {
+      "up_bytes": 1844,
+      "down_bytes": 48567,
+      "up_packets": 31,
+      "down_packets": 50,
+      "duration_ms": 250.4
+    },
+    {
+      "up_bytes": 1844,
+      "down_bytes": 46672,
+      "up_packets": 26,
+      "down_packets": 44,
+      "duration_ms": 258.6
+    },
+    {
+      "up_bytes": 1844,
+      "down_bytes": 47427,
+      "up_packets": 28,
+      "down_packets": 46,
+      "duration_ms": 261.0
+    }
+  ],
+  "visible_in_plaintext": {
+    "range_path": false,
+    "any_prefix": false,
+    "any_suffix": false,
+    "any_password": false,
+    "user_agent": false
+  },
+  "limitations": [
+    "DNS answers may come from cache, so absent queries do not mean no lookup occurs in general",
+    "One network, one host, one run",
+    "Encrypted DNS configurations would hide the DNS name"
+  ]
+}

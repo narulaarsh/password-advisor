@@ -1,0 +1,268 @@
+{
+  "stream": {
+    "streams": 334,
+    "seconds": 2.42,
+    "distinct_min": 30341,
+    "distinct_median": 46485.0,
+    "distinct_max": 87115,
+    "exhausted_streams": 334
+  },
+  "budgets": {
+    "100": {
+      "recovered": 1002,
+      "total": 3674,
+      "rate": 0.2727272727272727,
+      "rate_ci95": [
+        0.2585692613792239,
+        0.2873600510453828
+      ],
+      "recall_at_frozen_thresholds": {
+        "B1_syntax": {
+          "recall": 0.0,
+          "fpr": 0.0
+        },
+        "B2_breach_fixture": {
+          "recall": 0.3333333333333333,
+          "fpr": 0.0
+        },
+        "B5_history": {
+          "recall": 0.6666666666666666,
+          "fpr": 0.0
+        },
+        "CAV_current": {
+          "recall": 0.3333333333333333,
+          "fpr": 0.0
+        },
+        "B7_logistic": {
+          "recall": 1.0,
+          "fpr": 0.0625
+        },
+        "B9_nonneg_logistic": {
+          "recall": 1.0,
+          "fpr": 0.0
+        },
+        "R1_gate_rule": {
+          "recall": 1.0,
+          "fpr": 0.7522455089820359
+        },
+        "R2_context_rule": {
+          "recall": 0.6676646706586826,
+          "fpr": 0.6343562874251497
+        },
+        "B8a_zxcvbn_meter": {
+          "recall": 0.3333333333333333,
+          "fpr": 0.0
+        },
+        "B8b_zxcvbn_user_inputs": {
+          "recall": 0.6666666666666666,
+          "fpr": 0.0
+        }
+      },
+      "recovered_by_category": {
+        "direct": 0,
+        "exact_reuse": 334,
+        "hard_negative": 0,
+        "history_derived": 334,
+        "leetspeak": 0,
+        "multi_attribute": 0,
+        "partial": 0,
+        "random": 0,
+        "reordered": 0,
+        "unrelated_weak": 334,
+        "unseen_transformation": 0
+      }
+    },
+    "1000": {
+      "recovered": 1029,
+      "total": 3674,
+      "rate": 0.2800762112139358,
+      "rate_ci95": [
+        0.2657919107368182,
+        0.2948199269147773
+      ],
+      "recall_at_frozen_thresholds": {
+        "B1_syntax": {
+          "recall": 0.0,
+          "fpr": 0.0
+        },
+        "B2_breach_fixture": {
+          "recall": 0.32458697764820216,
+          "fpr": 0.0
+        },
+        "B5_history": {
+          "recall": 0.6491739552964043,
+          "fpr": 0.0
+        },
+        "CAV_current": {
+          "recall": 0.32458697764820216,
+          "fpr": 0.0
+        },
+        "B7_logistic": {
+          "recall": 0.9766763848396501,
+          "fpr": 0.06200378071833648
+        },
+        "B9_nonneg_logistic": {
+          "recall": 0.9737609329446064,
+          "fpr": 0.0
+        },
+        "R1_gate_rule": {
+          "recall": 1.0,
+          "fpr": 0.7497164461247637
+        },
+        "R2_context_rule": {
+          "recall": 0.6763848396501457,
+          "fpr": 0.6306238185255199
+        },
+        "B8a_zxcvbn_meter": {
+          "recall": 0.32458697764820216,
+          "fpr": 0.0
+        },
+        "B8b_zxcvbn_user_inputs": {
+          "recall": 0.6491739552964043,
+          "fpr": 0.0
+        }
+      },
+      "recovered_by_category": {
+        "direct": 6,
+        "exact_reuse": 334,
+        "hard_negative": 0,
+        "history_derived": 334,
+        "leetspeak": 6,
+        "multi_attribute": 15,
+        "partial": 0,
+        "random": 0,
+        "reordered": 0,
+        "unrelated_weak": 334,
+        "unseen_transformation": 0
+      }
+    },
+    "10000": {
+      "recovered": 2473,
+      "total": 3674,
+      "rate": 0.6731083287969516,
+      "rate_ci95": [
+        0.6577665529234862,
+        0.6880884857566938
+      ],
+      "recall_at_frozen_thresholds": {
+        "B1_syntax": {
+          "recall": 0.0,
+          "fpr": 0.0
+        },
+        "B2_breach_fixture": {
+          "recall": 0.13505863323898099,
+          "fpr": 0.0
+        },
+        "B5_history": {
+          "recall": 0.27011726647796197,
+          "fpr": 0.0
+        },
+        "CAV_current": {
+          "recall": 0.13505863323898099,
+          "fpr": 0.0
+        },
+        "B7_logistic": {
+          "recall": 0.47068338050950265,
+          "fpr": 0.004163197335553705
+        },
+        "B9_nonneg_logistic": {
+          "recall": 0.405175899716943,
+          "fpr": 0.0
+        },
+        "R1_gate_rule": {
+          "recall": 1.0,
+          "fpr": 0.4487926727726894
+        },
+        "R2_context_rule": {
+          "recall": 0.8653457339264051,
+          "fpr": 0.186511240632806
+        },
+        "B8a_zxcvbn_meter": {
+          "recall": 0.13505863323898099,
+          "fpr": 0.0
+        },
+        "B8b_zxcvbn_user_inputs": {
+          "recall": 0.27011726647796197,
+          "fpr": 0.0
+        }
+      },
+      "recovered_by_category": {
+        "direct": 334,
+        "exact_reuse": 334,
+        "hard_negative": 0,
+        "history_derived": 334,
+        "leetspeak": 326,
+        "multi_attribute": 334,
+        "partial": 333,
+        "random": 0,
+        "reordered": 144,
+        "unrelated_weak": 334,
+        "unseen_transformation": 0
+      }
+    },
+    "100000": {
+      "recovered": 2664,
+      "total": 3674,
+      "rate": 0.7250952640174197,
+      "rate_ci95": [
+        0.7104291066305293,
+        0.7392912030998304
+      ],
+      "recall_at_frozen_thresholds": {
+        "B1_syntax": {
+          "recall": 0.0,
+          "fpr": 0.0
+        },
+        "B2_breach_fixture": {
+          "recall": 0.12537537537537538,
+          "fpr": 0.0
+        },
+        "B5_history": {
+          "recall": 0.25075075075075076,
+          "fpr": 0.0
+        },
+        "CAV_current": {
+          "recall": 0.12537537537537538,
+          "fpr": 0.0
+        },
+        "B7_logistic": {
+          "recall": 0.4369369369369369,
+          "fpr": 0.0049504950495049506
+        },
+        "B9_nonneg_logistic": {
+          "recall": 0.3761261261261261,
+          "fpr": 0.0
+        },
+        "R1_gate_rule": {
+          "recall": 1.0,
+          "fpr": 0.3445544554455445
+        },
+        "R2_context_rule": {
+          "recall": 0.875,
+          "fpr": 0.032673267326732675
+        },
+        "B8a_zxcvbn_meter": {
+          "recall": 0.12537537537537538,
+          "fpr": 0.0
+        },
+        "B8b_zxcvbn_user_inputs": {
+          "recall": 0.25075075075075076,
+          "fpr": 0.0
+        }
+      },
+      "recovered_by_category": {
+        "direct": 334,
+        "exact_reuse": 334,
+        "hard_negative": 0,
+        "history_derived": 334,
+        "leetspeak": 326,
+        "multi_attribute": 334,
+        "partial": 334,
+        "random": 0,
+        "reordered": 334,
+        "unrelated_weak": 334,
+        "unseen_transformation": 0
+      }
+    }
+  }
+}

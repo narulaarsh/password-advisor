@@ -1,0 +1,392 @@
+{
+  "rows": [
+    {
+      "family": "a_diacritic_profile_ascii_password",
+      "profile_name": "José",
+      "password": "Jose##",
+      "coverage": 0.5,
+      "matched_fields": [
+        "name"
+      ],
+      "flagged_0_30": true,
+      "flagged_validation": true
+    },
+    {
+      "family": "a_diacritic_profile_ascii_password",
+      "profile_name": "Zoë",
+      "password": "Zoe##",
+      "coverage": 0.0,
+      "matched_fields": [],
+      "flagged_0_30": false,
+      "flagged_validation": false
+    },
+    {
+      "family": "a_diacritic_profile_ascii_password",
+      "profile_name": "François",
+      "password": "Francois##",
+      "coverage": 0.4,
+      "matched_fields": [
+        "name"
+      ],
+      "flagged_0_30": true,
+      "flagged_validation": true
+    },
+    {
+      "family": "a_diacritic_profile_ascii_password",
+      "profile_name": "Ángela",
+      "password": "Angela##",
+      "coverage": 0.0,
+      "matched_fields": [],
+      "flagged_0_30": false,
+      "flagged_validation": false
+    },
+    {
+      "family": "a_diacritic_profile_ascii_password",
+      "profile_name": "Müller",
+      "password": "Muller##",
+      "coverage": 0.0,
+      "matched_fields": [],
+      "flagged_0_30": false,
+      "flagged_validation": false
+    },
+    {
+      "family": "a_diacritic_profile_ascii_password",
+      "profile_name": "Müller",
+      "password": "Mueller##",
+      "coverage": 0.0,
+      "matched_fields": [],
+      "flagged_0_30": false,
+      "flagged_validation": false
+    },
+    {
+      "family": "a_diacritic_profile_ascii_password",
+      "profile_name": "Søren",
+      "password": "Soren##",
+      "coverage": 0.0,
+      "matched_fields": [],
+      "flagged_0_30": false,
+      "flagged_validation": false
+    },
+    {
+      "family": "a_diacritic_profile_ascii_password",
+      "profile_name": "Łukasz",
+      "password": "Lukasz##",
+      "coverage": 0.0,
+      "matched_fields": [],
+      "flagged_0_30": false,
+      "flagged_validation": false
+    },
+    {
+      "family": "a_diacritic_profile_ascii_password",
+      "profile_name": "Çelik",
+      "password": "Celik##",
+      "coverage": 0.0,
+      "matched_fields": [],
+      "flagged_0_30": false,
+      "flagged_validation": false
+    },
+    {
+      "family": "b_alternative_romanization",
+      "profile_name": "Mohammed",
+      "password": "Muhammad##",
+      "coverage": 0.0,
+      "matched_fields": [],
+      "flagged_0_30": false,
+      "flagged_validation": false
+    },
+    {
+      "family": "b_alternative_romanization",
+      "profile_name": "Aleksandr",
+      "password": "Alexander##",
+      "coverage": 0.273,
+      "matched_fields": [
+        "name"
+      ],
+      "flagged_0_30": false,
+      "flagged_validation": true
+    },
+    {
+      "family": "b_alternative_romanization",
+      "profile_name": "Yusuf",
+      "password": "Yousef##",
+      "coverage": 0.0,
+      "matched_fields": [],
+      "flagged_0_30": false,
+      "flagged_validation": false
+    },
+    {
+      "family": "b_alternative_romanization",
+      "profile_name": "Sergei",
+      "password": "Sergey##",
+      "coverage": 0.5,
+      "matched_fields": [
+        "name"
+      ],
+      "flagged_0_30": true,
+      "flagged_validation": true
+    },
+    {
+      "family": "b_alternative_romanization",
+      "profile_name": "Lakshmi",
+      "password": "Laxmi##",
+      "coverage": 0.0,
+      "matched_fields": [],
+      "flagged_0_30": false,
+      "flagged_validation": false
+    },
+    {
+      "family": "b_alternative_romanization",
+      "profile_name": "Chaudhary",
+      "password": "Choudhury##",
+      "coverage": 0.0,
+      "matched_fields": [],
+      "flagged_0_30": false,
+      "flagged_validation": false
+    },
+    {
+      "family": "b_alternative_romanization",
+      "profile_name": "Zhang",
+      "password": "Chang##",
+      "coverage": 0.0,
+      "matched_fields": [],
+      "flagged_0_30": false,
+      "flagged_validation": false
+    },
+    {
+      "family": "c_non_latin_profile_latin_password",
+      "profile_name": "प्रिया",
+      "password": "Priya##",
+      "coverage": 0.0,
+      "matched_fields": [],
+      "flagged_0_30": false,
+      "flagged_validation": false
+    },
+    {
+      "family": "c_non_latin_profile_latin_password",
+      "profile_name": "राहुल",
+      "password": "Rahul##",
+      "coverage": 0.0,
+      "matched_fields": [],
+      "flagged_0_30": false,
+      "flagged_validation": false
+    },
+    {
+      "family": "c_non_latin_profile_latin_password",
+      "profile_name": "Анна",
+      "password": "Anna##",
+      "coverage": 0.0,
+      "matched_fields": [],
+      "flagged_0_30": false,
+      "flagged_validation": false
+    },
+    {
+      "family": "c_non_latin_profile_latin_password",
+      "profile_name": "Дмитрий",
+      "password": "Dmitry##",
+      "coverage": 0.0,
+      "matched_fields": [],
+      "flagged_0_30": false,
+      "flagged_validation": false
+    },
+    {
+      "family": "c_non_latin_profile_latin_password",
+      "profile_name": "Ελένη",
+      "password": "Eleni##",
+      "coverage": 0.0,
+      "matched_fields": [],
+      "flagged_0_30": false,
+      "flagged_validation": false
+    },
+    {
+      "family": "c_non_latin_profile_latin_password",
+      "profile_name": "محمد",
+      "password": "Mohammed##",
+      "coverage": 0.0,
+      "matched_fields": [],
+      "flagged_0_30": false,
+      "flagged_validation": false
+    },
+    {
+      "family": "d_same_script",
+      "profile_name": "प्रिया",
+      "password": "प्रिया##",
+      "coverage": 0.75,
+      "matched_fields": [
+        "name"
+      ],
+      "flagged_0_30": true,
+      "flagged_validation": true
+    },
+    {
+      "family": "d_same_script",
+      "profile_name": "राहुल",
+      "password": "राहुल##",
+      "coverage": 0.714,
+      "matched_fields": [
+        "name"
+      ],
+      "flagged_0_30": true,
+      "flagged_validation": true
+    },
+    {
+      "family": "d_same_script",
+      "profile_name": "Анна",
+      "password": "Анна##",
+      "coverage": 0.667,
+      "matched_fields": [
+        "name"
+      ],
+      "flagged_0_30": true,
+      "flagged_validation": true
+    },
+    {
+      "family": "d_same_script",
+      "profile_name": "Дмитрий",
+      "password": "Дмитрий##",
+      "coverage": 0.778,
+      "matched_fields": [
+        "name"
+      ],
+      "flagged_0_30": true,
+      "flagged_validation": true
+    },
+    {
+      "family": "d_same_script",
+      "profile_name": "Ελένη",
+      "password": "Ελένη##",
+      "coverage": 0.714,
+      "matched_fields": [
+        "name"
+      ],
+      "flagged_0_30": true,
+      "flagged_validation": true
+    },
+    {
+      "family": "d_same_script",
+      "profile_name": "محمد",
+      "password": "محمد##",
+      "coverage": 0.667,
+      "matched_fields": [
+        "name"
+      ],
+      "flagged_0_30": true,
+      "flagged_validation": true
+    },
+    {
+      "family": "e_punctuation_removed",
+      "profile_name": "O'Brien",
+      "password": "OBrien##",
+      "coverage": 0.0,
+      "matched_fields": [],
+      "flagged_0_30": false,
+      "flagged_validation": false
+    },
+    {
+      "family": "e_punctuation_removed",
+      "profile_name": "D'Souza",
+      "password": "DSouza##",
+      "coverage": 0.0,
+      "matched_fields": [],
+      "flagged_0_30": false,
+      "flagged_validation": false
+    },
+    {
+      "family": "e_punctuation_removed",
+      "profile_name": "Jean-Luc",
+      "password": "JeanLuc##",
+      "coverage": 0.778,
+      "matched_fields": [
+        "name"
+      ],
+      "flagged_0_30": true,
+      "flagged_validation": true
+    },
+    {
+      "family": "e_punctuation_removed",
+      "profile_name": "Anne-Marie",
+      "password": "AnneMarie##",
+      "coverage": 0.818,
+      "matched_fields": [
+        "name"
+      ],
+      "flagged_0_30": true,
+      "flagged_validation": true
+    },
+    {
+      "family": "control_same_ascii_name",
+      "profile_name": "Priya",
+      "password": "Priya##",
+      "coverage": 0.714,
+      "matched_fields": [
+        "name"
+      ],
+      "flagged_0_30": true,
+      "flagged_validation": true
+    },
+    {
+      "family": "control_same_ascii_name",
+      "profile_name": "Anna",
+      "password": "Anna##",
+      "coverage": 0.667,
+      "matched_fields": [
+        "name"
+      ],
+      "flagged_0_30": true,
+      "flagged_validation": true
+    },
+    {
+      "family": "control_same_ascii_name",
+      "profile_name": "Jose",
+      "password": "Jose##",
+      "coverage": 0.667,
+      "matched_fields": [
+        "name"
+      ],
+      "flagged_0_30": true,
+      "flagged_validation": true
+    },
+    {
+      "family": "control_same_ascii_name",
+      "profile_name": "Rahul",
+      "password": "Rahul##",
+      "coverage": 0.714,
+      "matched_fields": [
+        "name"
+      ],
+      "flagged_0_30": true,
+      "flagged_validation": true
+    }
+  ],
+  "summary": {
+    "a_diacritic_profile_ascii_password": {
+      "n": 9,
+      "flagged_0_30": 2,
+      "flagged_validation": 2
+    },
+    "b_alternative_romanization": {
+      "n": 7,
+      "flagged_0_30": 1,
+      "flagged_validation": 2
+    },
+    "c_non_latin_profile_latin_password": {
+      "n": 6,
+      "flagged_0_30": 0,
+      "flagged_validation": 0
+    },
+    "d_same_script": {
+      "n": 6,
+      "flagged_0_30": 6,
+      "flagged_validation": 6
+    },
+    "e_punctuation_removed": {
+      "n": 4,
+      "flagged_0_30": 2,
+      "flagged_validation": 2
+    },
+    "control_same_ascii_name": {
+      "n": 4,
+      "flagged_0_30": 4,
+      "flagged_validation": 4
+    }
+  }
+}

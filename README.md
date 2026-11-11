@@ -21,7 +21,8 @@ Review 2 (current):
 - [Review 2 change list and item-by-item status](docs/REVIEW2_CHANGES.md)
 - [Frozen Review 2 analysis protocol](docs/REVIEW2_PROTOCOL.md) (its SHA-256 is recorded in `results/review2/manifest.json`)
 - [Executed Review 2 results](results/review2/SUMMARY.md) and paper tables in `results/review2/tables/`
-- Paper source and PDF: `docs/paper/`
+- Paper source and PDF: `docs/paper/` (IEEE) and `docs/paper/jisa/` (Elsevier JISA)
+- Kits still needing people: [independent benchmark](docs/INDEPENDENT_BENCHMARK_KIT.md), [ethics and participant documents](docs/ethics/), second machine (`scripts/run_second_machine.sh`)
 
 Review 1:
 
@@ -40,6 +41,9 @@ Review 1:
 .venv/bin/python scripts/review2_performance.py                              # E6 (about 6 min)
 .venv/bin/python scripts/study_power.py --sims 5000                          # E4 sample-size planning
 .venv/bin/python scripts/review2_network_capture.py                          # E5, makes live HIBP requests
+.venv/bin/python scripts/review2_amendment1.py                               # Amendment 1 (meters, S6, multilingual)
+.venv/bin/python scripts/review2_packet_capture.py                           # E5, needs access_bpf group or root
+.venv/bin/python scripts/review2_os_clipboard_check.py                       # E5, uses your real clipboard (restores text)
 ```
 
 `results/review1/` was produced by the Review 1 scripts at commit `3054432`. Re-running `scripts/review_performance.py` on newer code gives different timings, because Review 2 changed the derivative search; the E1-E3 outcomes are unchanged (the Review 2 runner checks this).

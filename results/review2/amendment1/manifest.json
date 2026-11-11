@@ -1,0 +1,15 @@
+{
+  "amendment": "docs/REVIEW2_PROTOCOL_AMENDMENT1.md",
+  "amendment_sha256": "41da03603ad3ad0f6d5952cebe4ef1e1d8deb786105feee407e30a190f74dbd7",
+  "primary_thresholds_match_review2": true,
+  "source_tree_sha256": "ef9d259ce535c2c4a646615f8716976bc21ac9494a031b3554946caf01e4be7f",
+  "git": {
+    "base_commit": "786bd9459e059ad8b9bb38f06c477ebf647ee1fb",
+    "branch": "review1-revision",
+    "dirty_files": 25
+  },
+  "python": "3.14.7",
+  "platform": "macOS-27.3-arm64-arm-64bit-Mach-O",
+  "runtime_seconds": 15.2,
+  "command": ".venv/bin/python scripts/review2_amendment1.py"
+}

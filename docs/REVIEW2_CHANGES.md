@@ -59,3 +59,19 @@ Behavioural efficacy is not claimed, and the study is presented as an instrument
 | Second machine for E6 | Run `scripts/review2_performance.py` on another computer. |
 | Packet capture, OS clipboard history | These need administrator access and changes to the user's real clipboard, which were deliberately not done. |
 | Journal choice and formatting | The paper keeps the IEEE conference template; switch templates when a venue is chosen. |
+
+## Follow-up: closing the partly and not-addressed items (11 November 2026)
+
+| Item | What was done | Evidence |
+|---|---|---|
+| B8 published baseline | No targeted-guessing model can be reproduced faithfully (no code, models or data). Under a dated Amendment 1 (`REVIEW2_PROTOCOL_AMENDMENT1.md`), the closest published methods were added: zxcvbn's estimate (B8a) and zxcvbn with its user-input dictionary set to the declared context (B8b). B8b reached recall 0.306 against CAV's 0.153 at the same operating rule. | `results/review2/amendment1/baselines.json` |
+| Stronger attacker | S6, a rule-based attacker, was added and run at 100 to 100,000 guesses: 28.0% recovery at 1,000 and 72.5% at 100,000. The context rule's FPR falls from 0.345 to 0.033 against it. It is author-written and disclosed as not independent. | `results/review2/amendment1/s6.json` |
+| E1 multilingual and transliterated attributes | An analysis of accented, romanized, non-Latin, same-script and punctuated names, without changing the detector. It shows the expected gaps: no Unicode folding or transliteration. | `results/review2/amendment1/multilingual.json` |
+| E5 packet capture | A tcpdump capture (access_bpf group, no root). The observer sees the server name and constant 1,844-byte requests; no path, prefix or password appears in plaintext. The raw capture is deleted and local addresses are not stored. | `scripts/review2_packet_capture.py`, `results/review2/packet_capture.json` |
+| E5 OS clipboard | A real macOS pasteboard check, run with the user's consent and their text restored. It showed copies were not marked concealed, so `vault/clipboard.py` now adds `org.nspasteboard.ConcealedType`, passing the secret on stdin. A re-check confirmed the marker. | `scripts/review2_os_clipboard_check.py`, `results/review2/os_clipboard_check.json`, `tests/test_clipboard.py` |
+| E6 second machine | A one-command kit (`scripts/run_second_machine.sh`) and a comparison script (`scripts/compare_hosts.py`). **Still needs another computer.** | |
+| P0 independent benchmark | Authoring and annotation kit, a Cohen's kappa and adjudication tool, and an `--input` path in the Review 2 runner, tested end to end. **Still needs independent authors and annotators.** | `docs/INDEPENDENT_BENCHMARK_KIT.md`, `scripts/benchmark_agreement.py` |
+| P0 human study (E4) | Ethics submission drafts: protocol, data management, recruitment, information sheet, consent and debrief. **Still needs ethics approval and participants.** | `docs/ethics/` |
+| Journal formatting | An Elsevier (JISA) version is built from the same source alongside the IEEE version, with author declarations left for the authors to complete. | `docs/paper/jisa/` |
+
+Tests: 152 pass.

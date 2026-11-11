@@ -191,10 +191,12 @@ def write_csv(path, rows):
 
 
 # ── main analysis ──────────────────────────────────────────────────────────────
-def run(out, profiles=1002, seed=42, e3_budgets=(100, 1000, 10000, 100000), reps=1000):
+def run(out, profiles=1002, seed=42, e3_budgets=(100, 1000, 10000, 100000), reps=1000, input_path=None):
     started = time.time()
     out.mkdir(parents=True, exist_ok=True)
-    rows = synthetic_rows(profiles, seed)
+    # An independently authored benchmark (JSONL, docs/INDEPENDENT_BENCHMARK_KIT.md) replaces the fixture.
+    rows = ([json.loads(line) for line in Path(input_path).read_text().splitlines() if line.strip()]
+            if input_path else synthetic_rows(profiles, seed))
     validate_rows(rows)
     x = np.asarray([features(r) for r in rows])
     part = {s: np.array([i for i, r in enumerate(rows) if r['split'] == s]) for s in ('train', 'validation', 'test')}
@@ -258,7 +260,7 @@ def run(out, profiles=1002, seed=42, e3_budgets=(100, 1000, 10000, 100000), reps
             a, b = ranks_all[(i, s)], ranks_te[(i, s)]
             assert a == (b if b is not None and b <= PRIMARY_BUDGET else None), (i, s, a, b)
     r1_path = ROOT / 'results/review1/attack_outcomes.json'
-    if r1_path.exists() and profiles == 1002 and seed == 42:
+    if r1_path.exists() and profiles == 1002 and seed == 42 and not input_path:
         r1 = {(o['id'], o['scenario']): o['rank'] for o in json.loads(r1_path.read_text())}
         mismatch = sum(r1[(rows[i]['id'], s)] != ranks_all[(i, s)] for i in range(len(rows)) for s in SCENARIOS)
         report['review1_rank_mismatches'] = mismatch
@@ -410,14 +412,16 @@ def run(out, profiles=1002, seed=42, e3_budgets=(100, 1000, 10000, 100000), reps
     deps = {p: importlib.metadata.version(p) for p in ('numpy', 'scipy', 'scikit-learn', 'zxcvbn-python', 'rapidfuzz')}
     manifest = dict(protocol='docs/REVIEW2_PROTOCOL.md', protocol_sha256=report['protocol_sha256'],
                     dataset_sha256=hashlib.sha256(json.dumps(rows, sort_keys=True).encode()).hexdigest(),
-                    samples=len(rows), profiles=profiles, seed=seed, primary_budget=PRIMARY_BUDGET,
+                    samples=len(rows), profiles=len({r['profile_id'] for r in rows}), seed=seed, primary_budget=PRIMARY_BUDGET,
                     e3_budgets=list(e3_budgets), bootstrap_replicates=reps,
                     review1_rank_mismatches=report.get('review1_rank_mismatches'),
                     source_tree_sha256=source_digest(), git=git_state(), python=sys.version.split()[0],
                     platform=platform.platform(), machine=platform.machine(), dependencies=deps,
                     runtime_seconds=round(time.time() - started, 1),
                     command=' '.join(['.venv/bin/python', 'scripts/review2_experiments.py', *sys.argv[1:]]),
-                    dataset_type='synthetic_smoke_not_independent')
+                    dataset_type=('supplied_benchmark_provenance_as_declared' if input_path
+                                  else 'synthetic_smoke_not_independent'),
+                    input=str(input_path) if input_path else None)
     (out / 'manifest.json').write_text(json.dumps(manifest, indent=2))
     return manifest
 
@@ -429,8 +433,9 @@ def main():
     parser.add_argument('--seed', type=int, default=42)
     parser.add_argument('--budgets', nargs='+', type=int, default=[100, 1000, 10000, 100000])
     parser.add_argument('--bootstrap', type=int, default=1000)
+    parser.add_argument('--input', type=Path, help='Independently authored JSONL benchmark (see docs/INDEPENDENT_BENCHMARK_KIT.md)')
     args = parser.parse_args()
-    print(json.dumps(run(args.out, args.profiles, args.seed, tuple(args.budgets), args.bootstrap), indent=2))
+    print(json.dumps(run(args.out, args.profiles, args.seed, tuple(args.budgets), args.bootstrap, args.input), indent=2))
 
 
 if __name__ == '__main__':

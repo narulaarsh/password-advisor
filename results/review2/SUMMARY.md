@@ -4,7 +4,7 @@ Run on 11 November 2026 on an Apple M5 (16 GB RAM, macOS 27.3, Python 3.14.7). A
 
 ## Verification
 
-- **Tests.** 142 tests passed, with one zxcvbn-python deprecation warning (`test_results.txt`). This is 102 earlier tests plus 40 new ones covering the indexed derivative search, the backup manifest and rollback boundary, Argon2id calibration, and the study schedule, SUS and page flow.
+- **Tests.** 152 tests passed, with one zxcvbn-python deprecation warning (`test_results.txt`). This is 102 earlier tests plus 50 added during Review 2.
 - **Reproduction check.** The runner reproduced all 55,110 Review 1 attack outcomes exactly (0 mismatches).
 
 ## E1: personal-context detection (held out, n = 3,674)
@@ -64,3 +64,28 @@ Recovery does not grow beyond 1,000 guesses. S1–S4 streams are exhausted at 80
 - **Derivative search.** The indexed search gives identical results to the quadratic search and takes 928 ms instead of 4,361 ms at 5,000 entries (38 ms instead of 177 ms at 1,000).
 - **Full audit.** Median 353 ms at 1,000 entries and 2.56 s at 5,000. Peak RSS is at most 113 MiB, including a 63–65 MiB interpreter baseline.
 - **Save gate.** It stays under 7 ms locally, takes about 1.0 s at 1 s breach-check latency, and takes about 20 s when the breach service hangs (two 10 s attempts).
+
+## Amendment 1 (secondary, `docs/REVIEW2_PROTOCOL_AMENDMENT1.md`)
+
+| Method (primary outcome S5@1000) | Recall (95% CI) | FPR | PR-AUC |
+|---|---:|---:|---:|
+| B8a zxcvbn meter | 0.153 (0.152–0.154) | 0.000 | 0.587 |
+| B8b zxcvbn with user inputs | 0.306 (0.303–0.309) | 0.000 | 0.818 |
+| CAV (current) | 0.153 | 0.000 | 0.781 |
+
+- **S6 recovery.** 27.3% (100 guesses), 28.0% (1,000), 67.3% (10,000) and 72.5% (100,000). Streams ended after 30,341–87,115 distinct guesses.
+- **Recall and FPR at 100,000 guesses.** CAV 0.125 at 0.000, B8b 0.251 at 0.000, B9 0.376 at 0.000, R2 0.875 at 0.033, R1 1.000 at 0.345.
+- **Multilingual names flagged at 0.30.**
+
+  | Group | Flagged |
+  |---|---:|
+  | Accented / accent-free | 2/9 |
+  | Alternative romanization | 1/7 |
+  | Non-Latin profile / Latin password | 0/6 |
+  | Same non-Latin script | 6/6 |
+  | Apostrophe removed | 0/2 |
+  | Hyphen removed | 2/2 |
+  | ASCII control | 4/4 |
+
+- **Packet capture.** See `packet_capture.json`.
+- **OS clipboard check.** See `os_clipboard_check.json`.
