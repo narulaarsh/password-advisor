@@ -11,7 +11,7 @@ System Usability Scale questionnaire and a personal results summary follow the t
 import os
 import time
 import streamlit as st
-from vault.study import (assignment, claim_next_slot, log_participant, log_questionnaire, log_response,
+from vault.study import (assignment, claim_next_slot, log_participant, log_questionnaire, log_report, log_response,
                          log_study_event, schedule_from_environment, SUS_ITEMS, TASKS)
 from vault.generator import generate_passphrase
 from modules.semantic import calculate_thematic_coverage
@@ -48,8 +48,24 @@ CONSENT = ('I have read what is stored, I agree to take part, and I will only ma
 ISSUE_CODES = ('breach', 'personal_info', 'weak_structure', 'reuse', 'similar_to_earlier')
 
 
+FIELD_LABELS = {'name': 'your first name', 'surname': 'your surname', 'hometown': 'your city',
+                'birth year': 'your birth year'}
+
+
+def personal_message(password, profile, fields):
+    parts = [FIELD_LABELS[f] for f in ('name', 'surname', 'hometown', 'birth year') if f in fields]
+    if not parts:
+        return 'It contains your personal details, which people who know you can guess.'
+    listed = parts[0] if len(parts) == 1 else ', '.join(parts[:-1]) + ' and ' + parts[-1]
+    values = [str(profile.get(k, '')).lower() for k in ('first_name', 'surname', 'city') if profile.get(k)]
+    disguised = not any(v and v in password.lower() for v in values) and any(f in fields for f in ('name', 'surname', 'hometown'))
+    how = (' (written with symbols or only partly, for example @ for a or 0 for o; guessing tools try these swaps '
+           'automatically)') if disguised else ''
+    return f'It contains {listed}{how}. People who know you, or can find you online, can guess it.'
+
+
 def assess(password, condition, profile, earlier):
-    """Every issue detected, and the reasons shown (G1 is shown structural feedback only)."""
+    """Every issue detected with a detailed reason, and the reasons shown (G1 sees structural feedback only)."""
     try:
         status, hits = check_hibp_status(password)
     except Exception:
@@ -57,21 +73,23 @@ def assess(password, condition, profile, earlier):
     row = dict(password=password, profile=profile, other_passwords=earlier,
                breach_count=hits if status == BreachStatus.BREACHED else 0)
     f = features(row)
+    strength = evaluate_syntactic_strength(password)
+    matched = calculate_thematic_coverage(password, profile)['matched_fields']
+    hint = f" {strength['warning']}" if strength.get('warning') else ''
     messages = {
-        'weak_structure': 'It is easy for computers to guess (its structure is weak).',
-        'breach': f'It appears in public lists of leaked passwords ({max(hits, 0):,} times).',
-        'personal_info': 'It contains your personal details (name, city or birth year), which people who know you can guess.',
-        'reuse': 'It is the same as a password you made for an earlier account.',
-        'similar_to_earlier': 'It is only a small change from a password you made for an earlier account.',
+        'weak_structure': f"It is easy for computers to guess (strength {strength['score']}/4).{hint}",
+        'breach': f'It has appeared {max(hits, 0):,} times in public lists of leaked passwords, so attackers try it early.',
+        'personal_info': personal_message(password, profile, matched),
+        'reuse': 'It is identical to the password you made for an earlier account; one leak would expose both.',
+        'similar_to_earlier': 'It is only a small change from a password you made for an earlier account; attackers try such variations.',
     }
     detected = [code for code, on in (('breach', f[0] > 0), ('personal_info', f[1] > 0), ('weak_structure', f[2] > 0),
                                       ('reuse', f[3] > 0), ('similar_to_earlier', f[4] > 0 and not f[3] > 0)) if on]
-    shown = [c for c in ('weak_structure', 'breach', 'personal_info', 'reuse', 'similar_to_earlier')
-             if c in detected and (condition != 'G1' or c == 'weak_structure')]
+    order = ('breach', 'personal_info', 'weak_structure', 'reuse', 'similar_to_earlier')
+    shown = [c for c in order if c in detected and (condition != 'G1' or c == 'weak_structure')]
     return dict(detected=detected, shown=shown, reasons=[messages[c] for c in shown],
-                matched_fields=calculate_thematic_coverage(password, profile)['matched_fields'],
-                zxcvbn_score=evaluate_syntactic_strength(password)['score'],
-                breach_count=hits if status != BreachStatus.UNKNOWN else 'unknown')
+                all_reasons=[messages[c] for c in order if c in detected], matched_fields=matched,
+                zxcvbn_score=strength['score'], breach_count=hits if status != BreachStatus.UNKNOWN else 'unknown')
 
 
 def outcome(password, profile, earlier):
@@ -157,11 +175,34 @@ def render():
     if trial >= len(TASKS):
         if st.session_state.get('study_sus_done'):
             st.success('All tasks and the questionnaire are complete. Thank you!')
-            st.subheader('Your results')
-            for r in results:
-                verdict = ('**could be cracked quickly** by a guessing program that knows your details and earlier passwords'
-                           if r['vulnerable'] else 'was **not cracked** by our simple guessing program (that does not prove it is safe)')
-                st.write(f"- {r['label'].capitalize()}: your final password {verdict}.")
+            st.subheader('Your password report')
+            st.caption('Every participant gets this full report at the end, whichever version of the tool they saw.')
+            if 'study_report' not in st.session_state:
+                report = []
+                for k, r in enumerate(results):
+                    check = r['check']
+                    risky = bool(check['all_reasons']) or r['vulnerable']
+                    suggestion = generate_passphrase(num_words=4).password if risky else ''
+                    report.append(dict(r, suggestion=suggestion))
+                    log_report(pid, condition, r['task_id'], r['label'], r['password'], r['vulnerable'],
+                               check['detected'], check['all_reasons'], check['matched_fields'],
+                               check['zxcvbn_score'], check['breach_count'], suggestion,
+                               source=source, protocol_id=PROTOCOL)
+                st.session_state.study_report = report
+            for k, r in enumerate(st.session_state.study_report):
+                with st.container(border=True):
+                    st.markdown(f"**Account {k + 1}: {r['label']}**")
+                    st.write('Would a guessing program that knows your details and earlier passwords crack it within '
+                             '1,000 guesses? ' + ('**Yes.**' if r['vulnerable'] else '**No** (that does not prove it is safe).'))
+                    if r['check']['all_reasons']:
+                        st.write('Problems found:')
+                        for reason in r['check']['all_reasons']:
+                            st.write(f'- {reason}')
+                    else:
+                        st.write('No problems were found with this password.')
+                    if r['suggestion']:
+                        st.write('A safer password you could use instead:')
+                        st.code(r['suggestion'])
             st.write(DEBRIEF)
             return
         st.progress(1.0, text='Last step: 10 quick questions')
@@ -210,7 +251,10 @@ def render():
                         (time.monotonic() - st.session_state.study_started) * 1000,
                         vulnerable=vulnerable, source=source, task_label=label,
                         task_position=trial + 1, task_order=order_text, protocol_id=PROTOCOL)
-        results.append(dict(label=label, password=password, vulnerable=vulnerable))
+        final_check = check if (check is not None and password == (entered if entered is not None else password)) \
+            else assess(password, condition, profile, earlier)
+        results.append(dict(label=label, password=password, vulnerable=vulnerable, check=final_check,
+                            task_id=f'T{task_index + 1}'))
         for key in ('study_pending', 'study_started', 'study_password', 'study_saved', 'study_warned', 'study_attempt'):
             st.session_state.pop(key, None)
         st.session_state.study_trial = trial + 1

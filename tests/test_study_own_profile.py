@@ -49,14 +49,14 @@ def test_profile_requires_first_name_and_year(monkeypatch, tmp_path):
 @pytest.mark.parametrize('condition,expect_personal', [('G3', True), ('G1', False)])
 def test_own_name_is_detected_except_in_structural_only_group(monkeypatch, tmp_path, condition, expect_personal):
     app = save(start(monkeypatch, condition, tmp_path), 'Zebedee2003rocks')
-    assert ('personal details' in reasons(app)) == expect_personal
+    assert ('It contains your first name' in reasons(app)) == expect_personal
 
 
 def test_reuse_of_an_earlier_session_password_is_flagged(monkeypatch, tmp_path):
     app = save(start(monkeypatch, 'G3', tmp_path), 'Velvet-Harbor-Lantern-91')
     assert any('Saved your password' in s.value for s in app.success)
     app = save(app, 'Velvet-Harbor-Lantern-91')
-    assert 'same as a password you made for an earlier account' in reasons(app)
+    assert 'identical to the password you made for an earlier account' in reasons(app)
 
 
 def test_consented_details_and_every_password_are_stored_and_results_are_shown(monkeypatch, tmp_path):
@@ -72,7 +72,8 @@ def test_consented_details_and_every_password_are_stored_and_results_are_shown(m
     next(b for b in app.button if b.label == 'Submit questionnaire').click().run()
     assert not app.exception
     assert any(s.value.startswith('All tasks and the questionnaire are complete') for s in app.success)
-    assert 'could be cracked quickly' in reasons(app)  # the name-plus-birth-year password
+    assert 'Your password report' in ' '.join(h.value for h in app.subheader)
+    assert 'your first name and your birth year' in reasons(app)  # the name-plus-birth-year password
     db = sqlite3.connect(tmp_path / 's.db')
     assert db.execute('SELECT first_name, city, birth_year FROM study_participants').fetchall() == [('Zebedee', 'Quillport', '2003')]
     rows = db.execute('SELECT entered_password, issues_detected, issues_shown, action, final_password, protocol_id '
@@ -102,3 +103,32 @@ def test_suggestion_and_edited_attempts_are_stored(monkeypatch, tmp_path):
     assert [r[3] for r in rows] == ['edited_after_warning', 'used_suggestion']
     assert rows[0][1] == 'zebedee1' and rows[1][1] == 'zebedee2'
     assert rows[1][2] and rows[1][4] == rows[1][2]  # final password is the stored suggestion
+
+
+def test_every_group_gets_a_full_stored_report_with_suggestions(monkeypatch, tmp_path):
+    app = start(monkeypatch, 'G1', tmp_path)  # control group: personal-info warnings hidden during tasks
+    for pw in ('Z3b3d33-2003', 'Velvet-Harbor-Lantern-91', 'Amber-Fjord-Wren-7731'):
+        save(app, pw)
+        assert 'It contains your first name' not in reasons(app)  # not shown during the tasks in G1
+        if any(b.label == 'Save anyway' for b in app.button):
+            next(b for b in app.button if b.label == 'Save anyway').click().run()
+    for k in range(10):
+        app.radio(key=f'study_sus_{k}').set_value(3)
+    next(b for b in app.button if b.label == 'Submit questionnaire').click().run()
+    text = reasons(app)
+    assert 'It contains your first name' in text and 'written with symbols' in text  # leetspeak explained in the report
+    assert 'A safer password you could use instead' in text
+    rows = sqlite3.connect(tmp_path / 's.db').execute(
+        'SELECT task_id, final_password, issues_detected, reasons, suggested_password FROM study_report').fetchall()
+    assert len(rows) == 3
+    first = next(r for r in rows if r[1] == 'Z3b3d33-2003')
+    assert 'personal_info' in first[2] and 'your first name' in first[3] and first[4]
+    clean = next(r for r in rows if r[1] == 'Velvet-Harbor-Lantern-91')
+    assert clean[2] == '' and clean[4] == ''  # no problems, no suggestion
+    app.run()  # a rerun must not log the report twice
+    assert len(sqlite3.connect(tmp_path / 's.db').execute('SELECT * FROM study_report').fetchall()) == 3
+
+
+def test_breach_count_is_reported(monkeypatch, tmp_path):
+    app = save(start(monkeypatch, 'G3', tmp_path), 'password123!')
+    assert 'times in public lists of leaked passwords' in reasons(app)

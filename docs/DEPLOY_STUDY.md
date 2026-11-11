@@ -8,7 +8,7 @@ Streamlit apps need a long-running Python server. Vercel runs short serverless f
 
 ## What is and is not recorded
 
-- **Recorded,** after the participant ticks consent: condition, task, warning shown, override, whether the alternative was accepted, total time, whether the S5 attacker would recover the final made-up password, ten SUS answers, the participant's first name, surname, city and birth year (`study_participants`), and every entered password with the issues detected, reasons shown, any suggested password and the action taken (`study_responses`). Records are stored against an automatic code such as S014.
+- **Recorded,** after the participant ticks consent: condition, task, warning shown, override, whether the alternative was accepted, total time, whether the S5 attacker would recover the final made-up password, ten SUS answers, the participant's first name, surname, city and birth year (`study_participants`), and every entered password with the issues detected, reasons shown, any suggested password and the action taken (`study_responses`), and the end-of-study report each participant is shown: per account, the final password, every issue found with its reason and any suggested alternative (`study_report`). Records are stored against an automatic code such as S014.
 - **Not recorded:** emails, IP addresses, keystrokes, or anything outside the study page. The hosting provider may keep standard server logs, and the participant information says so.
 - **"Recording in the background"** is limited to the items listed above, and every one of them is disclosed before consent. Do not add hidden tracking.
 
@@ -45,7 +45,7 @@ Streamlit apps need a long-running Python server. Vercel runs short serverless f
    # Alternatively: STUDY_ALLOCATION_CSV = """<contents of data/private/allocation.csv>"""
    ```
 
-5. **Dry run.** First run the app without `STUDY_MODE` (demo mode) and complete it once. Then switch to the secrets above and complete one real session yourself. Finally, empty the five tables (`study_events`, `study_questionnaire`, `study_slots`, `study_participants`, `study_responses`) so that the participants start from S001.
+5. **Dry run.** First run the app without `STUDY_MODE` (demo mode) and complete it once. Then switch to the secrets above and complete one real session yourself. Finally, empty the six tables (`study_events`, `study_questionnaire`, `study_slots`, `study_participants`, `study_responses`, `study_report`) so that the participants start from S001.
 
 6. **Share the link** with the participants. Each person ticks consent, presses **Start the study** and receives the next code in the schedule. When all codes are used, the app reports that the study is full.
 

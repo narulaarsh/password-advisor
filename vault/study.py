@@ -322,3 +322,24 @@ def log_response(participant_id, condition, task_id, task_label, task_position, 
         zxcvbn_score=zxcvbn_score, breach_count=breach_count, suggested_password=suggested_password or '',
         action=action, final_password=final_password, vulnerable='' if vulnerable is None else int(vulnerable),
         source=source, protocol_id=protocol_id, recorded_at=int(time.time())), table='study_responses')
+
+
+# ── End-of-study report (shown to every participant after the questionnaire) ──
+DEFAULT_REPORT_LOG = 'data/private/study_report.csv'
+REPORT_FIELDS = ['participant_id', 'condition', 'task_id', 'task_label', 'final_password', 'vulnerable',
+                 'issues_detected', 'reasons', 'matched_fields', 'zxcvbn_score', 'breach_count',
+                 'suggested_password', 'source', 'protocol_id', 'recorded_at']
+
+
+def log_report(participant_id, condition, task_id, task_label, final_password, vulnerable, issues_detected,
+               reasons, matched_fields, zxcvbn_score, breach_count, suggested_password,
+               log_path=DEFAULT_REPORT_LOG, *, source='demo', protocol_id=PROTOCOL_ID):
+    if condition not in CONDITIONS or source not in ('demo', 'synthetic', 'human'):
+        raise ValueError('Valid condition and source required')
+    _append(log_path, REPORT_FIELDS, dict(
+        participant_id=participant_id, condition=condition, task_id=task_id, task_label=task_label,
+        final_password=final_password, vulnerable='' if vulnerable is None else int(vulnerable),
+        issues_detected=';'.join(issues_detected), reasons=' | '.join(reasons),
+        matched_fields=';'.join(matched_fields), zxcvbn_score=zxcvbn_score, breach_count=breach_count,
+        suggested_password=suggested_password or '', source=source, protocol_id=protocol_id,
+        recorded_at=int(time.time())), table='study_report')

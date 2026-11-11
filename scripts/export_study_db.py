@@ -11,7 +11,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from vault.study import EVENT_FIELDS, PARTICIPANT_FIELDS, QUESTIONNAIRE_FIELDS, RESPONSE_FIELDS, _connect, database_url
+from vault.study import (EVENT_FIELDS, PARTICIPANT_FIELDS, QUESTIONNAIRE_FIELDS, REPORT_FIELDS, RESPONSE_FIELDS,
+                         _connect, database_url)
 
 
 def export(out_dir):
@@ -25,7 +26,8 @@ def export(out_dir):
         for table, fields, name in (('study_events', EVENT_FIELDS, 'study_events.csv'),
                                     ('study_questionnaire', QUESTIONNAIRE_FIELDS, 'study_questionnaire.csv'),
                                     ('study_participants', PARTICIPANT_FIELDS, 'study_participants.csv'),
-                                    ('study_responses', RESPONSE_FIELDS, 'study_responses.csv')):
+                                    ('study_responses', RESPONSE_FIELDS, 'study_responses.csv'),
+                                    ('study_report', REPORT_FIELDS, 'study_report.csv')):
             cur = conn.cursor()
             try:
                 cur.execute(f'SELECT {", ".join(fields)} FROM {table}')
