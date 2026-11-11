@@ -1,8 +1,9 @@
 """Password feedback study (G1-G4); never accesses the real vault.
 
-Each participant enters their own first name, surname, city and birth year. These are
-held in session memory only, used to check passwords during the session, and never
-stored or logged. Each new password is also checked against the participant's earlier
+Each participant enters their own first name, surname, city and birth year. With the
+participant's consent (stated in the information text), these details, every password
+entered, any suggested password, and the detected and shown reasons are stored in the
+research database (study_participants, study_responses). Each new password is also checked against the participant's earlier
 passwords from this session (no real passwords are ever requested). Task order is
 counterbalanced; human mode uses a concealed permuted-block allocation schedule. A
 System Usability Scale questionnaire and a personal results summary follow the tasks.
@@ -10,13 +11,14 @@ System Usability Scale questionnaire and a personal results summary follow the t
 import os
 import time
 import streamlit as st
-from vault.study import (assignment, claim_next_slot, log_study_event, log_questionnaire,
-                         schedule_from_environment, SUS_ITEMS, TASKS)
+from vault.study import (assignment, claim_next_slot, log_participant, log_questionnaire, log_response,
+                         log_study_event, schedule_from_environment, SUS_ITEMS, TASKS)
 from vault.generator import generate_passphrase
-from modules.syntactic import check_hibp_status, BreachStatus
+from modules.semantic import calculate_thematic_coverage
+from modules.syntactic import check_hibp_status, evaluate_syntactic_strength, BreachStatus
 from vault.research import attack_rank, features
 
-PROTOCOL = 'review2-v2-own-profile'
+PROTOCOL = 'review2-v3-stored-responses'
 TASK_SCENARIOS = {
     'a shop': 'You are signing up for a new **online shopping** account.',
     'an email service': 'You are creating a new **email** account.',
@@ -24,23 +26,30 @@ TASK_SCENARIOS = {
 }
 INFORMATION = ('You will create passwords for three new accounts and then answer ten quick questions '
                '(about 10–15 minutes). First you enter your first name, surname, home city and birth year, '
-               'so the tool can check whether a password could be guessed from them. These details stay in this '
-               'browser session only: they are never saved or sent anywhere. Please make up new passwords and '
-               'never type one you use for a real account. To check public breach lists, the tool sends only a '
-               'short 5-character fragment of a scrambled version of each password. We record which version of the '
-               'tool you saw, whether a warning appeared, your choices, how long you took, whether a simple guessing '
-               'program would crack your final password, and your questionnaire answers. We do not record your '
-               'name, your details, any password you type, or your IP address (the hosting provider may keep '
-               'standard server logs). Taking part is voluntary and you can stop at any time.')
+               'so the tool can check whether a password could be guessed from them.\n\n'
+               '**What is stored for the research:** your first name, surname, city and birth year; every password '
+               'you type in this study (stored as you typed it, readable by the researchers); any password the tool '
+               'suggests; the reasons the tool gave; the version of the tool you saw; your choices; how long you took; '
+               'whether a simple guessing program would crack your final password; and your questionnaire answers. '
+               'The data are kept in a private research database, used only for this study, and reported only in '
+               'summaries. We do not record your IP address (the hosting provider may keep standard server logs).\n\n'
+               '**Because your passwords are stored, make up completely new ones. Never type a password you use, '
+               'or have used, for any real account.** To check public breach lists, the tool sends only a short '
+               '5-character fragment of a scrambled version of each password. Taking part is voluntary and you can '
+               'stop at any time.')
 DEBRIEF = ('Thank you! You saw one of four versions of this tool. They differ in whether the password feedback '
            'appeared before or after saving, and whether a safer alternative was offered. We are testing whether '
-           'feedback shown before saving helps people choose passwords that are harder to guess. Nothing you typed '
-           'was stored. For your real accounts, use a password manager and a different password for every account.')
-CONSENT = 'I agree to take part, and I will only make up new passwords (never real ones).'
+           'feedback shown before saving helps people choose passwords that are harder to guess. Your details and '
+           'the passwords you made up are stored as described at the start; to have your data removed, contact the '
+           'researchers with your participant code. For your real accounts, use a password manager and a different '
+           'password for every account.')
+CONSENT = ('I have read what is stored, I agree to take part, and I will only make up new passwords '
+           '(never real ones).')
+ISSUE_CODES = ('breach', 'personal_info', 'weak_structure', 'reuse', 'similar_to_earlier')
 
 
-def findings(password, condition, profile, earlier):
-    """Reasons shown to the participant. G1 sees structural feedback only."""
+def assess(password, condition, profile, earlier):
+    """Every issue detected, and the reasons shown (G1 is shown structural feedback only)."""
     try:
         status, hits = check_hibp_status(password)
     except Exception:
@@ -48,19 +57,21 @@ def findings(password, condition, profile, earlier):
     row = dict(password=password, profile=profile, other_passwords=earlier,
                breach_count=hits if status == BreachStatus.BREACHED else 0)
     f = features(row)
-    reasons = []
-    if f[2]:
-        reasons.append('It is easy for computers to guess (its structure is weak).')
-    if condition != 'G1':
-        if f[0]:
-            reasons.append(f'It appears in public lists of leaked passwords ({hits:,} times).')
-        if f[1] > 0:
-            reasons.append('It contains your personal details (name, city or birth year), which people who know you can guess.')
-        if f[3]:
-            reasons.append('It is the same as a password you made for an earlier account.')
-        elif f[4]:
-            reasons.append('It is only a small change from a password you made for an earlier account.')
-    return reasons
+    messages = {
+        'weak_structure': 'It is easy for computers to guess (its structure is weak).',
+        'breach': f'It appears in public lists of leaked passwords ({max(hits, 0):,} times).',
+        'personal_info': 'It contains your personal details (name, city or birth year), which people who know you can guess.',
+        'reuse': 'It is the same as a password you made for an earlier account.',
+        'similar_to_earlier': 'It is only a small change from a password you made for an earlier account.',
+    }
+    detected = [code for code, on in (('breach', f[0] > 0), ('personal_info', f[1] > 0), ('weak_structure', f[2] > 0),
+                                      ('reuse', f[3] > 0), ('similar_to_earlier', f[4] > 0 and not f[3] > 0)) if on]
+    shown = [c for c in ('weak_structure', 'breach', 'personal_info', 'reuse', 'similar_to_earlier')
+             if c in detected and (condition != 'G1' or c == 'weak_structure')]
+    return dict(detected=detected, shown=shown, reasons=[messages[c] for c in shown],
+                matched_fields=calculate_thematic_coverage(password, profile)['matched_fields'],
+                zxcvbn_score=evaluate_syntactic_strength(password)['score'],
+                breach_count=hits if status != BreachStatus.UNKNOWN else 'unknown')
 
 
 def outcome(password, profile, earlier):
@@ -72,7 +83,7 @@ def outcome(password, profile, earlier):
 def profile_step():
     st.subheader('Step 1 · About you')
     st.write('These details let the tool check whether a password could be guessed from things about you. '
-             'They stay in this session only and are **never saved**.')
+             'They are **stored with your responses** for the research, as described above.')
     with st.form('study_profile_form'):
         first = st.text_input('First name', key='profile_first')
         surname = st.text_input('Surname (optional)', key='profile_surname')
@@ -84,8 +95,9 @@ def profile_step():
         if len(first.strip()) < 2 or year is None:
             st.error('Please enter at least your first name and birth year.')
         else:
-            st.session_state.study_profile = dict(first_name=first.strip(), surname=surname.strip(),
-                                                  city=city.strip(), birth_year=int(year))
+            profile = dict(first_name=first.strip(), surname=surname.strip(), city=city.strip(), birth_year=int(year))
+            st.session_state.study_profile = profile
+            st.session_state.study_profile_pending_log = True
             st.rerun()
     st.stop()
 
@@ -135,6 +147,8 @@ def render():
     if 'study_profile' not in st.session_state:
         profile_step()
     profile = st.session_state.study_profile
+    if st.session_state.pop('study_profile_pending_log', False):
+        log_participant(pid, condition, profile, source=source, protocol_id=PROTOCOL)
     results = st.session_state.setdefault('study_results', [])
     earlier = [r['password'] for r in results]
     trial = st.session_state.get('study_trial', 0)
@@ -181,14 +195,23 @@ def render():
         st.error('Finish the current account before changing the participant code.')
         st.stop()
 
-    def finish(password, warning, override=False, adopt=False):
+    def record(entered, check, action, final='', vulnerable=None, suggestion=None):
+        st.session_state.study_attempt = st.session_state.get('study_attempt', 0) + 1
+        log_response(pid, condition, f'T{task_index + 1}', label, trial + 1, st.session_state.study_attempt, entered,
+                     check['detected'], check['shown'], check['reasons'], check['matched_fields'],
+                     check['zxcvbn_score'], check['breach_count'], suggestion, action, final, vulnerable,
+                     source=source, protocol_id=PROTOCOL)
+
+    def finish(password, warning, override=False, adopt=False, entered=None, check=None, suggestion=None):
         vulnerable = outcome(password, profile, earlier)
+        action = ('used_suggestion' if adopt else 'kept_after_warning' if override else 'saved_without_warning')
+        record(entered if entered is not None else password, check, action, password, vulnerable, suggestion)
         log_study_event(pid, condition, f'T{task_index + 1}', password, warning, override, adopt,
                         (time.monotonic() - st.session_state.study_started) * 1000,
                         vulnerable=vulnerable, source=source, task_label=label,
                         task_position=trial + 1, task_order=order_text, protocol_id=PROTOCOL)
         results.append(dict(label=label, password=password, vulnerable=vulnerable))
-        for key in ('study_pending', 'study_started', 'study_password', 'study_saved', 'study_warned'):
+        for key in ('study_pending', 'study_started', 'study_password', 'study_saved', 'study_warned', 'study_attempt'):
             st.session_state.pop(key, None)
         st.session_state.study_trial = trial + 1
         nxt = ('Now the next account.' if trial + 1 < len(TASKS) else 'Now the last step.')
@@ -200,11 +223,12 @@ def render():
             password = st.text_input('New password', type='password', key='study_password')
             submit = st.form_submit_button('Save password', type='primary')
         if submit and password:
-            reasons = findings(password, condition, profile, earlier)
-            if not reasons:
-                finish(password, st.session_state.get('study_warned', False))
+            check = assess(password, condition, profile, earlier)
+            if not check['reasons']:
+                finish(password, st.session_state.get('study_warned', False), check=check)
             st.session_state.study_warned = True
-            st.session_state.study_pending = dict(password=password, reasons=reasons, pid=pid, trial=trial,
+            st.session_state.study_pending = dict(password=password, reasons=check['reasons'], check=check, pid=pid,
+                                                  trial=trial,
                                                   alternative=generate_passphrase(num_words=4).password if condition == 'G4' else None)
             if condition == 'G2':
                 st.session_state.study_saved = password
@@ -218,12 +242,14 @@ def render():
             st.write('A safer password you could use instead:')
             st.code(pending['alternative'])
             if st.button('Use suggested alternative'):
-                finish(pending['alternative'], True, adopt=True)
+                finish(pending['alternative'], True, adopt=True, entered=pending['password'], check=pending['check'],
+                       suggestion=pending['alternative'])
         if st.button('Edit password'):
+            record(pending['password'], pending['check'], 'edited_after_warning', suggestion=pending['alternative'])
             st.session_state.pop('study_pending', None)
             st.rerun()
         if st.button('Keep saved credential' if condition == 'G2' else 'Save anyway'):
-            finish(pending['password'], True, override=True)
+            finish(pending['password'], True, override=True, check=pending['check'], suggestion=pending['alternative'])
 
 
 render()

@@ -283,3 +283,42 @@ def log_questionnaire(participant_id, condition, responses, log_path=DEFAULT_QUE
     row.update({f'sus_{k + 1}': r for k, r in enumerate(responses)})
     _append(log_path, QUESTIONNAIRE_FIELDS, row, table='study_questionnaire')
     return row['sus_score']
+
+
+# ── Stored responses (participants consent to this in the study's information text) ──
+DEFAULT_PARTICIPANT_LOG = 'data/private/study_participants.csv'
+DEFAULT_RESPONSE_LOG = 'data/private/study_responses.csv'
+PARTICIPANT_FIELDS = ['participant_id', 'condition', 'first_name', 'surname', 'city', 'birth_year',
+                      'source', 'protocol_id', 'recorded_at']
+RESPONSE_FIELDS = ['participant_id', 'condition', 'task_id', 'task_label', 'task_position', 'attempt',
+                   'entered_password', 'issues_detected', 'issues_shown', 'reasons_shown', 'matched_fields',
+                   'zxcvbn_score', 'breach_count', 'suggested_password', 'action', 'final_password',
+                   'vulnerable', 'source', 'protocol_id', 'recorded_at']
+RESPONSE_ACTIONS = ('saved_without_warning', 'edited_after_warning', 'kept_after_warning', 'used_suggestion')
+
+
+def log_participant(participant_id, condition, profile, log_path=DEFAULT_PARTICIPANT_LOG, *, source='demo',
+                    protocol_id=PROTOCOL_ID):
+    if condition not in CONDITIONS or not participant_id.strip() or source not in ('demo', 'synthetic', 'human'):
+        raise ValueError('Valid participant, condition and source required')
+    _append(log_path, PARTICIPANT_FIELDS, dict(
+        participant_id=participant_id, condition=condition, first_name=profile.get('first_name', ''),
+        surname=profile.get('surname', ''), city=profile.get('city', ''), birth_year=profile.get('birth_year', ''),
+        source=source, protocol_id=protocol_id, recorded_at=int(time.time())), table='study_participants')
+
+
+def log_response(participant_id, condition, task_id, task_label, task_position, attempt, entered_password,
+                 issues_detected, issues_shown, reasons_shown, matched_fields, zxcvbn_score, breach_count,
+                 suggested_password, action, final_password='', vulnerable=None, log_path=DEFAULT_RESPONSE_LOG,
+                 *, source='demo', protocol_id=PROTOCOL_ID):
+    """One row per password decision, including passwords the participant later edited."""
+    if condition not in CONDITIONS or action not in RESPONSE_ACTIONS or source not in ('demo', 'synthetic', 'human'):
+        raise ValueError('Valid condition, action and source required')
+    _append(log_path, RESPONSE_FIELDS, dict(
+        participant_id=participant_id, condition=condition, task_id=task_id, task_label=task_label,
+        task_position=task_position, attempt=attempt, entered_password=entered_password,
+        issues_detected=';'.join(issues_detected), issues_shown=';'.join(issues_shown),
+        reasons_shown=' | '.join(reasons_shown), matched_fields=';'.join(matched_fields),
+        zxcvbn_score=zxcvbn_score, breach_count=breach_count, suggested_password=suggested_password or '',
+        action=action, final_password=final_password, vulnerable='' if vulnerable is None else int(vulnerable),
+        source=source, protocol_id=protocol_id, recorded_at=int(time.time())), table='study_responses')

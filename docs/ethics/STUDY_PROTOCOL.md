@@ -25,7 +25,7 @@ Draft for submission to [institution ethics committee]. Items in [brackets] must
   - **G4:** G3 plus a locally generated alternative.
 - **Allocation.** A concealed permuted-block schedule (blocks of 4) is created with `scripts/make_allocation_schedule.py` by a person who does not recruit. Participants receive slot IDs in enrollment order.
 - **Task order.** The order of the three tasks is counterbalanced within each arm.
-- **Tasks.** Participants enter their own first name, surname, home city and birth year. These are held in session memory only and never stored. They then make up passwords for three new accounts (a shop, an email service, a social account). Each password is checked against those details, against the participant's earlier passwords from the session, and against public breach lists (5-character hash prefix only). Participants never use or reveal their own passwords.
+- **Tasks.** Participants enter their own first name, surname, home city and birth year. With consent, these are stored with their responses. They then make up passwords for three new accounts (a shop, an email service, a social account). Each password is checked against those details, against the participant's earlier passwords from the session, and against public breach lists (5-character hash prefix only). Participants never use or reveal their own passwords.
 - **Duration.** About [15] minutes, to be confirmed in a pilot.
 
 ## 4. Participants
@@ -54,14 +54,14 @@ The analysis uses participant-level rates, with clustered bootstrap 95% interval
 
 ## 7. Risks and mitigations
 
-- **Disclosure of real passwords and personal details.** The consent text and on-screen instructions forbid real passwords. Personal details are used in session memory only, and no password, hash or personal detail is stored. The participant sees their own results only at the end.
+- **Disclosure of real passwords and personal details.** The study stores participants' names, city, birth year and every password they type in readable form, so a participant who ignored the instructions and typed a real password would expose it. Mitigations: the information text states plainly that passwords are stored and readable and must be newly invented; consent requires acknowledging this; the database is private, used only for this study and deleted after the retention period; and results are reported only in aggregate. The committee should consider whether these risks are acceptable for identifiable data.
 - **Identifiability.** Only pseudonymous slot IDs are used. The slot-to-person mapping, if one is kept at all, is held separately by [coordinator] and destroyed after [date].
 - **Burden.** About 15 minutes, with no deception. Participants can stop at any time.
 
 ## 8. Data management
 
-- **Stored data.** The event log (`data/private/study_events.csv`, mode 0600) holds the slot ID, condition, task, task position and order, whether a warning was shown, override, alternative accepted, decision time, the attacker outcome, source label, protocol ID and timestamp. The questionnaire log holds the slot ID, condition, ten SUS answers, SUS score, source label, protocol ID and timestamp.
-- **Not stored.** Names and the other entered details, contact details, passwords, password hashes or IP addresses.
+- **Stored data.** The event log (`data/private/study_events.csv`, mode 0600) holds the slot ID, condition, task, task position and order, whether a warning was shown, override, alternative accepted, decision time, the attacker outcome, source label, protocol ID and timestamp. The questionnaire log holds the slot ID, condition, ten SUS answers, SUS score, source label, protocol ID and timestamp. The participant table holds the slot ID, condition, first name, surname, city and birth year. The response table holds one row per password decision: entered password, issues detected, issues and reasons shown, matched profile fields, zxcvbn score, breach count, suggested password, action taken and final password.
+- **Not stored.** Contact details, email addresses or IP addresses. The data are identifiable, because names are stored, so they must be handled as personal data.
 - **Storage and retention.** [Encrypted institutional storage]. Data are kept for [x years] and then deleted.
 - **Withdrawal.** A participant can withdraw before [date or analysis lock]; all rows with their slot ID are then deleted.
 - **Sharing.** Only aggregated results are published. [Whether de-identified logs will be shared.]
