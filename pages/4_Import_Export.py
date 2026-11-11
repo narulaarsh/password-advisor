@@ -19,6 +19,7 @@ from vault.importers import parse_csv_stream
 from vault.backup import (
     create_encrypted_backup,
     restore_encrypted_backup,
+    backup_is_authenticated,
     export_decrypted_csv,
     SPVAULT_FORMAT_TAG,
     SPVAULT_VERSION
@@ -108,7 +109,7 @@ def render_import_export_page():
                     tmp_b_path = tmp_b.name
 
                 try:
-                    create_encrypted_backup(store, tmp_b_path)
+                    create_encrypted_backup(store, tmp_b_path, dek=dek)
                     with open(tmp_b_path, "rb") as f:
                         spvault_bytes = f.read()
 
@@ -132,7 +133,18 @@ def render_import_export_page():
 
             backup_password = st.text_input("Backup master password", type="password", key="backup_mpw")
             if uploaded_spvault is not None:
-                confirm_restore = st.checkbox(" I understand restoring replaces vault keys with the backup's keyslots", key="chk_confirm_restore")
+                try:
+                    legacy_backup = not backup_is_authenticated(json.loads(uploaded_spvault.getvalue()))
+                except (ValueError, TypeError, AttributeError):
+                    legacy_backup = False  # malformed files are rejected by the restore checks
+                confirm_legacy = True
+                if legacy_backup:
+                    st.warning(
+                        "This is a legacy backup without an authenticated manifest. Each record is still "
+                        "authenticated, but deleted records or an edited record count cannot be detected."
+                    )
+                    confirm_legacy = st.checkbox("Restore this unauthenticated legacy backup anyway", key="chk_confirm_legacy")
+                confirm_restore = st.checkbox(" I understand restoring replaces vault keys with the backup's keyslots", key="chk_confirm_restore") and confirm_legacy
                 if st.button(" Restore Vault Backup", disabled=not confirm_restore, type="primary"):
                     with tempfile.NamedTemporaryFile(suffix=".spvault", delete=False) as tmp_r:
                         tmp_r.write(uploaded_spvault.getvalue())

@@ -1,0 +1,529 @@
+{
+  "validation_threshold": 0.25,
+  "thresholds": {
+    "validation_selected": {
+      "threshold": 0.25,
+      "overall": {
+        "n": 3674,
+        "tp": 2343,
+        "fp": 26,
+        "tn": 976,
+        "fn": 329,
+        "precision": 0.9890249050232165,
+        "recall": 0.8768712574850299,
+        "f1": 0.9295774647887324,
+        "fpr": 0.02594810379241517,
+        "balanced_accuracy": 0.9254615768463074,
+        "pr_auc": 0.9663988966309294,
+        "roc_auc": 0.917742733096681,
+        "brier": 0.1539314164398476,
+        "threshold": 0.25,
+        "recall_ci95": [
+          0.8638685768761173,
+          0.8887918594741054
+        ],
+        "fpr_ci95": [
+          0.01776828070430242,
+          0.03774887692625085
+        ]
+      },
+      "categories": {
+        "direct": {
+          "n": 334,
+          "label": 1,
+          "flagged": 334,
+          "rate": 1.0,
+          "rate_ci95": [
+            0.9886294037620382,
+            1.0
+          ],
+          "rate_is": "recall"
+        },
+        "exact_reuse": {
+          "n": 334,
+          "label": 1,
+          "flagged": 334,
+          "rate": 1.0,
+          "rate_ci95": [
+            0.9886294037620382,
+            1.0
+          ],
+          "rate_is": "recall"
+        },
+        "hard_negative": {
+          "n": 334,
+          "label": 0,
+          "flagged": 25,
+          "rate": 0.0748502994011976,
+          "rate_ci95": [
+            0.05121070043769914,
+            0.10815830953709475
+          ],
+          "rate_is": "false_positive_rate"
+        },
+        "history_derived": {
+          "n": 334,
+          "label": 1,
+          "flagged": 334,
+          "rate": 1.0,
+          "rate_ci95": [
+            0.9886294037620382,
+            1.0
+          ],
+          "rate_is": "recall"
+        },
+        "leetspeak": {
+          "n": 334,
+          "label": 1,
+          "flagged": 334,
+          "rate": 1.0,
+          "rate_ci95": [
+            0.9886294037620382,
+            1.0
+          ],
+          "rate_is": "recall"
+        },
+        "multi_attribute": {
+          "n": 334,
+          "label": 1,
+          "flagged": 334,
+          "rate": 1.0,
+          "rate_ci95": [
+            0.9886294037620382,
+            1.0
+          ],
+          "rate_is": "recall"
+        },
+        "partial": {
+          "n": 334,
+          "label": 1,
+          "flagged": 334,
+          "rate": 1.0,
+          "rate_ci95": [
+            0.9886294037620382,
+            1.0
+          ],
+          "rate_is": "recall"
+        },
+        "random": {
+          "n": 334,
+          "label": 0,
+          "flagged": 0,
+          "rate": 0.0,
+          "rate_ci95": [
+            0.0,
+            0.011370596237961843
+          ],
+          "rate_is": "false_positive_rate"
+        },
+        "reordered": {
+          "n": 334,
+          "label": 1,
+          "flagged": 334,
+          "rate": 1.0,
+          "rate_ci95": [
+            0.9886294037620382,
+            1.0
+          ],
+          "rate_is": "recall"
+        },
+        "unrelated_weak": {
+          "n": 334,
+          "label": 0,
+          "flagged": 1,
+          "rate": 0.0029940119760479044,
+          "rate_ci95": [
+            0.0005287122877524648,
+            0.016761820499682663
+          ],
+          "rate_is": "false_positive_rate"
+        },
+        "unseen_transformation": {
+          "n": 334,
+          "label": 1,
+          "flagged": 5,
+          "rate": 0.014970059880239521,
+          "rate_ci95": [
+            0.0064108214469532215,
+            0.034559457538375034
+          ],
+          "rate_is": "recall"
+        }
+      }
+    },
+    "production_0.30": {
+      "threshold": 0.3,
+      "overall": {
+        "n": 3674,
+        "tp": 2338,
+        "fp": 26,
+        "tn": 976,
+        "fn": 334,
+        "precision": 0.9890016920473773,
+        "recall": 0.875,
+        "f1": 0.9285146942017474,
+        "fpr": 0.02594810379241517,
+        "balanced_accuracy": 0.9245259481037924,
+        "pr_auc": 0.9663988966309294,
+        "roc_auc": 0.917742733096681,
+        "brier": 0.1539314164398476,
+        "threshold": 0.3,
+        "recall_ci95": [
+          0.8619193416725809,
+          0.8870039524911958
+        ],
+        "fpr_ci95": [
+          0.01776828070430242,
+          0.03774887692625085
+        ]
+      },
+      "categories": {
+        "direct": {
+          "n": 334,
+          "label": 1,
+          "flagged": 334,
+          "rate": 1.0,
+          "rate_ci95": [
+            0.9886294037620382,
+            1.0
+          ],
+          "rate_is": "recall"
+        },
+        "exact_reuse": {
+          "n": 334,
+          "label": 1,
+          "flagged": 334,
+          "rate": 1.0,
+          "rate_ci95": [
+            0.9886294037620382,
+            1.0
+          ],
+          "rate_is": "recall"
+        },
+        "hard_negative": {
+          "n": 334,
+          "label": 0,
+          "flagged": 25,
+          "rate": 0.0748502994011976,
+          "rate_ci95": [
+            0.05121070043769914,
+            0.10815830953709475
+          ],
+          "rate_is": "false_positive_rate"
+        },
+        "history_derived": {
+          "n": 334,
+          "label": 1,
+          "flagged": 334,
+          "rate": 1.0,
+          "rate_ci95": [
+            0.9886294037620382,
+            1.0
+          ],
+          "rate_is": "recall"
+        },
+        "leetspeak": {
+          "n": 334,
+          "label": 1,
+          "flagged": 334,
+          "rate": 1.0,
+          "rate_ci95": [
+            0.9886294037620382,
+            1.0
+          ],
+          "rate_is": "recall"
+        },
+        "multi_attribute": {
+          "n": 334,
+          "label": 1,
+          "flagged": 334,
+          "rate": 1.0,
+          "rate_ci95": [
+            0.9886294037620382,
+            1.0
+          ],
+          "rate_is": "recall"
+        },
+        "partial": {
+          "n": 334,
+          "label": 1,
+          "flagged": 334,
+          "rate": 1.0,
+          "rate_ci95": [
+            0.9886294037620382,
+            1.0
+          ],
+          "rate_is": "recall"
+        },
+        "random": {
+          "n": 334,
+          "label": 0,
+          "flagged": 0,
+          "rate": 0.0,
+          "rate_ci95": [
+            0.0,
+            0.011370596237961843
+          ],
+          "rate_is": "false_positive_rate"
+        },
+        "reordered": {
+          "n": 334,
+          "label": 1,
+          "flagged": 334,
+          "rate": 1.0,
+          "rate_ci95": [
+            0.9886294037620382,
+            1.0
+          ],
+          "rate_is": "recall"
+        },
+        "unrelated_weak": {
+          "n": 334,
+          "label": 0,
+          "flagged": 1,
+          "rate": 0.0029940119760479044,
+          "rate_ci95": [
+            0.0005287122877524648,
+            0.016761820499682663
+          ],
+          "rate_is": "false_positive_rate"
+        },
+        "unseen_transformation": {
+          "n": 334,
+          "label": 1,
+          "flagged": 0,
+          "rate": 0.0,
+          "rate_ci95": [
+            0.0,
+            0.011370596237961843
+          ],
+          "rate_is": "recall"
+        }
+      }
+    }
+  },
+  "hard_negative_analysis": {
+    "flagged": 25,
+    "of": 334,
+    "matched_fields": {
+      "birth year+name": 24,
+      "name+surname": 1
+    },
+    "coverage_values": [
+      0.312,
+      0.333,
+      0.375
+    ]
+  },
+  "stress_families": {
+    "reversed_name": {
+      "validation_selected": {
+        "n": 334,
+        "detected": 334,
+        "recall": 1.0,
+        "recall_ci95": [
+          0.9886294037620382,
+          1.0
+        ],
+        "detected_by_birth_year_only": 0,
+        "detected_with_name_or_city_field": 15,
+        "detected_with_surname_field": 334
+      },
+      "production_0.30": {
+        "n": 334,
+        "detected": 334,
+        "recall": 1.0,
+        "recall_ci95": [
+          0.9886294037620382,
+          1.0
+        ],
+        "detected_by_birth_year_only": 0,
+        "detected_with_name_or_city_field": 15,
+        "detected_with_surname_field": 334
+      }
+    },
+    "vowel_dropped": {
+      "validation_selected": {
+        "n": 334,
+        "detected": 202,
+        "recall": 0.6047904191616766,
+        "recall_ci95": [
+          0.551452864632171,
+          0.6557449145993939
+        ],
+        "detected_by_birth_year_only": 33,
+        "detected_with_name_or_city_field": 167,
+        "detected_with_surname_field": 3
+      },
+      "production_0.30": {
+        "n": 334,
+        "detected": 169,
+        "recall": 0.5059880239520959,
+        "recall_ci95": [
+          0.4526072177444159,
+          0.5592326553545307
+        ],
+        "detected_by_birth_year_only": 0,
+        "detected_with_name_or_city_field": 167,
+        "detected_with_surname_field": 3
+      }
+    },
+    "symbol_split": {
+      "validation_selected": {
+        "n": 334,
+        "detected": 334,
+        "recall": 1.0,
+        "recall_ci95": [
+          0.9886294037620382,
+          1.0
+        ],
+        "detected_by_birth_year_only": 0,
+        "detected_with_name_or_city_field": 334,
+        "detected_with_surname_field": 10
+      },
+      "production_0.30": {
+        "n": 334,
+        "detected": 334,
+        "recall": 1.0,
+        "recall_ci95": [
+          0.9886294037620382,
+          1.0
+        ],
+        "detected_by_birth_year_only": 0,
+        "detected_with_name_or_city_field": 334,
+        "detected_with_surname_field": 10
+      }
+    },
+    "diacritics": {
+      "validation_selected": {
+        "n": 334,
+        "detected": 334,
+        "recall": 1.0,
+        "recall_ci95": [
+          0.9886294037620382,
+          1.0
+        ],
+        "detected_by_birth_year_only": 165,
+        "detected_with_name_or_city_field": 167,
+        "detected_with_surname_field": 3
+      },
+      "production_0.30": {
+        "n": 334,
+        "detected": 334,
+        "recall": 1.0,
+        "recall_ci95": [
+          0.9886294037620382,
+          1.0
+        ],
+        "detected_by_birth_year_only": 165,
+        "detected_with_name_or_city_field": 167,
+        "detected_with_surname_field": 3
+      }
+    },
+    "adjacent_swap": {
+      "validation_selected": {
+        "n": 334,
+        "detected": 334,
+        "recall": 1.0,
+        "recall_ci95": [
+          0.9886294037620382,
+          1.0
+        ],
+        "detected_by_birth_year_only": 0,
+        "detected_with_name_or_city_field": 334,
+        "detected_with_surname_field": 8
+      },
+      "production_0.30": {
+        "n": 334,
+        "detected": 334,
+        "recall": 1.0,
+        "recall_ci95": [
+          0.9886294037620382,
+          1.0
+        ],
+        "detected_by_birth_year_only": 0,
+        "detected_with_name_or_city_field": 334,
+        "detected_with_surname_field": 8
+      }
+    },
+    "two_char_parts": {
+      "validation_selected": {
+        "n": 334,
+        "detected": 334,
+        "recall": 1.0,
+        "recall_ci95": [
+          0.9886294037620382,
+          1.0
+        ],
+        "detected_by_birth_year_only": 312,
+        "detected_with_name_or_city_field": 22,
+        "detected_with_surname_field": 0
+      },
+      "production_0.30": {
+        "n": 334,
+        "detected": 334,
+        "recall": 1.0,
+        "recall_ci95": [
+          0.9886294037620382,
+          1.0
+        ],
+        "detected_by_birth_year_only": 312,
+        "detected_with_name_or_city_field": 22,
+        "detected_with_surname_field": 0
+      }
+    },
+    "digit_inserted": {
+      "validation_selected": {
+        "n": 334,
+        "detected": 334,
+        "recall": 1.0,
+        "recall_ci95": [
+          0.9886294037620382,
+          1.0
+        ],
+        "detected_by_birth_year_only": 0,
+        "detected_with_name_or_city_field": 334,
+        "detected_with_surname_field": 10
+      },
+      "production_0.30": {
+        "n": 334,
+        "detected": 334,
+        "recall": 1.0,
+        "recall_ci95": [
+          0.9886294037620382,
+          1.0
+        ],
+        "detected_by_birth_year_only": 0,
+        "detected_with_name_or_city_field": 334,
+        "detected_with_surname_field": 10
+      }
+    },
+    "initials_year": {
+      "validation_selected": {
+        "n": 334,
+        "detected": 334,
+        "recall": 1.0,
+        "recall_ci95": [
+          0.9886294037620382,
+          1.0
+        ],
+        "detected_by_birth_year_only": 334,
+        "detected_with_name_or_city_field": 0,
+        "detected_with_surname_field": 0
+      },
+      "production_0.30": {
+        "n": 334,
+        "detected": 334,
+        "recall": 1.0,
+        "recall_ci95": [
+          0.9886294037620382,
+          1.0
+        ],
+        "detected_by_birth_year_only": 334,
+        "detected_with_name_or_city_field": 0,
+        "detected_with_surname_field": 0
+      }
+    }
+  },
+  "stress_note": "Fixture surnames are the reversed first name, so reversed_name matches the surname field; detections driven only by the birth year do not show that the transformed name was recognised."
+}

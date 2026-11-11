@@ -1,0 +1,23 @@
+category,threshold,n,label,flagged,rate,rate_ci95,rate_is
+direct,validation_selected,334,1,334,1.0,"[0.9886294037620382, 1.0]",recall
+exact_reuse,validation_selected,334,1,334,1.0,"[0.9886294037620382, 1.0]",recall
+hard_negative,validation_selected,334,0,25,0.0748502994011976,"[0.05121070043769914, 0.10815830953709475]",false_positive_rate
+history_derived,validation_selected,334,1,334,1.0,"[0.9886294037620382, 1.0]",recall
+leetspeak,validation_selected,334,1,334,1.0,"[0.9886294037620382, 1.0]",recall
+multi_attribute,validation_selected,334,1,334,1.0,"[0.9886294037620382, 1.0]",recall
+partial,validation_selected,334,1,334,1.0,"[0.9886294037620382, 1.0]",recall
+random,validation_selected,334,0,0,0.0,"[0.0, 0.011370596237961843]",false_positive_rate
+reordered,validation_selected,334,1,334,1.0,"[0.9886294037620382, 1.0]",recall
+unrelated_weak,validation_selected,334,0,1,0.0029940119760479044,"[0.0005287122877524648, 0.016761820499682663]",false_positive_rate
+unseen_transformation,validation_selected,334,1,5,0.014970059880239521,"[0.0064108214469532215, 0.034559457538375034]",recall
+direct,production_0.30,334,1,334,1.0,"[0.9886294037620382, 1.0]",recall
+exact_reuse,production_0.30,334,1,334,1.0,"[0.9886294037620382, 1.0]",recall
+hard_negative,production_0.30,334,0,25,0.0748502994011976,"[0.05121070043769914, 0.10815830953709475]",false_positive_rate
+history_derived,production_0.30,334,1,334,1.0,"[0.9886294037620382, 1.0]",recall
+leetspeak,production_0.30,334,1,334,1.0,"[0.9886294037620382, 1.0]",recall
+multi_attribute,production_0.30,334,1,334,1.0,"[0.9886294037620382, 1.0]",recall
+partial,production_0.30,334,1,334,1.0,"[0.9886294037620382, 1.0]",recall
+random,production_0.30,334,0,0,0.0,"[0.0, 0.011370596237961843]",false_positive_rate
+reordered,production_0.30,334,1,334,1.0,"[0.9886294037620382, 1.0]",recall
+unrelated_weak,production_0.30,334,0,1,0.0029940119760479044,"[0.0005287122877524648, 0.016761820499682663]",false_positive_rate
+unseen_transformation,production_0.30,334,1,0,0.0,"[0.0, 0.011370596237961843]",recall

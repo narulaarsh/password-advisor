@@ -1,0 +1,314 @@
+{
+  "provenance": "application-layer capture (urllib3 hooks) of live requests; not a packet capture",
+  "passwords_tested": 20,
+  "requests_captured": 25,
+  "distinct_destinations": [
+    "GET api.pwnedpasswords.com:443"
+  ],
+  "request_headers_seen": [
+    "Accept",
+    "Accept-Encoding",
+    "Add-Padding",
+    "Connection",
+    "User-Agent"
+  ],
+  "user_agent": [
+    "PasswordAdvisor-ResearchPilot/1.0"
+  ],
+  "add_padding_on_every_request": true,
+  "any_request_body": false,
+  "any_full_digest_sent": false,
+  "any_suffix_sent": false,
+  "any_password_sent": false,
+  "all_prefixes_match": true,
+  "results": {
+    "breached": 2,
+    "not_found": 18,
+    "unknown": 0
+  },
+  "median_elapsed_ms": 261.6,
+  "padded_response_sizes": [
+    {
+      "prefix": "00000",
+      "status": 200,
+      "bytes": 101954,
+      "lines": 2596,
+      "zero_count_padding_lines": 87
+    },
+    {
+      "prefix": "5BAA6",
+      "status": 200,
+      "bytes": 85205,
+      "lines": 2172,
+      "zero_count_padding_lines": 194
+    },
+    {
+      "prefix": "FFFFF",
+      "status": 200,
+      "bytes": 86928,
+      "lines": 2215,
+      "zero_count_padding_lines": 168
+    },
+    {
+      "prefix": "ABCDE",
+      "status": 200,
+      "bytes": 87185,
+      "lines": 2221,
+      "zero_count_padding_lines": 175
+    },
+    {
+      "prefix": "12345",
+      "status": 200,
+      "bytes": 78585,
+      "lines": 2001,
+      "zero_count_padding_lines": 31
+    }
+  ],
+  "observations": [
+    {
+      "requests": 1,
+      "elapsed_ms": 261.6,
+      "result": "breached",
+      "prefix_matches_digest": true,
+      "full_digest_sent": false,
+      "suffix_sent": false,
+      "password_sent": false,
+      "destinations": [
+        "GET https://api.pwnedpasswords.com:443/range/\u2026"
+      ]
+    },
+    {
+      "requests": 1,
+      "elapsed_ms": 201.5,
+      "result": "breached",
+      "prefix_matches_digest": true,
+      "full_digest_sent": false,
+      "suffix_sent": false,
+      "password_sent": false,
+      "destinations": [
+        "GET https://api.pwnedpasswords.com:443/range/\u2026"
+      ]
+    },
+    {
+      "requests": 1,
+      "elapsed_ms": 202.6,
+      "result": "not_found",
+      "prefix_matches_digest": true,
+      "full_digest_sent": false,
+      "suffix_sent": false,
+      "password_sent": false,
+      "destinations": [
+        "GET https://api.pwnedpasswords.com:443/range/\u2026"
+      ]
+    },
+    {
+      "requests": 1,
+      "elapsed_ms": 492.9,
+      "result": "not_found",
+      "prefix_matches_digest": true,
+      "full_digest_sent": false,
+      "suffix_sent": false,
+      "password_sent": false,
+      "destinations": [
+        "GET https://api.pwnedpasswords.com:443/range/\u2026"
+      ]
+    },
+    {
+      "requests": 1,
+      "elapsed_ms": 656.5,
+      "result": "not_found",
+      "prefix_matches_digest": true,
+      "full_digest_sent": false,
+      "suffix_sent": false,
+      "password_sent": false,
+      "destinations": [
+        "GET https://api.pwnedpasswords.com:443/range/\u2026"
+      ]
+    },
+    {
+      "requests": 1,
+      "elapsed_ms": 263.4,
+      "result": "not_found",
+      "prefix_matches_digest": true,
+      "full_digest_sent": false,
+      "suffix_sent": false,
+      "password_sent": false,
+      "destinations": [
+        "GET https://api.pwnedpasswords.com:443/range/\u2026"
+      ]
+    },
+    {
+      "requests": 1,
+      "elapsed_ms": 268.6,
+      "result": "not_found",
+      "prefix_matches_digest": true,
+      "full_digest_sent": false,
+      "suffix_sent": false,
+      "password_sent": false,
+      "destinations": [
+        "GET https://api.pwnedpasswords.com:443/range/\u2026"
+      ]
+    },
+    {
+      "requests": 1,
+      "elapsed_ms": 295.3,
+      "result": "not_found",
+      "prefix_matches_digest": true,
+      "full_digest_sent": false,
+      "suffix_sent": false,
+      "password_sent": false,
+      "destinations": [
+        "GET https://api.pwnedpasswords.com:443/range/\u2026"
+      ]
+    },
+    {
+      "requests": 1,
+      "elapsed_ms": 186.4,
+      "result": "not_found",
+      "prefix_matches_digest": true,
+      "full_digest_sent": false,
+      "suffix_sent": false,
+      "password_sent": false,
+      "destinations": [
+        "GET https://api.pwnedpasswords.com:443/range/\u2026"
+      ]
+    },
+    {
+      "requests": 1,
+      "elapsed_ms": 214.9,
+      "result": "not_found",
+      "prefix_matches_digest": true,
+      "full_digest_sent": false,
+      "suffix_sent": false,
+      "password_sent": false,
+      "destinations": [
+        "GET https://api.pwnedpasswords.com:443/range/\u2026"
+      ]
+    },
+    {
+      "requests": 1,
+      "elapsed_ms": 233.4,
+      "result": "not_found",
+      "prefix_matches_digest": true,
+      "full_digest_sent": false,
+      "suffix_sent": false,
+      "password_sent": false,
+      "destinations": [
+        "GET https://api.pwnedpasswords.com:443/range/\u2026"
+      ]
+    },
+    {
+      "requests": 1,
+      "elapsed_ms": 256.2,
+      "result": "not_found",
+      "prefix_matches_digest": true,
+      "full_digest_sent": false,
+      "suffix_sent": false,
+      "password_sent": false,
+      "destinations": [
+        "GET https://api.pwnedpasswords.com:443/range/\u2026"
+      ]
+    },
+    {
+      "requests": 1,
+      "elapsed_ms": 577.3,
+      "result": "not_found",
+      "prefix_matches_digest": true,
+      "full_digest_sent": false,
+      "suffix_sent": false,
+      "password_sent": false,
+      "destinations": [
+        "GET https://api.pwnedpasswords.com:443/range/\u2026"
+      ]
+    },
+    {
+      "requests": 1,
+      "elapsed_ms": 191.6,
+      "result": "not_found",
+      "prefix_matches_digest": true,
+      "full_digest_sent": false,
+      "suffix_sent": false,
+      "password_sent": false,
+      "destinations": [
+        "GET https://api.pwnedpasswords.com:443/range/\u2026"
+      ]
+    },
+    {
+      "requests": 1,
+      "elapsed_ms": 772.8,
+      "result": "not_found",
+      "prefix_matches_digest": true,
+      "full_digest_sent": false,
+      "suffix_sent": false,
+      "password_sent": false,
+      "destinations": [
+        "GET https://api.pwnedpasswords.com:443/range/\u2026"
+      ]
+    },
+    {
+      "requests": 1,
+      "elapsed_ms": 276.3,
+      "result": "not_found",
+      "prefix_matches_digest": true,
+      "full_digest_sent": false,
+      "suffix_sent": false,
+      "password_sent": false,
+      "destinations": [
+        "GET https://api.pwnedpasswords.com:443/range/\u2026"
+      ]
+    },
+    {
+      "requests": 1,
+      "elapsed_ms": 226.2,
+      "result": "not_found",
+      "prefix_matches_digest": true,
+      "full_digest_sent": false,
+      "suffix_sent": false,
+      "password_sent": false,
+      "destinations": [
+        "GET https://api.pwnedpasswords.com:443/range/\u2026"
+      ]
+    },
+    {
+      "requests": 1,
+      "elapsed_ms": 199.1,
+      "result": "not_found",
+      "prefix_matches_digest": true,
+      "full_digest_sent": false,
+      "suffix_sent": false,
+      "password_sent": false,
+      "destinations": [
+        "GET https://api.pwnedpasswords.com:443/range/\u2026"
+      ]
+    },
+    {
+      "requests": 1,
+      "elapsed_ms": 206.3,
+      "result": "not_found",
+      "prefix_matches_digest": true,
+      "full_digest_sent": false,
+      "suffix_sent": false,
+      "password_sent": false,
+      "destinations": [
+        "GET https://api.pwnedpasswords.com:443/range/\u2026"
+      ]
+    },
+    {
+      "requests": 1,
+      "elapsed_ms": 297.6,
+      "result": "not_found",
+      "prefix_matches_digest": true,
+      "full_digest_sent": false,
+      "suffix_sent": false,
+      "password_sent": false,
+      "destinations": [
+        "GET https://api.pwnedpasswords.com:443/range/\u2026"
+      ]
+    }
+  ],
+  "limitations": [
+    "DNS queries, TLS SNI and TCP/IP metadata were not captured",
+    "Timing and request frequency remain visible to a network observer",
+    "One network, one host, one run"
+  ]
+}

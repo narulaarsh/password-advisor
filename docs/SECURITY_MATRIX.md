@@ -20,3 +20,13 @@ Existing storage primitives (AES-GCM, Argon2id, HKDF) are established mechanisms
 The backup API permits structurally checked restoration into a fresh store without a password for compatibility; authenticity is then checked on decryption. The application always supplies a backup password and verifies before replacing an existing vault. Successful restore locks and clears the current session so a previous vault's key cannot remain active.
 
 The global test fixtures stub HIBP and clipboard access. The egress guard itself is exercised against prepared outbound requests, but mock results must not be described as live service validation. The single test warning comes from the existing zxcvbn-python package's deprecation notice.
+
+## Review 2 additions (11 November 2026)
+
+| Review item | Attacker capability | Tested property | Observed outcome | Scope of guarantee |
+|---|---|---|---|---|
+| E5.10b backup manifest | Edits a backup file (deletes a record and lowers the count, swaps IDs, removes the profile, edits the header, strips the manifest) | Version 2 backups carry an HMAC-SHA256 manifest keyed by HKDF(DEK, `cav-backup-manifest-v1`); restore verifies it before replacing anything | `test_review2_security.py`: every listed edit is rejected and the previous vault stays usable | Needs the backup's master password. Downgrading to the legacy version 1 format bypasses the manifest; the app warns and asks for confirmation, and `require_manifest=True` refuses it |
+| E5.11 whole-file rollback | Replaces the database with an older valid copy | Is rollback detected? | Not detected (test documents it): unlock succeeds and newer entries are gone | No protection without an external monotonic counter or trusted timestamp |
+| E5.12 live row deletion | Deletes a ciphertext row from the live database | Is deletion detected? | Not detected (test documents it): the remaining rows decrypt normally | Per-record AEAD gives integrity, not completeness |
+| E5.3b Argon2id calibration | Offline guessing of the master password | New vaults use per-device parameters that reach 300–600 ms | Development host: 256 MiB, p=4 and t=9–10 depending on the machine's current speed (five recorded runs: t=10, 312–320 ms; `results/review2/argon2_calibration.json`); floor 64 MiB, t=3 | Host timing only; not adversary throughput. Existing vaults keep their stored parameters |
+| E5.6b network capture | Observes breach-check traffic | Live application-layer capture of real HIBP requests for fictional passwords | See `results/review2/network_capture.json` | No DNS, TLS or TCP metadata; timing remains observable |

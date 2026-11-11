@@ -1,0 +1,11 @@
+Run at 2026-11-11T08:17:22Z
+Python 3.14.7
+........................................................................ [ 50%]
+......................................................................   [100%]
+=============================== warnings summary ===============================
+.venv/lib/python3.14/site-packages/zxcvbn/__init__.py:6
+  /Users/arshnarula/Downloads/password-advisor/.venv/lib/python3.14/site-packages/zxcvbn/__init__.py:6: DeprecationWarning: deprecated
+    warnings.warn("deprecated", DeprecationWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+142 passed, 1 warning in 6.85s

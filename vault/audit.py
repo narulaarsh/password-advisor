@@ -150,6 +150,57 @@ def _are_derivatives(pw_i: str, pw_j: str, base_i: str, base_j: str) -> bool:
     return False
 
 
+def derivative_adjacency(passwords: List[str], bases: List[str], chunk: int = 256) -> List[Set[int]]:
+    """Returns, for each index, the set of indices satisfying `_are_derivatives`.
+
+    Candidate pairs come from rapidfuzz's native `cdist` (processed in row chunks so
+    memory stays O(chunk * n)), using slightly looser cut-offs than the rule. Every
+    candidate is then re-checked with `_are_derivatives`, so the relation is exactly
+    the pairwise rule; only the search is faster. Worst-case work is still quadratic.
+    """
+    from rapidfuzz import process
+    import numpy as np
+
+    n = len(passwords)
+    adjacency: List[Set[int]] = [set() for _ in range(n)]
+    candidates: Set[Tuple[int, int]] = set()
+
+    # Condition 1: identical base of length >= 3 (exact grouping).
+    by_base: Dict[str, List[int]] = {}
+    for i, base in enumerate(bases):
+        if base and len(base) >= 3:
+            by_base.setdefault(base, []).append(i)
+    for members in by_base.values():
+        for a in range(len(members)):
+            for b in range(a + 1, len(members)):
+                candidates.add((members[a], members[b]))
+
+    def add_from_cdist(index: List[int], strings: List[str], scorer, cutoff, is_hit):
+        for start in range(0, len(index), chunk):
+            rows = index[start:start + chunk]
+            scores = process.cdist([strings[k] for k in range(start, start + len(rows))],
+                                   strings, scorer=scorer, score_cutoff=cutoff, dtype=np.float64)
+            for r, c in zip(*np.nonzero(is_hit(scores))):
+                i, j = rows[r], index[c]
+                if i < j:
+                    candidates.add((i, j))
+
+    # Condition 2: base similarity >= 85 for bases of length >= 4 (candidate cut-off 80).
+    idx2 = [i for i, b in enumerate(bases) if b and len(b) >= 4]
+    if len(idx2) > 1:
+        add_from_cdist(idx2, [bases[i] for i in idx2], fuzz.ratio, 80.0, lambda s: s > 0)
+    # Condition 3: raw Levenshtein distance <= 2 for passwords of length >= 6 (cut-off 3).
+    idx3 = [i for i, p in enumerate(passwords) if len(p) >= 6]
+    if len(idx3) > 1:
+        add_from_cdist(idx3, [passwords[i] for i in idx3], Levenshtein.distance, 3, lambda s: s <= 3)
+
+    for i, j in candidates:
+        if _are_derivatives(passwords[i], passwords[j], bases[i], bases[j]):
+            adjacency[i].add(j)
+            adjacency[j].add(i)
+    return adjacency
+
+
 def detect_derivative_families(
     entries: List[Entry],
     cluster_mode: str = "chain"
@@ -167,8 +218,9 @@ def detect_derivative_families(
     entries = sorted(entries, key=lambda e: e.id)
     n = len(entries)
     bases = [extract_base_password(e.password) for e in entries]
+    adjacency = derivative_adjacency([e.password for e in entries], bases)
     def related(i, j):
-        return _are_derivatives(entries[i].password, entries[j].password, bases[i], bases[j])
+        return j in adjacency[i]
     if cluster_mode == "pairwise":
         groups = []
         for i in range(n):
@@ -185,11 +237,10 @@ def detect_derivative_families(
                 members[fid] = [entries[i].site_name for i in group]
                 mapping.update({entries[i].id: fid for i in group})
         return mapping, members
-    # Streaming comparisons retain the exact chain semantics without an n² matrix.
     uf = UnionFind(n)
     for i in range(n):
-        for j in range(i + 1, n):
-            if related(i, j):
+        for j in adjacency[i]:
+            if j > i:
                 uf.union(i, j)
 
     clusters: Dict[int, List[int]] = {}

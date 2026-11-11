@@ -3,7 +3,8 @@ import argparse,csv,json
 from pathlib import Path
 import numpy as np
 
-def export_study_summary(input_csv='data/private/study_events.csv', output_csv='results/review1/study_summary.json', source='human'):
+def export_study_summary(input_csv='data/private/study_events.csv', output_csv='results/review1/study_summary.json', source='human',
+                         questionnaire_csv=None):
     with open(input_csv,newline='') as f:rows=list(csv.DictReader(f))
     if any('source' not in r or 'vulnerable' not in r for r in rows):
         raise ValueError('Legacy logs lack independent outcome/provenance; cannot establish the E4 primary outcome')
@@ -38,10 +39,22 @@ def export_study_summary(input_csv='data/private/study_events.csv', output_csv='
     for left,right in [('G3','G2'),('G4','G3'),('G4','G1')]:
         if samples[left] is not None and samples[right] is not None:
             contrasts[f'{left}_minus_{right}']=dict(difference=summary[left]['participant_mean_vulnerable_rate']-summary[right]['participant_mean_vulnerable_rate'],ci95=np.percentile(samples[left]-samples[right],[2.5,97.5]).tolist())
-    report=dict(source=source,estimand='Equal-participant mean retained vulnerability rate',groups=summary,contrasts=contrasts,
+    usability={}
+    if questionnaire_csv:
+        with open(questionnaire_csv,newline='') as f:q=[r for r in csv.DictReader(f) if r.get('source')==source]
+        if len({r['participant_id'] for r in q})!=len(q):raise ValueError('Duplicate questionnaire per participant')
+        for r in q:
+            if assignment.get(r['participant_id']) not in (None,r['condition']):raise ValueError('Questionnaire condition differs from task condition')
+        qrng=np.random.default_rng(7)
+        for condition in ('G1','G2','G3','G4'):
+            scores=[float(r['sus_score']) for r in q if r['condition']==condition]
+            boot=[np.mean(qrng.choice(scores,len(scores),replace=True)) for _ in range(2000)] if scores else None
+            usability[condition]=dict(participants=len(scores),mean_sus=float(np.mean(scores)) if scores else None,
+                                      bootstrap_ci95=np.percentile(boot,[2.5,97.5]).tolist() if boot else None)
+    report=dict(source=source,estimand='Equal-participant mean retained vulnerability rate',groups=summary,contrasts=contrasts,usability_sus=usability,
                 limitations=['Primary label relative to specified attacker/budget only','Bootstrap inference is unstable with few participants','No study power or external validity established by this analysis'])
     out=Path(output_csv);out.parent.mkdir(parents=True,exist_ok=True);out.write_text(json.dumps(report,indent=2))
     return report
 if __name__=='__main__':
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--input',default='data/private/study_events.csv');p.add_argument('--output',default='results/review1/study_summary.json');p.add_argument('--source',choices=['human','demo','synthetic'],default='human');a=p.parse_args()
-    export_study_summary(a.input,a.output,a.source)
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--input',default='data/private/study_events.csv');p.add_argument('--output',default='results/review1/study_summary.json');p.add_argument('--source',choices=['human','demo','synthetic'],default='human');p.add_argument('--questionnaire',default=None);a=p.parse_args()
+    export_study_summary(a.input,a.output,a.source,a.questionnaire)

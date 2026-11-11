@@ -19,6 +19,7 @@ from streamlit_autorefresh import st_autorefresh
 from vault.models import VaultHeader, Profile, Entry
 from vault.crypto import (
     create_vault_header,
+    calibrate_argon2_parameters,
     generate_recovery_key,
     parse_recovery_key,
     unlock_dek_with_password,
@@ -181,9 +182,12 @@ def render_setup_view(store: VaultStore):
                 st.error(f" {issue}")
             return
 
-        with st.spinner("Deriving keys using Argon2id ($m=64\\text{ MiB}, t=3, p=4$)..."):
+        with st.spinner("Calibrating Argon2id for this device and deriving keys..."):
+            # Parameters are chosen once for this new vault and stored in its header.
+            kdf = calibrate_argon2_parameters()
             formatted_rec, rec_raw = generate_recovery_key()
-            header, dek, _ = create_vault_header(mpw, recovery_key=rec_raw)
+            header, dek, _ = create_vault_header(mpw, recovery_key=rec_raw,
+                                                 m=kdf["m"], t=kdf["t"], p=kdf["p"])
             store.save_header(header)
             store.save_profile(profile, dek)
 

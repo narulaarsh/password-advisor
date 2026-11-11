@@ -1,0 +1,86 @@
+{
+  "platform": "macOS-27.3-arm64-arm-64bit-Mach-O",
+  "python": "3.14.7",
+  "fixed_parameters": [
+    {
+      "m_mib": 64,
+      "t": 3,
+      "p": 4,
+      "median_ms": 21.7,
+      "min_ms": 21.6,
+      "max_ms": 23.4,
+      "repeats": 5
+    },
+    {
+      "m_mib": 256,
+      "t": 3,
+      "p": 4,
+      "median_ms": 92.8,
+      "min_ms": 92.4,
+      "max_ms": 98.5,
+      "repeats": 5
+    },
+    {
+      "m_mib": 256,
+      "t": 9,
+      "p": 4,
+      "median_ms": 280.3,
+      "min_ms": 280.0,
+      "max_ms": 282.0,
+      "repeats": 5
+    }
+  ],
+  "calibration_runs": [
+    {
+      "m": 262144,
+      "t": 10,
+      "p": 4,
+      "measured_ms": 312.0,
+      "target_ms": [
+        300.0,
+        600.0
+      ]
+    },
+    {
+      "m": 262144,
+      "t": 10,
+      "p": 4,
+      "measured_ms": 317.4,
+      "target_ms": [
+        300.0,
+        600.0
+      ]
+    },
+    {
+      "m": 262144,
+      "t": 10,
+      "p": 4,
+      "measured_ms": 316.8,
+      "target_ms": [
+        300.0,
+        600.0
+      ]
+    },
+    {
+      "m": 262144,
+      "t": 10,
+      "p": 4,
+      "measured_ms": 318.8,
+      "target_ms": [
+        300.0,
+        600.0
+      ]
+    },
+    {
+      "m": 262144,
+      "t": 10,
+      "p": 4,
+      "measured_ms": 320.2,
+      "target_ms": [
+        300.0,
+        600.0
+      ]
+    }
+  ],
+  "note": "Host timings only; not adversary guessing throughput."
+}

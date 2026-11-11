@@ -1,0 +1,17 @@
+family,threshold,n,detected,recall,recall_ci95,detected_by_birth_year_only,detected_with_name_or_city_field,detected_with_surname_field
+reversed_name,validation_selected,334,334,1.0,"[0.9886294037620382, 1.0]",0,15,334
+reversed_name,production_0.30,334,334,1.0,"[0.9886294037620382, 1.0]",0,15,334
+vowel_dropped,validation_selected,334,202,0.6047904191616766,"[0.551452864632171, 0.6557449145993939]",33,167,3
+vowel_dropped,production_0.30,334,169,0.5059880239520959,"[0.4526072177444159, 0.5592326553545307]",0,167,3
+symbol_split,validation_selected,334,334,1.0,"[0.9886294037620382, 1.0]",0,334,10
+symbol_split,production_0.30,334,334,1.0,"[0.9886294037620382, 1.0]",0,334,10
+diacritics,validation_selected,334,334,1.0,"[0.9886294037620382, 1.0]",165,167,3
+diacritics,production_0.30,334,334,1.0,"[0.9886294037620382, 1.0]",165,167,3
+adjacent_swap,validation_selected,334,334,1.0,"[0.9886294037620382, 1.0]",0,334,8
+adjacent_swap,production_0.30,334,334,1.0,"[0.9886294037620382, 1.0]",0,334,8
+two_char_parts,validation_selected,334,334,1.0,"[0.9886294037620382, 1.0]",312,22,0
+two_char_parts,production_0.30,334,334,1.0,"[0.9886294037620382, 1.0]",312,22,0
+digit_inserted,validation_selected,334,334,1.0,"[0.9886294037620382, 1.0]",0,334,10
+digit_inserted,production_0.30,334,334,1.0,"[0.9886294037620382, 1.0]",0,334,10
+initials_year,validation_selected,334,334,1.0,"[0.9886294037620382, 1.0]",334,0,0
+initials_year,production_0.30,334,334,1.0,"[0.9886294037620382, 1.0]",334,0,0

@@ -63,6 +63,47 @@ def derive_k_pw(password: str, salt: bytes, m: int = ARGON2_DEFAULT_MEMORY,
     )
 
 
+ARGON2_CALIBRATION_MEMORY = 262144   # 256 MiB preferred for new vaults
+ARGON2_TARGET_MS = (300.0, 600.0)    # unlock-latency target on the creating host
+ARGON2_MAX_TIME = 64
+
+
+def calibrate_argon2_parameters(target_ms: Tuple[float, float] = ARGON2_TARGET_MS,
+                                parallelism: int = ARGON2_DEFAULT_PARALLELISM,
+                                measure=None) -> Dict[str, Any]:
+    """
+    Chooses Argon2id parameters for a NEW vault so one derivation takes roughly
+    target_ms on this machine. Never returns less than the previous default
+    (64 MiB, t=3). Existing vaults keep the parameters stored in their header.
+    `measure(m, t, p) -> milliseconds` can be injected for testing.
+    """
+    import time as _time
+
+    def default_measure(m: int, t: int, p: int) -> float:
+        salt = secrets.token_bytes(SALT_LEN_BYTES)
+        start = _time.perf_counter()
+        derive_k_pw("calibration-only-not-a-secret", salt, m, t, p)
+        return (_time.perf_counter() - start) * 1000.0
+
+    measure = measure or default_measure
+    low, high = target_ms
+    for memory in (ARGON2_CALIBRATION_MEMORY, ARGON2_DEFAULT_MEMORY):
+        base_t = ARGON2_DEFAULT_TIME
+        base_ms = min(measure(memory, base_t, parallelism) for _ in range(2))
+        if base_ms > high and memory != ARGON2_DEFAULT_MEMORY:
+            continue  # too slow at this memory size: fall back to 64 MiB
+        per_iteration = max(base_ms / base_t, 1e-3)
+        t = int(-(-low // per_iteration))  # ceil(low / per_iteration)
+        t = max(base_t, min(ARGON2_MAX_TIME, t))
+        measured = measure(memory, t, parallelism)
+        while measured < low and t < ARGON2_MAX_TIME:  # the linear estimate can undershoot
+            t += 1
+            measured = measure(memory, t, parallelism)
+        return {"m": memory, "t": t, "p": parallelism, "measured_ms": round(measured, 1),
+                "target_ms": [low, high]}
+    raise CryptoError("Argon2id calibration failed")
+
+
 def derive_kek(k_pw: bytes, device_secret: Optional[bytes] = None) -> bytes:
     """
     Derives Key Encryption Key (KEK) using HKDF-SHA256 over K_pw and optional device secret.
@@ -101,6 +142,23 @@ def derive_history_key(dek: bytes) -> bytes:
         info=HISTORY_HMAC_INFO,
     )
     return hkdf.derive(dek)
+
+
+BACKUP_MANIFEST_INFO = b"cav-backup-manifest-v1"
+
+
+def derive_backup_manifest_key(dek: bytes) -> bytes:
+    """
+    Derives the HMAC key that authenticates a backup's manifest (header, profile,
+    record count and every record) so deleted or altered backup records are detected.
+    """
+    hkdf = HKDF(
+        algorithm=hashes.SHA256(),
+        length=KEY_LEN_BYTES,
+        salt=None,
+        info=BACKUP_MANIFEST_INFO,
+    )
+    return hkdf.derive(bytes(dek))
 
 
 def hash_password_for_history(password: str, history_key: bytes) -> str:

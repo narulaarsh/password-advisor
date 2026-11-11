@@ -1,0 +1,36 @@
+{
+  "protocol": "docs/REVIEW2_PROTOCOL.md",
+  "protocol_sha256": "c6fcdf09679c4e818e3a58d0af37b117cd1411847a24bd17b8e545a4e5aa9925",
+  "dataset_sha256": "644bf92fd446b12beeda5fca008e7065bfd155b02e0ee5a4dd46f8aa1db91b20",
+  "samples": 11022,
+  "profiles": 1002,
+  "seed": 42,
+  "primary_budget": 1000,
+  "e3_budgets": [
+    100,
+    1000,
+    10000,
+    100000
+  ],
+  "bootstrap_replicates": 1000,
+  "review1_rank_mismatches": 0,
+  "source_tree_sha256": "a01c2551429eedc2aa970b07df9ed37ff36892173367cfe9174625d20cd89aab",
+  "git": {
+    "base_commit": "30544323510898c495ab530b884fd1e561d6d4e6",
+    "branch": "review1-revision",
+    "dirty_files": 28
+  },
+  "python": "3.14.7",
+  "platform": "macOS-27.3-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "dependencies": {
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "zxcvbn-python": "4.4.24",
+    "rapidfuzz": "3.14.6"
+  },
+  "runtime_seconds": 30.3,
+  "command": ".venv/bin/python scripts/review2_experiments.py --out results/review2",
+  "dataset_type": "synthetic_smoke_not_independent"
+}

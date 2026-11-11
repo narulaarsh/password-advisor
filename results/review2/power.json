@@ -1,0 +1,110 @@
+{
+  "provenance": "simulation under planning assumptions; no participant data",
+  "model": "Beta-binomial participant rates, 3 tasks each, Welch t-test on participant rates",
+  "primary_contrast": "G3 vs G2 (pre-save vs post-save), one-sided direction, two-sided test",
+  "alpha": 0.016666666666666666,
+  "target_power": 0.8,
+  "simulations_per_point": 5000,
+  "seed": 20261111,
+  "search": "participants per arm in steps of 10 up to 600",
+  "scenarios": [
+    {
+      "control_rate": 0.5,
+      "absolute_reduction": 0.1,
+      "icc": 0.2,
+      "participants_per_arm": 240,
+      "total_participants": 960,
+      "achieved_power": 0.8008
+    },
+    {
+      "control_rate": 0.5,
+      "absolute_reduction": 0.1,
+      "icc": 0.4,
+      "participants_per_arm": 310,
+      "total_participants": 1240,
+      "achieved_power": 0.8072
+    },
+    {
+      "control_rate": 0.5,
+      "absolute_reduction": 0.15,
+      "icc": 0.2,
+      "participants_per_arm": 110,
+      "total_participants": 440,
+      "achieved_power": 0.8136
+    },
+    {
+      "control_rate": 0.5,
+      "absolute_reduction": 0.15,
+      "icc": 0.4,
+      "participants_per_arm": 140,
+      "total_participants": 560,
+      "achieved_power": 0.8102
+    },
+    {
+      "control_rate": 0.5,
+      "absolute_reduction": 0.2,
+      "icc": 0.2,
+      "participants_per_arm": 60,
+      "total_participants": 240,
+      "achieved_power": 0.8124
+    },
+    {
+      "control_rate": 0.5,
+      "absolute_reduction": 0.2,
+      "icc": 0.4,
+      "participants_per_arm": 80,
+      "total_participants": 320,
+      "achieved_power": 0.8338
+    },
+    {
+      "control_rate": 0.6,
+      "absolute_reduction": 0.1,
+      "icc": 0.2,
+      "participants_per_arm": 240,
+      "total_participants": 960,
+      "achieved_power": 0.8038
+    },
+    {
+      "control_rate": 0.6,
+      "absolute_reduction": 0.1,
+      "icc": 0.4,
+      "participants_per_arm": 320,
+      "total_participants": 1280,
+      "achieved_power": 0.8132
+    },
+    {
+      "control_rate": 0.6,
+      "absolute_reduction": 0.15,
+      "icc": 0.2,
+      "participants_per_arm": 110,
+      "total_participants": 440,
+      "achieved_power": 0.8082
+    },
+    {
+      "control_rate": 0.6,
+      "absolute_reduction": 0.15,
+      "icc": 0.4,
+      "participants_per_arm": 140,
+      "total_participants": 560,
+      "achieved_power": 0.8118
+    },
+    {
+      "control_rate": 0.6,
+      "absolute_reduction": 0.2,
+      "icc": 0.2,
+      "participants_per_arm": 60,
+      "total_participants": 240,
+      "achieved_power": 0.8012
+    },
+    {
+      "control_rate": 0.6,
+      "absolute_reduction": 0.2,
+      "icc": 0.4,
+      "participants_per_arm": 80,
+      "total_participants": 320,
+      "achieved_power": 0.8148
+    }
+  ],
+  "python": "3.14.7",
+  "numpy": "2.5.4"
+}
