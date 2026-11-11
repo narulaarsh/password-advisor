@@ -46,7 +46,8 @@ def render():
     st.title('Controlled fictional credential study')
     st.caption('Feasibility interface for G1–G4. No real account passwords. Outcomes use a limited offline attacker, not the warning rules.')
     human=os.environ.get('STUDY_MODE')=='1'
-    has_schedule=bool(os.environ.get('STUDY_ALLOCATION_FILE') or os.environ.get('STUDY_ALLOCATION_CSV'))
+    has_schedule=bool(os.environ.get('STUDY_ALLOCATION_FILE') or os.environ.get('STUDY_ALLOCATION_CSV')
+                     or (os.environ.get('STUDY_ALLOCATION_SEED') and os.environ.get('STUDY_ALLOCATION_SLOTS')))
     if human and (not os.environ.get('STUDY_ETHICS_REFERENCE') or not has_schedule):
         st.error('Human collection requires the institutional ethics reference and a concealed allocation schedule (STUDY_ALLOCATION_FILE or STUDY_ALLOCATION_CSV). Demo is available with STUDY_MODE unset.')
         st.stop()

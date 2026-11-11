@@ -105,12 +105,19 @@ def load_allocation_schedule_text(text):
 
 
 def schedule_from_environment(schedule_path=None):
-    """Schedule from an explicit path, STUDY_ALLOCATION_FILE or STUDY_ALLOCATION_CSV (text)."""
+    """Schedule from a path, STUDY_ALLOCATION_FILE, STUDY_ALLOCATION_CSV (text) or a secret
+    STUDY_ALLOCATION_SEED with STUDY_ALLOCATION_SLOTS."""
     path = schedule_path or os.environ.get('STUDY_ALLOCATION_FILE')
     if path:
         return load_allocation_schedule(path)
     text = os.environ.get('STUDY_ALLOCATION_CSV', '').strip()
-    return load_allocation_schedule_text(text) if text else None
+    if text:
+        return load_allocation_schedule_text(text)
+    seed = os.environ.get('STUDY_ALLOCATION_SEED', '').strip()
+    slots = os.environ.get('STUDY_ALLOCATION_SLOTS', '').strip()
+    if seed and slots:  # deterministic permuted-block schedule; conceal the seed
+        return _parse_schedule([{k: str(v) for k, v in row.items()} for row in make_allocation_schedule(seed, int(slots))])
+    return None
 
 
 def _parse_schedule(rows):

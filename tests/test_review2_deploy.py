@@ -76,3 +76,15 @@ def test_online_flow_assigns_a_code_and_logs_human_records(tmp_path, monkeypatch
     expected_condition = vault.study.load_allocation_schedule_text(schedule_csv(4))['S001'][0]
     assert rows == [('S001', 'human')]
     assert sqlite3.connect(db).execute('SELECT condition FROM study_events').fetchone()[0] == expected_condition
+
+
+def test_schedule_from_secret_seed_matches_generator(monkeypatch):
+    from vault.study import schedule_from_environment
+    for key in ('STUDY_ALLOCATION_FILE', 'STUDY_ALLOCATION_CSV'):
+        monkeypatch.delenv(key, raising=False)
+    monkeypatch.setenv('STUDY_ALLOCATION_SEED', 'fixture-seed')
+    monkeypatch.setenv('STUDY_ALLOCATION_SLOTS', '8')
+    schedule = schedule_from_environment()
+    expected = {r['slot_id']: (r['condition'], [int(x) for x in r['task_order'].split('-')])
+                for r in make_allocation_schedule('fixture-seed', 8)}
+    assert schedule == expected and list(schedule) == [f'S{k:03d}' for k in range(1, 9)]
