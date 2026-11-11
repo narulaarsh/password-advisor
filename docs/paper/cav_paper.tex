@@ -590,7 +590,7 @@ No reply (10\,s timeout) & 20,011.8 & not run & unknown\\
 \end{tabular}
 \end{table}
 
-\textbf{E4: intervention study.} No human-subject results are reported, and no participants were recruited. An earlier 10-participant comparison of loss-framed and neutral warnings is not reported, because its records and assignment procedure could not be verified. Table~\ref{tab:power} gives planning sample sizes for the primary contrast, G3 against G2, from a simulation with 5,000 runs per point. Each participant completes three tasks, outcomes are correlated within participants through a beta-binomial model, and participant-level rates are compared with Welch's test at $\alpha=0.05/3$. Under these assumptions, detecting a 0.20 absolute reduction needs 60 to 80 participants per arm, and a 0.10 reduction needs 240 to 320. A planning figure of 50 per arm would be underpowered even for the largest assumed effect. The control rates, effects and correlations are assumptions to be replaced by pilot or published values before preregistration.
+\textbf{E4: intervention study.} No human-subject results are reported, and no participants were recruited. An earlier 10-participant comparison of loss-framed and neutral warnings is not reported, because its records and assignment procedure could not be verified. Table~\ref{tab:power} gives planning sample sizes for the primary contrast, G3 against G2, from a simulation with 5,000 runs per point. Each participant completes three tasks, outcomes are correlated within participants through a beta-binomial model, and participant-level rates are compared with Welch's test at $\alpha=0.05/3$. Under these assumptions, detecting a 0.20 absolute reduction needs 60 to 80 participants per arm, and a 0.10 reduction needs 240 to 320. A planning figure of 50 per arm would be underpowered even for the largest assumed effect. The control rates, effects and correlations are assumptions to be replaced by pilot or published values before preregistration. To check the analysis rather than the intervention, we simulated 1,000 studies. Each had 80 participants per arm, planted vulnerable-credential rates of 0.60, 0.60, 0.40 and 0.35 for G1--G4, and a within-participant correlation of 0.4. We logged them through the study logger as records labelled synthetic and analysed them with the unchanged analysis script. The G3$-$G2 estimate averaged $-0.197$ against the planted $-0.200$, and its 95\% interval contained the planted value in 94.2\% of the simulated studies. These participants are simulated, so this shows only that the analysis recovers a known effect. It says nothing about real behaviour.
 
 \begin{table}[t]
 \caption{E4 Participants per Arm for 80\% Power (Planning Only)}
@@ -648,6 +648,9 @@ Future work, in order of priority, is as follows:
 \item passwordless authentication with FIDO2/WebAuthn.
 \end{itemize}
 The repository includes kits for the independent benchmark, the study (protocol, participant documents and allocation schedule) and the second-machine measurements. Each still needs people outside the authors to carry it out.
+
+\section*{Acknowledgment}
+During the revision of the software and of this manuscript, the authors used AI coding and writing assistants (OpenAI Codex and Anthropic Claude) to implement changes, run the analyses and draft text. The authors reviewed and edited all output and take full responsibility for the content of this paper.
 
 \begin{thebibliography}{99}
 \bibitem{jubur} M. Jubur, P. Shrestha, and N. Saxena, ``An in-depth analysis of password managers and two-factor authentication tools,'' \emph{ACM Comput. Surv.}, vol.~57, no.~5, Art. no.~128, 2025, doi: 10.1145/3711117.

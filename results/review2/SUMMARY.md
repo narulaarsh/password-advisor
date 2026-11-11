@@ -89,3 +89,7 @@ Recovery does not grow beyond 1,000 guesses. S1–S4 streams are exhausted at 80
 
 - **Packet capture.** See `packet_capture.json`.
 - **OS clipboard check.** See `os_clipboard_check.json`.
+
+## E4 pipeline validation (simulated, not human data)
+
+`simulated_study.json` comes from 1,000 simulated studies (80 per arm; planted rates 0.60/0.60/0.40/0.35; within-participant correlation 0.4) run through the real logger and the real analysis. The G3−G2 estimate averaged −0.197 against −0.200 planted, and 95% interval coverage was 94.2%. This validates the analysis only.

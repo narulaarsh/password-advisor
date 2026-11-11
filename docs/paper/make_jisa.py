@@ -87,7 +87,9 @@ def main():
     keywords = between(src, r'\begin{IEEEkeywords}', r'\end{IEEEkeywords}').rstrip('.')
     for h in HIGHLIGHTS:
         assert len(h) <= 85, (len(h), h)
-    body = src[src.index(r'\section{Introduction}'):src.index(r'\begin{thebibliography}')]
+    end = src.index(r'\section*{Acknowledgment}') if r'\section*{Acknowledgment}' in src else src.index(r'\begin{thebibliography}')
+    body = src[src.index(r'\section{Introduction}'):end]
+    ai_statement = between(src, r'\section*{Acknowledgment}', r'\begin{thebibliography}') if end != src.index(r'\begin{thebibliography}') else None
     # The architecture figure is wider than the single-column text block.
     body = body.replace(r'\begin{tikzpicture}[', r'\resizebox{\textwidth}{!}{\begin{tikzpicture}[', 1)
     body = body.replace(r'\end{tikzpicture}', r'\end{tikzpicture}}', 1)
@@ -100,7 +102,11 @@ def main():
     doc = (PREAMBLE.replace('TITLE', title).replace('ABSTRACT', abstract)
            .replace('HIGHLIGHTS', '\n'.join(r'\item ' + h.replace("'", "'") for h in HIGHLIGHTS))
            .replace('KEYWORDS', ' \\sep '.join(k.strip() for k in keywords.split(','))))
-    doc += body + DECLARATIONS + bibliography + '\n\\end{document}\n'
+    declarations = DECLARATIONS
+    if ai_statement:  # the IEEE acknowledgment becomes Elsevier's required AI declaration
+        start = declarations.index('[Complete accurately before submission.')
+        declarations = declarations[:start] + ai_statement + declarations[declarations.index(']', start) + 1:]
+    doc += body + declarations + bibliography + '\n\\end{document}\n'
     OUT.parent.mkdir(exist_ok=True)
     OUT.write_text(doc, encoding='utf-8')
     print(f'Wrote {OUT}')

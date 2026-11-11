@@ -74,4 +74,6 @@ Behavioural efficacy is not claimed, and the study is presented as an instrument
 | P0 human study (E4) | Ethics submission drafts: protocol, data management, recruitment, information sheet, consent and debrief. **Still needs ethics approval and participants.** | `docs/ethics/` |
 | Journal formatting | An Elsevier (JISA) version is built from the same source alongside the IEEE version, with author declarations left for the authors to complete. | `docs/paper/jisa/` |
 
+Also added: a labelled simulation that validates the E4 analysis pipeline (`scripts/study_pipeline_simulation.py`, coverage 94.2%), and an AI-use acknowledgment in the IEEE paper, which becomes the JISA AI declaration.
+
 Tests: 152 pass.

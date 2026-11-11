@@ -1,0 +1,77 @@
+{
+  "provenance": "SIMULATED participants with planted effects; validates the analysis pipeline only; not human data",
+  "planted_rates": {
+    "G1": 0.6,
+    "G2": 0.6,
+    "G3": 0.4,
+    "G4": 0.35
+  },
+  "icc": 0.4,
+  "tasks_per_participant": 3,
+  "participants_per_arm": 80,
+  "replicates": 1000,
+  "seed": 20261111,
+  "planted_g3_minus_g2": -0.19999999999999996,
+  "mean_estimate": -0.19651249999999998,
+  "bias": 0.0034874999999999767,
+  "ci95_coverage": 0.942,
+  "example_replicate": {
+    "groups": {
+      "G1": {
+        "participants": 80,
+        "rate": 0.6416666666666667,
+        "ci95": [
+          0.5541666666666666,
+          0.7209374999999996
+        ]
+      },
+      "G2": {
+        "participants": 80,
+        "rate": 0.6458333333333333,
+        "ci95": [
+          0.5666666666666667,
+          0.725
+        ]
+      },
+      "G3": {
+        "participants": 80,
+        "rate": 0.3958333333333333,
+        "ci95": [
+          0.31239583333333326,
+          0.4833333333333333
+        ]
+      },
+      "G4": {
+        "participants": 80,
+        "rate": 0.375,
+        "ci95": [
+          0.3,
+          0.4541666666666667
+        ]
+      }
+    },
+    "contrasts": {
+      "G3_minus_G2": {
+        "difference": -0.24999999999999994,
+        "ci95": [
+          -0.3708333333333333,
+          -0.13333333333333336
+        ]
+      },
+      "G4_minus_G3": {
+        "difference": -0.020833333333333315,
+        "ci95": [
+          -0.13333333333333341,
+          0.09999999999999998
+        ]
+      },
+      "G4_minus_G1": {
+        "difference": -0.2666666666666667,
+        "ci95": [
+          -0.3833333333333332,
+          -0.14583333333333337
+        ]
+      }
+    }
+  }
+}
