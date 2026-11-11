@@ -27,7 +27,7 @@ Vellore Institute of Technology, Vellore, Tamil Nadu, India}}
 \maketitle
 
 \begin{abstract}
-A password can be structurally complex and still be predictable from its owner's personal details or from the owner's other passwords. We present the Context-Aware Local Vault (CAV), a local-first password manager. It combines breach evidence from a k-anonymity range query, coverage of personal attributes the user declares, structural weakness estimated by zxcvbn, exact reuse and derivative-password families. It encrypts both credentials and the personal profile, and it can warn before a risky password is stored. We then evaluate, under a protocol frozen before the experiments, whether CAV's fixed-weight risk score detects passwords that an attacker can recover. The evaluation uses a synthetic, leakage-checked fixture of 11,022 examples from 1,002 fictional profiles and a deterministic attacker at five knowledge levels. Against the all-information attacker at 1,000 guesses, the score's held-out recall was 0.153 at a validation-selected false-positive limit of 5\%, identical to breach evidence alone. The cause is structural. Without breach evidence the score cannot exceed 0.50, below its selected threshold of 0.60, so it detected none of the passwords recovered with personal or history information alone. A logistic model on the same signals reached a recall of 0.503 (false-positive rate 0.048), and a non-negative variant reached 0.459 (0.000). The deployed non-additive save-time rule detected every recovery, but at a false-positive rate of 0.556. Raising the budget to 100,000 guesses recovered no additional passwords. The personal-context detector reached a recall of 0.875 at its production threshold but detected none of 334 unseen transformations, and several apparent stress-test detections came only from the birth year. We report these as negative results. The vault also gains authenticated backups, per-device Argon2id calibration and a lossless derivative search that is 4.7 times faster at 5,000 entries, and 142 automated tests pass. A four-condition intervention study is specified, with a power analysis, but has not been run. All results are synthetic and do not establish external validity.
+A password can be structurally strong yet predictable from its owner's personal details or other passwords. We present the Context-Aware Local Vault (CAV), a local-first password manager. It combines k-anonymity breach checks, coverage of personal attributes the user declares, zxcvbn structural weakness, reuse and derivative-password families. It encrypts credentials and the personal profile, and it can warn before a risky password is stored. Under a protocol frozen before the experiments, we evaluate whether its fixed-weight risk score detects attack-recoverable passwords, using a synthetic, leakage-checked fixture of 11,022 examples from 1,002 fictional profiles. Against an all-information attacker at 1,000 guesses, the score's recall was 0.153 at a validation-selected 5\% false-positive limit, equal to breach evidence alone. Without breach evidence the score cannot exceed 0.50, below its 0.60 threshold. Using the same signals, a logistic model reached a recall of 0.503, a non-negative variant 0.459, and zxcvbn given the user's details 0.306. A stronger rule-based attacker recovered 72.5\% of passwords at 100,000 guesses, and against it a simple context rule detected 87.5\% of them at a 3.3\% false-positive rate. The personal-context detector missed unseen transformations and accent-free or transliterated names. We report these as negative findings. The vault adds authenticated backups, per-device Argon2id calibration, concealed clipboard copies and an exact derivative search that is 4.7 times faster at 5,000 entries, and 152 tests pass. A four-condition intervention study is specified, with a power analysis, but has not been run. All results are synthetic.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -98,8 +98,8 @@ Adversary & Access and assumptions & Evaluated by & Not covered\\
 A1 locked storage & Reads or edits the database or backup files; no key and no unlocked session & Tamper, manifest, rollback and deletion tests (Table~\ref{tab:sec}) & Whole-vault rollback; live row deletion; visible lengths and counts\\
 A2 online guessing & Uses the app's unlock and recovery screens repeatedly & Throttling tests; Argon2id timing & Offline guessing cost on attacker hardware\\
 A3 targeted guessing & Offline; knows S1--S5 information; up to $10^5$ guesses & E2, E3 & Published neural attacks; real users\\
-A4 network observer & Sees breach-check traffic & Application-layer capture & DNS, TLS and timing metadata\\
-A5 environment & Clipboard contents; session state after lock & Simulated clipboard; session tests & OS clipboard history; immutable Python copies\\
+A4 network observer & Sees breach-check traffic & Application-layer and packet capture & Timing and frequency of checks; one network\\
+A5 environment & Clipboard contents; session state after lock & Real macOS pasteboard; session tests & OS or third-party clipboard history; immutable Python copies\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -266,11 +266,11 @@ A password is flagged in the audit when $C(p)\geq 0.3$. The matched fields, incl
 
 \section{Implementation}
 \label{sec:impl}
-CAV uses Streamlit, argon2-cffi, the cryptography library, zxcvbn-python, requests, rapidfuzz, platformdirs and pyperclip. The research scripts also use NumPy and scikit-learn. Tested versions are pinned in a lock file. The vault is stored in the operating system's user-data directory with mode 0700 on POSIX systems. Clipboard contents are cleared after 20 seconds, but only if the clipboard still holds the copied secret. Auto-lock defaults to five minutes and can be set from 1 to 60 minutes. Import supports Chrome and Bitwarden CSV exports and generic column layouts. A plaintext CSV export also exists, with a disclosure warning. The Settings page shows the deployed weights read-only. Earlier sliders that appeared to change the weights but were never applied were removed.
+CAV uses Streamlit, argon2-cffi, the cryptography library, zxcvbn-python, requests, rapidfuzz, platformdirs and pyperclip. The research scripts also use NumPy and scikit-learn. Tested versions are pinned in a lock file. The vault is stored in the operating system's user-data directory with mode 0700 on POSIX systems. Clipboard contents are cleared after 20 seconds, but only if the clipboard still holds the copied secret. On macOS, a copied secret is also marked with the \texttt{org.nspasteboard.ConcealedType} convention, which clipboard managers use to avoid recording passwords. The secret is passed to the system on standard input, never on the command line. Auto-lock defaults to five minutes and can be set from 1 to 60 minutes. Import supports Chrome and Bitwarden CSV exports and generic column layouts. A plaintext CSV export also exists, with a disclosure warning. The Settings page shows the deployed weights read-only. Earlier sliders that appeared to change the weights but were never applied were removed.
 
 All outbound requests pass through the egress guard. Its allowlist accepts the HIBP range endpoint with exactly five hexadecimal characters and localhost. It also retains a pattern for the chat endpoint used by the earlier advisor, but no code path now calls it. URLs, request bodies and non-authorization headers are scanned for active secret strings, and any violation raises an error.
 
-The automated suite contains 142 tests, and all passed on 11 November 2026 (Python 3.14.7, macOS 27.3, Apple M5, 16\,GB RAM), with one deprecation warning from zxcvbn-python. The suite covers cryptographic round trips, nonce uniqueness, associated-data swaps, recovery keys and a scan for plaintext in stored bytes. It also covers keyless profile writes, legacy profile migration, backup profile preservation, atomic rejection of tampered restores, unknown breach intervals, malformed HIBP responses, session cleanup, same-service reuse and absent birth-year matches. Streamlit AppTest exercises all four study conditions and the vault's warn-before-save and override behaviour. Forty tests added for this revision cover the following: the indexed derivative search against the original code, manifest tampering, the rollback and deletion boundary, Argon2id calibration, schedule balance, SUS scoring and the full study flow. HIBP and the clipboard are replaced by deterministic fixtures, so the tests check the application's contract, not live services. Live traffic was examined separately (Section~\ref{sec:results}).
+The automated suite contains 152 tests, and all passed on 11 November 2026 (Python 3.14.7, macOS 27.3, Apple M5, 16\,GB RAM), with one deprecation warning from zxcvbn-python. The suite covers cryptographic round trips, nonce uniqueness, associated-data swaps, recovery keys and a scan for plaintext in stored bytes. It also covers keyless profile writes, legacy profile migration, backup profile preservation, atomic rejection of tampered restores, unknown breach intervals, malformed HIBP responses, session cleanup, same-service reuse and absent birth-year matches. Streamlit AppTest exercises all four study conditions and the vault's warn-before-save and override behaviour. Fifty tests added during Review 2 cover the following: the indexed derivative search against the original code, manifest tampering, the rollback and deletion boundary, Argon2id calibration, schedule balance, SUS scoring, the full study flow, the concealed clipboard copy, the stronger attacker, the meter baselines and the benchmark-agreement tool. HIBP and the clipboard are replaced by deterministic fixtures, so the tests check the application's contract, not live services. Live traffic was examined separately (Section~\ref{sec:results}).
 
 \section{Evaluation Method}
 \label{sec:method}
@@ -280,20 +280,31 @@ The automated suite contains 142 tests, and all passed on 11 November 2026 (Pyth
 
 \textbf{Attacker.} A deterministic bounded attacker produces distinct, ordered guesses without seeing the target. S1 uses eight common words with fixed suffixes and appended numbers. S2 joins pairs of declared attributes with separators and appends numbers to each attribute. S3 mutates the previous password: it shifts four-digit years by $\pm 1$ or $\pm 2$, appends suffixes and replaces trailing digits and symbols with numbers. S4 interleaves S2 and S3, and S5 interleaves all three. The order of a stream does not depend on the budget, so a rank found at a large budget also applies at every smaller budget that includes it. The runner checks that all 55,110 Review 1 outcomes (11,022 examples, five scenarios) are reproduced exactly.
 
-\textbf{Methods.} All methods are scored against the same primary outcome: S5 recovers the password within 1,000 guesses. B1 is the binary zxcvbn weakness flag, B2 the breach fixture, B3 their maximum, B4 personal coverage, B5 reuse or derivative membership, and B6 the submitted six-signal weights without the cap. CAV is the current score (\ref{eq:risk}). B7 is a logistic regression fitted on the training partition. B9 is the same model with every coefficient constrained to be non-negative, an interpretable alternative. R1 is the deployed save-time gate rule (breach, any coverage, weak syntax, reuse or derivative) and R2 a context rule (coverage at least 0.30, reuse or derivative). Both are fixed rules with no threshold. A faithful published contextual model (B8) was not reproduced.
+\textbf{Methods.} All methods are scored against the same primary outcome: S5 recovers the password within 1,000 guesses. B1 is the binary zxcvbn weakness flag, B2 the breach fixture, B3 their maximum, B4 personal coverage, B5 reuse or derivative membership, and B6 the submitted six-signal weights without the cap. CAV is the current score (\ref{eq:risk}). B7 is a logistic regression fitted on the training partition. B9 is the same model with every coefficient constrained to be non-negative, an interpretable alternative. R1 is the deployed save-time gate rule (breach, any coverage, weak syntax, reuse or derivative) and R2 a context rule (coverage at least 0.30, reuse or derivative). Both are fixed rules with no threshold. No published targeted-guessing model (B8) could be reproduced faithfully, because their code, models and training data are not available to us. Amendment 1 adds the closest available published methods.
 
 \textbf{Thresholds and uncertainty.} For each scored method the threshold is the one with the highest validation recall at a validation false-positive rate (FPR) of at most 5\%. It is then frozen for the test partition. Intervals are 95\% profile-level bootstrap intervals (1,000 replicates), and Wilson intervals are used for single proportions. Exploratory analyses are labelled as such: recall at a matched test FPR, a threshold sweep, scenario-specific thresholds, ablations (fixed weights with and without renormalization, and refitted models) and E3 budgets of 100, 1,000, 10,000 and 100,000 guesses on the test partition. Brier scores and calibration bands are reported only for the probability models B7 and B9.
 
-\textbf{Reproducibility.} Every number in Section~\ref{sec:results} comes from files written by the commands below. The tables are also written as CSV files. The results manifest records the protocol digest, a SHA-256 digest of the source tree (prefix \texttt{a01c2551429eedc2}), the base commit (\texttt{3054432}), the dependency versions and the run time. Tested versions are pinned in \texttt{requirements-lock.txt}.
+\textbf{Amendment 1.} After the Review 2 results were committed, and before any new analysis was run, a dated amendment (digest prefix \texttt{41da03603ad3ad0f}) added three secondary analyses. The primary criterion is unchanged.
+\begin{itemize}
+\item \emph{Published-meter baselines:} B8a is zxcvbn's guess estimate~\cite{wheeler}, and B8b is the same meter with its documented user-input dictionary set to the declared attributes and the previous password. They are thresholded like the other methods.
+\item \emph{A stronger rule-based attacker, S6:} it applies case variants, leetspeak subsets, reversal, prefixes, two-token joins, year and symbol suffixes and history increments. It is stronger than S5 but was written by the same authors as the fixture, so it is not independent.
+\item \emph{A multilingual and transliteration analysis of E1:} profile names with accents, alternative romanizations, non-Latin scripts and apostrophes or hyphens, using passwords without digits so that the birth year cannot contribute.
+\end{itemize}
+The detector and weights were not changed.
+
+\textbf{Reproducibility.} Every number in Section~\ref{sec:results} comes from files written by the commands below. The tables are also written as CSV files. The results manifests record the protocol digests, a SHA-256 digest of the source tree (prefix \texttt{ef9d259ce535c2c4}), the dependency versions and the run time. The code and results are in commit \texttt{1a5dc39}. Tested versions are pinned in \texttt{requirements-lock.txt}.
 {\footnotesize
 \begin{verbatim}
 python scripts/review2_experiments.py   # E1-E3
 python scripts/review2_clusters.py      # clustering
 python scripts/review2_performance.py   # E6
+python scripts/review2_amendment1.py
 python scripts/review2_network_capture.py
+python scripts/review2_packet_capture.py
+python scripts/review2_os_clipboard_check.py
 python scripts/argon2_calibration_report.py
 python scripts/study_power.py --sims 5000
-python -m pytest -q                     # 142 tests
+python -m pytest -q                     # 152 tests
 \end{verbatim}}
 
 \section{Results}
@@ -423,6 +434,67 @@ S5 & 50.3 & 59.4 & 59.4 & 59.4 & 0.153 & 0.503 & 0.459 & 0.847\\
 
 \textbf{Error analysis by knowledge.} At S5 and 1,000 guesses, the 1,181 passwords that the personal-information attacker recovered were the direct, multi-attribute and reordered categories (334 each) and 179 of the leetspeak passwords. CAV and B9 detected none of them, and B7 detected 95, all leetspeak. R1 and R2 detected all of them. The 668 passwords recovered from the previous password (history-derived and exact reuse) were detected by B7, B9, R1 and R2 but not by CAV. Partial, unseen-transformation, hard-negative and random passwords were never recovered. Personal-pattern passwords that this attacker missed therefore count as false positives for R1 and R2, even though a stronger attacker might recover them.
 
+\textbf{Amendment 1: published meters.} Table~\ref{tab:meters} compares the two zxcvbn variants with CAV and B7 on the primary outcome. Without user inputs, the meter matched breach evidence alone, at a recall of 0.153. Given the declared attributes and the previous password, it doubled that to 0.306 with no false positives, and its PR-AUC (0.818) exceeded CAV's (0.781). B8b's recall at 1,000 guesses was 1.000 for S1, 0.500 for S3, 0.181 for S4 and 0 for S2. A standard published meter, given the same local context, therefore detected more attack-recoverable passwords than CAV's fixed score at the same operating rule. B8b is a meter with a user dictionary, not a targeted-guessing model.
+
+\begin{table}[t]
+\caption{Amendment 1: Published-Meter Baselines (S5 Within 1,000 Guesses)}
+\label{tab:meters}
+\centering\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Method & Prec. & Recall (95\% CI) & FPR & PR-AUC\\
+\midrule
+B8a zxcvbn meter & 1.000 & 0.153 (0.152--0.154) & 0.000 & 0.587\\
+B8b zxcvbn + user inputs & 1.000 & 0.306 (0.303--0.309) & 0.000 & 0.818\\
+CAV (current) & 1.000 & 0.153 (0.152--0.154) & 0.000 & 0.781\\
+B7 logistic & 0.938 & 0.503 (0.497--0.508) & 0.048 & 0.956\\
+\bottomrule
+\multicolumn{5}{@{}p{\columnwidth}@{}}{\scriptsize Same thresholding rule as Table~\ref{tab:e2}. B8b user inputs: first name, surname, city, birth year (four and two digits) and previous password.}
+\end{tabular}
+\end{table}
+
+\textbf{Amendment 1: stronger attacker.} Table~\ref{tab:s6} reports S6 on the test partition. Unlike S5, S6 kept recovering passwords beyond 1,000 guesses: 28.0\% at 1,000, 67.3\% at 10,000 and 72.5\% at 100,000 (95\% CI 71.0--73.9). Its streams ended after 30,341 to 87,115 distinct guesses (median 46,485). At 100,000 guesses it recovered every direct, multi-attribute, reordered, partial, history-derived, exact-reuse and unrelated-weak password, and 326 of 334 leetspeak passwords. It recovered no unseen-transformation, hard-negative or random password. Against this attacker, the frozen fixed score caught only 12.5\% of recoveries. The context rule R2 caught 87.5\%, and its FPR fell from 0.345 against S5 to 0.033. Most passwords that R2 flagged but S5 missed are therefore passwords that a stronger attacker does recover. R1 kept a recall of 1.000 with an FPR of 0.345, and B7 reached 0.437 at an FPR of 0.005. Because S6 was written with knowledge of the fixture, this result shows how sensitive the conclusions are to the attacker; it is not independent evidence.
+
+\begin{table}[t]
+\caption{Amendment 1: S6 Recovery and Recall / FPR at Frozen S5 Thresholds}
+\label{tab:s6}
+\centering\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{@{}rccccc@{}}
+\toprule
+Budget & Recovered & CAV & B8b & B9 & R2\\
+\midrule
+100 & 27.3\% & 0.333 / 0.000 & 0.667 / 0.000 & 1.000 / 0.000 & 0.668 / 0.634\\
+1,000 & 28.0\% & 0.325 / 0.000 & 0.649 / 0.000 & 0.974 / 0.000 & 0.676 / 0.631\\
+10,000 & 67.3\% & 0.135 / 0.000 & 0.270 / 0.000 & 0.405 / 0.000 & 0.865 / 0.187\\
+100,000 & 72.5\% & 0.125 / 0.000 & 0.251 / 0.000 & 0.376 / 0.000 & 0.875 / 0.033\\
+\bottomrule
+\multicolumn{6}{@{}p{\columnwidth}@{}}{\scriptsize Test partition, $n=3{,}674$. Entries are recall / FPR. R1: recall 1.000 at every budget, FPR 0.752, 0.750, 0.449 and 0.345.}
+\end{tabular}
+\end{table}
+
+\textbf{Amendment 1: multilingual names.} Table~\ref{tab:multi} applies the detector to author-written names without digits. It recognised names written in the same non-Latin script as the profile (6 of 6) and names with a removed hyphen (2 of 2). It largely failed when the password used an accent-free spelling of an accented profile name: Zo\"e, \'Angela, M\"uller, S\o ren, \L ukasz and \c{C}elik were missed, and Jos\'e and Fran\c{c}ois were caught only through a three- or four-letter prefix. It also failed when the profile was in a non-Latin script and the password in Latin letters (0 of 6), when an apostrophe was removed (0 of 2), and for most alternative romanizations (1 of 7 at 0.30). The detector has no Unicode folding or transliteration, so these gaps are expected. They are reported here, not fixed after the fact.
+
+\begin{table}[t]
+\caption{Amendment 1: Multilingual and Transliteration Analysis (E1)}
+\label{tab:multi}
+\centering\footnotesize
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Profile name / password & $n$ & Flagged at 0.30 & At 0.25\\
+\midrule
+Accented / accent-free & 9 & 2 & 2\\
+Alternative romanization & 7 & 1 & 2\\
+Non-Latin script / Latin & 6 & 0 & 0\\
+Same non-Latin script & 6 & 6 & 6\\
+Apostrophe or hyphen removed & 4 & 2 & 2\\
+Control: identical ASCII name & 4 & 4 & 4\\
+\bottomrule
+\multicolumn{4}{@{}p{\columnwidth}@{}}{\scriptsize Passwords are the name followed by two symbols, with no digits. Both hyphenated names were flagged; both apostrophe names were missed.}
+\end{tabular}
+\end{table}
+
 \textbf{Derivative clustering.} A wider planted fixture contained 178 entries in 88 families. It had six families of each of six mutation types (year, suffix digits, case, leetspeak, added symbols and one internal edit), eight near-miss pairs of unrelated real words, six gradual-edit chains of four passwords each, and 30 random singletons. Table~\ref{tab:clusters} summarizes the results. Both modes recovered every within-family pair of the six mutation types. The only false pair was \texttt{Mountain93!} with \texttt{Fountain48!}, whose bases have a similarity of 87.5, above the threshold of 85. In the gradual chains, no chain's two ends were directly related. Chain mode still joined each chain into one group, while pairwise mode split them and recovered half of those pairs. Chain mode suits mutation histories, and pairwise mode avoids transitive merges. The S3 attacker guessed all 18 year-variant pairs but none of the other mutation types, so detection and this attacker's success measure different things.
 
 \begin{table}[t]
@@ -440,7 +512,11 @@ Pairwise & 0.992 & 0.875 & 0.929 & 0.500\\
 \end{tabular}
 \end{table}
 
-\textbf{E5: security and privacy.} Table~\ref{tab:sec} reports, for each threat, the attacker capability, the test and observed outcome, and the scope of the guarantee. Two outcomes are deliberately negative. Replacing the database with an older valid copy, and deleting a live ciphertext row, were both \emph{not} detected. Per-record authenticated encryption protects integrity, not completeness. A live application-layer capture of 20 breach checks (two common example passwords and 18 random strings) recorded only \texttt{GET} requests to \texttt{api.pwnedpasswords.com:443} for \texttt{/range/} followed by five hexadecimal characters. Every request carried the padding header and no request body, and no suffix, full digest or password appeared in any outbound request. Decompressed padded responses for five prefixes ranged from 78.6 to 102.0\,kB (2,001 to 2,596 lines). DNS, TLS and timing metadata were not captured.
+\textbf{E5: security and privacy.} Table~\ref{tab:sec} reports, for each threat, the attacker capability, the test and observed outcome, and the scope of the guarantee. Two outcomes are deliberately negative. Replacing the database with an older valid copy, and deleting a live ciphertext row, were both \emph{not} detected. Per-record authenticated encryption protects integrity, not completeness. Two live captures examined breach-check traffic. First, at the application layer, 20 checks (two common example passwords and 18 random strings) produced only \texttt{GET} requests to \texttt{api.pwnedpasswords.com:443} for \texttt{/range/} followed by five hexadecimal characters. Every request carried the padding header and no body, and no suffix, full digest or password appeared in any outbound request. Decompressed padded responses for five prefixes ranged from 78.6 to 102.0\,kB.
+
+Second, a packet capture with tcpdump recorded 10 further checks as an on-path observer would see them. The script kept only HIBP-related findings, deleted the raw capture and stored no local addresses. Each check opened its own TLS connection, with the server name \texttt{api.pwnedpasswords.com} visible in the handshake. Every connection sent exactly 1,844 bytes and received 45,865 to 48,567 bytes. The path, prefix, suffix, password and User-Agent never appeared in plaintext, and no DNS query occurred during the window because the answer was cached. An observer can therefore tell that and when breach checks happen, but the constant request size reveals nothing about which prefix was queried.
+
+On the real macOS pasteboard, the application's copy function placed a fictional secret on the clipboard and cleared it when the timer expired. It left alone a value that had been copied over it in the meantime, and the user's own clipboard text was restored afterwards. The first run found that copies carried no concealed marker. They now carry \texttt{org.nspasteboard.ConcealedType}, and a second run confirmed the marker. Clipboard history kept by the operating system or third-party managers could not be inspected.
 
 \begin{table*}[t]
 \caption{E5 Threat-Specific Evidence}
@@ -457,9 +533,9 @@ A1 replaces the database with an older copy & Not detected: unlock succeeds and 
 A1 deletes a live ciphertext row & Not detected: the other rows decrypt normally & Authenticated encryption gives integrity, not completeness\\
 A1 legacy plaintext profile & Keyless writes rejected; migration encrypts; tampering rejected (pass) & Secure deletion cannot erase snapshots or old copies\\
 A2 repeated unlock or recovery attempts & Throttled, including recovery keys (pass); calibrated Argon2id took 312--320\,ms (Table~\ref{tab:perf}) & Host timing, not attacker throughput; recovery key reusable until revoked\\
-A4 observes breach-check traffic & Live capture: only GET \texttt{/range/<5 hex>} with padding; no suffix, digest or password sent (20 checks) & No DNS, TLS or timing analysis; one network and host\\
+A4 observes breach-check traffic & Application layer: only GET \texttt{/range/<5 hex>} with padding (20 checks). Packet capture: server name visible; constant 1,844-byte requests; no path, prefix or password in plaintext (10 checks) & Timing and frequency of checks remain visible; one network and host\\
 D3 breach service unavailable & Refused connection, HTTP 503 or malformed body give ``unknown'' in about 1\,ms; a hanging service gives ``unknown'' after about 20\,s & Score intervals cover missing breach evidence only\\
-A5 clipboard residue & Cleared only if still unchanged (simulated clipboard; pass) & OS clipboard history and synchronization not inspected\\
+A5 clipboard residue & Real macOS pasteboard: cleared after the timer, later copies left alone, marked concealed (pass) & OS and third-party clipboard history not inspected; marker honoured only by managers that support it\\
 A5 decrypted session state & Lock clears key, entries and widget state (pass) & Immutable Python copies and rendered secrets\\
 \bottomrule
 \end{tabular}
@@ -538,26 +614,40 @@ Absolute reduction & ICC & Control rate 0.5 & Control rate 0.6\\
 \section{Discussion and Limitations}
 \textbf{What the evaluation shows.} On this fixture, personal context and vault relationships carry information about attack outcomes. B5 alone recalled 0.306 with no false positives, B9 recalled 0.459, and the context rule R2 recalled 0.847 at an FPR of 0.345. The deployed fixed-weight score does not use this information at a strict false-positive limit. The reason is analytic rather than statistical: an additive score whose contextual terms are capped below its operating threshold cannot flag context-only risk, whatever the data. For RQ1 and RQ2, the answer is that the signals help when they are allowed to act on their own, as in B5, B9 and R2, but not inside the current weighted score.
 
+\textbf{Attacker sensitivity and published meters.} Two amendment results sharpen these conclusions. Against the stronger S6, the context rule's false-positive rate fell from 0.345 to 0.033. Its apparent false alarms against S5 were mostly passwords that a more capable attacker recovers. Meanwhile the published zxcvbn meter, given the same declared context, reached twice CAV's recall at the same operating rule. The case for CAV's fixed score therefore weakens as baselines and attackers get stronger. A reasonable next decision rule is a per-signal or context rule, compared against a context-aware published meter on independent data.
+
 \textbf{What we did not change.} Three remedies are available. The first is to make per-signal warnings the decision rule. CAV's gate already does this, with high recall but many warnings for passwords this attacker did not recover. The second is to deploy a fitted model, and the third is to raise the contextual weights or remove the cap. The last two would tune the deployed score on data that the authors generated, which is the bias this evaluation is meant to expose. We therefore leave the deployed weights unchanged until an independent benchmark is available. The fitted models remain research-only.
 
-\textbf{RQ4.} The live capture showed only five-character prefixes leaving the device, and local computation was below 0.4\,s for 1,000 entries. Network latency, not computation, dominates audit time, and a hanging breach service delays a save by about 20\,s. A shorter save-time timeout would reduce that delay but would turn more checks into ``unknown''.
+\textbf{RQ4.} The application-layer capture showed only five-character prefixes leaving the device. The packet capture showed that an on-path observer sees the server name and constant-size encrypted requests, but not the prefix. Local computation was below 0.4\,s for 1,000 entries. Network latency, not computation, dominates audit time, and a hanging breach service delays a save by about 20\,s. A shorter save-time timeout would reduce that delay but would turn more checks into ``unknown''.
 
 \textbf{Limitations.}
 \begin{enumerate}
-\item \textbf{Data.} The fixture, its labels and the stress families were produced by the authors, with templates related across partitions and a fixture surname that is the reversed first name. No independent, adjudicated or multilingual dataset was used.
-\item \textbf{Attacks and baselines.} The attacker is a simple deterministic generator that exhausts its streams before $10^5$ guesses. It is not MDIGuess~\cite{mdiguess} or the attack of Ou et al.~\cite{ou2026}, and no published contextual model (B8) was reproduced. No superiority claim is made.
+\item \textbf{Data.} The fixture, its labels and the stress families were produced by the authors, with templates related across partitions and a fixture surname that is the reversed first name. No independent, adjudicated or multilingual dataset was used. The author-written multilingual analysis found that accent-folded names, non-Latin profile names written in Latin letters and names with apostrophes are largely missed.
+\item \textbf{Attacks and baselines.} S5 exhausts its streams before $10^5$ guesses. S6 is stronger but was written with knowledge of the fixture. Neither is MDIGuess~\cite{mdiguess} or the attack of Ou et al.~\cite{ou2026}. The closest published baselines are zxcvbn meters, and no published targeted-guessing model was reproduced. No superiority claim is made.
 \item \textbf{Scoring.} The weights and the 0.35 cap are heuristics. B7 and B9 were fitted and tested on the same synthetic distribution. Chain clustering links passwords transitively, and one near-miss word pair was merged.
 \item \textbf{Breach evidence.} Score intervals cover missing breach evidence only. Saving and master-password creation remain possible when HIBP is unreachable.
 \item \textbf{Storage.} Whole-vault rollback and live row deletion are not detected, a legacy backup can be restored after a warning, and historical plaintext artifacts may persist outside SQLite's control.
-\item \textbf{Host and network.} Memory clearing is best-effort in Python. The clipboard tests use a simulated clipboard, and the network evidence is an application-layer capture on one network, not a packet capture.
+\item \textbf{Host and network.} Memory clearing is best-effort in Python. The real-pasteboard check could not inspect OS or third-party clipboard history, and the concealed marker is honoured only by managers that support it. Both captures come from one network and host, and DNS answers were cached during the packet capture.
 \item \textbf{Behaviour.} The study has not been run. It needs ethics approval, recruitment powered according to Table~\ref{tab:power}, questionnaires on understanding and delayed recall, and follow-up. Retained study credentials are not real account changes.
-\item \textbf{Performance.} All measurements come from one machine. Other hardware and real networks were not measured.
+\item \textbf{Performance.} All measurements come from one machine. A kit for running the same suite on another computer is provided, but it has not yet been run.
 \end{enumerate}
 
 \section{Conclusion and Future Work}
-CAV shows that a local password manager can assess breach evidence, declared personal context, structure, reuse and derivative relationships while keeping credentials and personal attributes encrypted on disk and off the network. The evaluation, run under a frozen protocol, shows that its fixed-weight score does not turn those signals into detection: at a 5\% false-positive limit it found only the breach-evidence passwords, for a structural reason that holds regardless of the data. Per-signal rules and fitted models used the same signals far more effectively on this synthetic fixture, at costs in false positives and external validity respectively. We present these as negative findings and make no claim of superior detection or behavioural efficacy.
+CAV shows that a local password manager can assess breach evidence, declared personal context, structure, reuse and derivative relationships while keeping credentials and personal attributes encrypted on disk and off the network. The evaluation, run under a frozen protocol, shows that its fixed-weight score does not turn those signals into detection: at a 5\% false-positive limit it found only the breach-evidence passwords, for a structural reason that holds regardless of the data. Per-signal rules and fitted models used the same signals far more effectively on this synthetic fixture, at costs in false positives and external validity respectively. A published meter given the same context also outperformed it. We present these as negative findings and make no claim of superior detection or behavioural efficacy.
 
-Future work, in order of priority, is as follows: an independent, adjudicated benchmark; a faithful reproduction of published targeted-guessing attacks at larger budgets; selecting and calibrating a decision rule on that benchmark before any deployment; an ethics-approved, adequately powered and counterbalanced G1--G4 study; measurements on other hardware and real networks; packet-level and OS clipboard-history inspection; dictionary-word checks in the gate; post-login keystroke verification~\cite{parkinson,rusli}; and passwordless authentication with FIDO2/WebAuthn.
+Future work, in order of priority, is as follows:
+\begin{itemize}
+\item an independent, adjudicated benchmark;
+\item a faithful reproduction of published targeted-guessing attacks;
+\item selecting and calibrating a decision rule on that benchmark, against a context-aware published meter, before any deployment;
+\item an ethics-approved, adequately powered and counterbalanced G1--G4 study;
+\item measurements on other hardware;
+\item Unicode-aware matching (accent folding, apostrophes and transliteration);
+\item dictionary-word checks in the gate;
+\item post-login keystroke verification~\cite{parkinson,rusli};
+\item passwordless authentication with FIDO2/WebAuthn.
+\end{itemize}
+The repository includes kits for the independent benchmark, the study (protocol, participant documents and allocation schedule) and the second-machine measurements. Each still needs people outside the authors to carry it out.
 
 \begin{thebibliography}{99}
 \bibitem{jubur} M. Jubur, P. Shrestha, and N. Saxena, ``An in-depth analysis of password managers and two-factor authentication tools,'' \emph{ACM Comput. Surv.}, vol.~57, no.~5, Art. no.~128, 2025, doi: 10.1145/3711117.
