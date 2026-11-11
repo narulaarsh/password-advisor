@@ -1,7 +1,7 @@
 {
   "stream": {
     "streams": 334,
-    "seconds": 2.42,
+    "seconds": 2.71,
     "distinct_min": 30341,
     "distinct_median": 46485.0,
     "distinct_max": 87115,

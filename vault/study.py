@@ -1,9 +1,11 @@
 """Fictional-task study logging. Passwords and password hashes are never persisted."""
 import csv
 import hashlib
+import io
 import itertools
 import os
 import random
+import sqlite3
 import time
 from pathlib import Path
 
@@ -94,7 +96,24 @@ def write_allocation_schedule(rows, path):
 
 def load_allocation_schedule(path):
     with open(path, newline='') as f:
-        rows = list(csv.DictReader(f))
+        return _parse_schedule(list(csv.DictReader(f)))
+
+
+def load_allocation_schedule_text(text):
+    """Parses a schedule supplied as CSV text (for example a hosting secret)."""
+    return _parse_schedule(list(csv.DictReader(io.StringIO(text.strip()))))
+
+
+def schedule_from_environment(schedule_path=None):
+    """Schedule from an explicit path, STUDY_ALLOCATION_FILE or STUDY_ALLOCATION_CSV (text)."""
+    path = schedule_path or os.environ.get('STUDY_ALLOCATION_FILE')
+    if path:
+        return load_allocation_schedule(path)
+    text = os.environ.get('STUDY_ALLOCATION_CSV', '').strip()
+    return load_allocation_schedule_text(text) if text else None
+
+
+def _parse_schedule(rows):
     schedule = {}
     for row in rows:
         order = [int(x) for x in row['task_order'].split('-')]
@@ -115,9 +134,9 @@ def assignment(participant_id, human=False, schedule_path=None):
     if not participant_id.strip():
         raise ValueError('Participant ID required')
     if human:
-        if not schedule_path:
-            raise ValueError('Human collection requires STUDY_ALLOCATION_FILE')
-        schedule = load_allocation_schedule(schedule_path)
+        schedule = schedule_from_environment(schedule_path)
+        if not schedule:
+            raise ValueError('Human collection requires STUDY_ALLOCATION_FILE or STUDY_ALLOCATION_CSV')
         if participant_id.strip() not in schedule:
             raise ValueError('Participant ID is not a slot in the allocation schedule')
         return schedule[participant_id.strip()]
@@ -129,7 +148,77 @@ EVENT_FIELDS = ['participant_id', 'condition', 'task_id', 'task_label', 'task_po
                 'protocol_id', 'recorded_at']
 
 
-def _append(path, fields, row):
+def database_url():
+    """Optional database for hosted studies (hosting disks are wiped on restart)."""
+    return os.environ.get('STUDY_DATABASE_URL', '').strip()
+
+
+def _connect(url):
+    if url.startswith('sqlite:///'):
+        return sqlite3.connect(url[len('sqlite:///'):]), '?'
+    if url.startswith(('postgres://', 'postgresql://')):
+        import psycopg  # only needed for hosted deployments
+        return psycopg.connect(url), '%s'
+    raise ValueError('STUDY_DATABASE_URL must start with sqlite:/// or postgresql://')
+
+
+def _db_insert(table, fields, row):
+    conn, mark = _connect(database_url())
+    try:
+        cur = conn.cursor()
+        cur.execute(f'CREATE TABLE IF NOT EXISTS {table} ({", ".join(f + " TEXT" for f in fields)})')
+        cur.execute(f'INSERT INTO {table} ({", ".join(fields)}) VALUES ({", ".join([mark] * len(fields))})',
+                    [str(row[f]) for f in fields])
+        conn.commit()
+    finally:
+        conn.close()
+
+
+def claim_next_slot(schedule, claims_path='data/private/claimed_slots.csv'):
+    """Gives the next unclaimed schedule slot to a new participant (enrollment order), or None
+    when the schedule is exhausted. Claims are atomic in the database or under a file lock."""
+    slots = list(schedule)
+    if database_url():
+        conn, mark = _connect(database_url())
+        try:
+            cur = conn.cursor()
+            cur.execute('CREATE TABLE IF NOT EXISTS study_slots (slot_id TEXT PRIMARY KEY, claimed_at TEXT)')
+            conn.commit()
+            cur.execute('SELECT slot_id FROM study_slots')
+            claimed = {r[0] for r in cur.fetchall()}
+            for slot in slots:
+                if slot in claimed:
+                    continue
+                try:
+                    cur.execute(f'INSERT INTO study_slots (slot_id, claimed_at) VALUES ({mark}, {mark})',
+                                (slot, str(int(time.time()))))
+                    conn.commit()
+                    return slot
+                except Exception:  # claimed concurrently by another participant
+                    conn.rollback()
+            return None
+        finally:
+            conn.close()
+    import fcntl
+    path = Path(claims_path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open('a+') as f:
+        fcntl.flock(f, fcntl.LOCK_EX)
+        f.seek(0)
+        claimed = {line.split(',')[0] for line in f.read().splitlines() if line}
+        for slot in slots:
+            if slot not in claimed:
+                f.write(f'{slot},{int(time.time())}\n')
+                f.flush()
+                os.chmod(path, 0o600)
+                return slot
+    return None
+
+
+def _append(path, fields, row, table=None):
+    if table and database_url():
+        _db_insert(table, fields, row)
+        return
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     if path.exists() and path.stat().st_size:
@@ -156,7 +245,7 @@ def log_study_event(participant_id, condition, task_id, final_password, warning_
         raise ValueError('Valid participant, task and condition required')
     if time_ms < 0 or source not in ('demo', 'synthetic', 'human'):
         raise ValueError('Invalid event metadata')
-    _append(log_path, EVENT_FIELDS, dict(
+    _append(log_path, EVENT_FIELDS, table='study_events', row=dict(
         participant_id=participant_id, condition=condition, task_id=task_id, task_label=task_label,
         task_position=task_position, task_order=task_order, warning_shown=int(warning_shown),
         overridden=int(overridden), accepted_alternative=int(accepted_alternative),
@@ -185,5 +274,5 @@ def log_questionnaire(participant_id, condition, responses, log_path=DEFAULT_QUE
     row = dict(participant_id=participant_id, condition=condition, sus_score=sus_score(responses),
                source=source, protocol_id=protocol_id, recorded_at=int(time.time()))
     row.update({f'sus_{k + 1}': r for k, r in enumerate(responses)})
-    _append(log_path, QUESTIONNAIRE_FIELDS, row)
+    _append(log_path, QUESTIONNAIRE_FIELDS, row, table='study_questionnaire')
     return row['sus_score']

@@ -1,0 +1,2461 @@
+{
+  "provenance": "PASS public sample (Wang et al., ACM CODASPY 2018); real pseudonymous breached passwords; only aggregates reported; no HIBP lookups; thresholds and models frozen from Review 2",
+  "dataset": {
+    "users": 1000,
+    "passwords": 2111,
+    "sha256": "3e4c96578324df5d955449f6c7e921974d2202096ef2b40477a77cd3fac899b5",
+    "passwords_per_user": {
+      "2": 901,
+      "3": 88,
+      "4": 10,
+      "5": 1
+    },
+    "length_median": 8.0,
+    "length_p10_p90": [
+      6.0,
+      10.0
+    ]
+  },
+  "relations": {
+    "users_with_exact_reuse": 439,
+    "users_with_exact_reuse_rate": 0.439,
+    "within_user_distinct_pairs": 670,
+    "within_user_pairs_derivative": 147,
+    "within_user_derivative_rate": 0.21940298507462686,
+    "within_user_derivative_rate_ci95": [
+      0.18971501925759254,
+      0.2522902253320673
+    ],
+    "cross_user_random_pairs": 20000,
+    "cross_user_identical": 0,
+    "cross_user_derivative": 3,
+    "cross_user_derivative_rate": 0.00015,
+    "cross_user_derivative_rate_ci95": [
+      5.101481799495055e-05,
+      0.0004409636272928435
+    ]
+  },
+  "primary_one_target_per_user": {
+    "cases": 1000,
+    "users": 1000,
+    "signal_prevalence": {
+      "exact_reuse": 0.425,
+      "derivative": 0.561,
+      "weak_syntax": 0.877,
+      "reuse_or_derivative": 0.561
+    },
+    "outcomes": {
+      "S3@100": {
+        "recovered": 449,
+        "rate": 0.449,
+        "rate_ci95": [
+          0.4184254667345993,
+          0.47996486263092736
+        ],
+        "methods": {
+          "CAV_current": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "pr_auc": 0.968786376620095,
+            "flagged": 0,
+            "bootstrap_ci95": {
+              "recall": [
+                0.0,
+                0.0
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "recall_minus_cav": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "B7_logistic_transfer": {
+            "precision": 1.0,
+            "recall": 0.10690423162583519,
+            "fpr": 0.0,
+            "pr_auc": 0.9625881718685989,
+            "flagged": 48,
+            "bootstrap_ci95": {
+              "recall": [
+                0.0774640097220491,
+                0.13519758419701258
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "precision": [
+                1.0,
+                1.0
+              ],
+              "recall_minus_cav": [
+                0.0774640097220491,
+                0.13519758419701258
+              ]
+            }
+          },
+          "B9_nonneg_logistic_transfer": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "pr_auc": 0.989328632850184,
+            "flagged": 0,
+            "bootstrap_ci95": {
+              "recall": [
+                0.0,
+                0.0
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "recall_minus_cav": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "B8a_zxcvbn_meter": {
+            "precision": 0.45788336933045354,
+            "recall": 0.47216035634743875,
+            "fpr": 0.455535390199637,
+            "pr_auc": 0.4481957257869472,
+            "flagged": 463,
+            "bootstrap_ci95": {
+              "recall": [
+                0.42729509356181544,
+                0.520794660055214
+              ],
+              "fpr": [
+                0.4149854059331893,
+                0.49641133706488255
+              ],
+              "precision": [
+                0.4152307989264311,
+                0.506924620765581
+              ],
+              "recall_minus_cav": [
+                0.42729509356181544,
+                0.520794660055214
+              ]
+            }
+          },
+          "B8b_zxcvbn_history_inputs": {
+            "precision": 0.6218836565096952,
+            "recall": 1.0,
+            "fpr": 0.4954627949183303,
+            "pr_auc": 0.9811986530319168,
+            "flagged": 722,
+            "bootstrap_ci95": {
+              "recall": [
+                1.0,
+                1.0
+              ],
+              "fpr": [
+                0.45598401619850437,
+                0.5359211940261098
+              ],
+              "precision": [
+                0.5849208952344203,
+                0.6596681705469073
+              ],
+              "recall_minus_cav": [
+                1.0,
+                1.0
+              ]
+            }
+          },
+          "B5_reuse_or_derivative": {
+            "precision": 0.8003565062388592,
+            "recall": 1.0,
+            "fpr": 0.20326678765880218,
+            "pr_auc": null,
+            "flagged": 561,
+            "bootstrap_ci95": {
+              "recall": [
+                1.0,
+                1.0
+              ],
+              "fpr": [
+                0.1702719942041768,
+                0.23669967079427148
+              ],
+              "precision": [
+                0.7654298703035165,
+                0.8300579225963207
+              ],
+              "recall_minus_cav": [
+                1.0,
+                1.0
+              ]
+            }
+          },
+          "R1_gate_rule_no_profile": {
+            "precision": 0.4771519659936238,
+            "recall": 1.0,
+            "fpr": 0.8929219600725953,
+            "pr_auc": null,
+            "flagged": 941,
+            "bootstrap_ci95": {
+              "recall": [
+                1.0,
+                1.0
+              ],
+              "fpr": [
+                0.86882154412756,
+                0.9183748915462673
+              ],
+              "precision": [
+                0.4431368653073723,
+                0.5091123274631127
+              ],
+              "recall_minus_cav": [
+                1.0,
+                1.0
+              ]
+            }
+          }
+        }
+      },
+      "S3@1000": {
+        "recovered": 449,
+        "rate": 0.449,
+        "rate_ci95": [
+          0.4184254667345993,
+          0.47996486263092736
+        ],
+        "methods": {
+          "CAV_current": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "pr_auc": 0.968786376620095,
+            "flagged": 0,
+            "bootstrap_ci95": {
+              "recall": [
+                0.0,
+                0.0
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "recall_minus_cav": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "B7_logistic_transfer": {
+            "precision": 1.0,
+            "recall": 0.10690423162583519,
+            "fpr": 0.0,
+            "pr_auc": 0.9625881718685989,
+            "flagged": 48,
+            "bootstrap_ci95": {
+              "recall": [
+                0.0774640097220491,
+                0.13519758419701258
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "precision": [
+                1.0,
+                1.0
+              ],
+              "recall_minus_cav": [
+                0.0774640097220491,
+                0.13519758419701258
+              ]
+            }
+          },
+          "B9_nonneg_logistic_transfer": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "pr_auc": 0.989328632850184,
+            "flagged": 0,
+            "bootstrap_ci95": {
+              "recall": [
+                0.0,
+                0.0
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "recall_minus_cav": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "B8a_zxcvbn_meter": {
+            "precision": 0.45788336933045354,
+            "recall": 0.47216035634743875,
+            "fpr": 0.455535390199637,
+            "pr_auc": 0.4481957257869472,
+            "flagged": 463,
+            "bootstrap_ci95": {
+              "recall": [
+                0.42729509356181544,
+                0.520794660055214
+              ],
+              "fpr": [
+                0.4149854059331893,
+                0.49641133706488255
+              ],
+              "precision": [
+                0.4152307989264311,
+                0.506924620765581
+              ],
+              "recall_minus_cav": [
+                0.42729509356181544,
+                0.520794660055214
+              ]
+            }
+          },
+          "B8b_zxcvbn_history_inputs": {
+            "precision": 0.6218836565096952,
+            "recall": 1.0,
+            "fpr": 0.4954627949183303,
+            "pr_auc": 0.9811986530319168,
+            "flagged": 722,
+            "bootstrap_ci95": {
+              "recall": [
+                1.0,
+                1.0
+              ],
+              "fpr": [
+                0.45598401619850437,
+                0.5359211940261098
+              ],
+              "precision": [
+                0.5849208952344203,
+                0.6596681705469073
+              ],
+              "recall_minus_cav": [
+                1.0,
+                1.0
+              ]
+            }
+          },
+          "B5_reuse_or_derivative": {
+            "precision": 0.8003565062388592,
+            "recall": 1.0,
+            "fpr": 0.20326678765880218,
+            "pr_auc": null,
+            "flagged": 561,
+            "bootstrap_ci95": {
+              "recall": [
+                1.0,
+                1.0
+              ],
+              "fpr": [
+                0.1702719942041768,
+                0.23669967079427148
+              ],
+              "precision": [
+                0.7654298703035165,
+                0.8300579225963207
+              ],
+              "recall_minus_cav": [
+                1.0,
+                1.0
+              ]
+            }
+          },
+          "R1_gate_rule_no_profile": {
+            "precision": 0.4771519659936238,
+            "recall": 1.0,
+            "fpr": 0.8929219600725953,
+            "pr_auc": null,
+            "flagged": 941,
+            "bootstrap_ci95": {
+              "recall": [
+                1.0,
+                1.0
+              ],
+              "fpr": [
+                0.86882154412756,
+                0.9183748915462673
+              ],
+              "precision": [
+                0.4431368653073723,
+                0.5091123274631127
+              ],
+              "recall_minus_cav": [
+                1.0,
+                1.0
+              ]
+            }
+          }
+        }
+      },
+      "S3@10000": {
+        "recovered": 449,
+        "rate": 0.449,
+        "rate_ci95": [
+          0.4184254667345993,
+          0.47996486263092736
+        ],
+        "methods": {
+          "CAV_current": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "pr_auc": 0.968786376620095,
+            "flagged": 0,
+            "bootstrap_ci95": {
+              "recall": [
+                0.0,
+                0.0
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "recall_minus_cav": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "B7_logistic_transfer": {
+            "precision": 1.0,
+            "recall": 0.10690423162583519,
+            "fpr": 0.0,
+            "pr_auc": 0.9625881718685989,
+            "flagged": 48,
+            "bootstrap_ci95": {
+              "recall": [
+                0.0774640097220491,
+                0.13519758419701258
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "precision": [
+                1.0,
+                1.0
+              ],
+              "recall_minus_cav": [
+                0.0774640097220491,
+                0.13519758419701258
+              ]
+            }
+          },
+          "B9_nonneg_logistic_transfer": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "pr_auc": 0.989328632850184,
+            "flagged": 0,
+            "bootstrap_ci95": {
+              "recall": [
+                0.0,
+                0.0
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "recall_minus_cav": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "B8a_zxcvbn_meter": {
+            "precision": 0.45788336933045354,
+            "recall": 0.47216035634743875,
+            "fpr": 0.455535390199637,
+            "pr_auc": 0.4481957257869472,
+            "flagged": 463,
+            "bootstrap_ci95": {
+              "recall": [
+                0.42729509356181544,
+                0.520794660055214
+              ],
+              "fpr": [
+                0.4149854059331893,
+                0.49641133706488255
+              ],
+              "precision": [
+                0.4152307989264311,
+                0.506924620765581
+              ],
+              "recall_minus_cav": [
+                0.42729509356181544,
+                0.520794660055214
+              ]
+            }
+          },
+          "B8b_zxcvbn_history_inputs": {
+            "precision": 0.6218836565096952,
+            "recall": 1.0,
+            "fpr": 0.4954627949183303,
+            "pr_auc": 0.9811986530319168,
+            "flagged": 722,
+            "bootstrap_ci95": {
+              "recall": [
+                1.0,
+                1.0
+              ],
+              "fpr": [
+                0.45598401619850437,
+                0.5359211940261098
+              ],
+              "precision": [
+                0.5849208952344203,
+                0.6596681705469073
+              ],
+              "recall_minus_cav": [
+                1.0,
+                1.0
+              ]
+            }
+          },
+          "B5_reuse_or_derivative": {
+            "precision": 0.8003565062388592,
+            "recall": 1.0,
+            "fpr": 0.20326678765880218,
+            "pr_auc": null,
+            "flagged": 561,
+            "bootstrap_ci95": {
+              "recall": [
+                1.0,
+                1.0
+              ],
+              "fpr": [
+                0.1702719942041768,
+                0.23669967079427148
+              ],
+              "precision": [
+                0.7654298703035165,
+                0.8300579225963207
+              ],
+              "recall_minus_cav": [
+                1.0,
+                1.0
+              ]
+            }
+          },
+          "R1_gate_rule_no_profile": {
+            "precision": 0.4771519659936238,
+            "recall": 1.0,
+            "fpr": 0.8929219600725953,
+            "pr_auc": null,
+            "flagged": 941,
+            "bootstrap_ci95": {
+              "recall": [
+                1.0,
+                1.0
+              ],
+              "fpr": [
+                0.86882154412756,
+                0.9183748915462673
+              ],
+              "precision": [
+                0.4431368653073723,
+                0.5091123274631127
+              ],
+              "recall_minus_cav": [
+                1.0,
+                1.0
+              ]
+            }
+          }
+        }
+      },
+      "S6@100": {
+        "recovered": 489,
+        "rate": 0.489,
+        "rate_ci95": [
+          0.4581191521232714,
+          0.5199650365634109
+        ],
+        "methods": {
+          "CAV_current": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "pr_auc": 0.9681504703289749,
+            "flagged": 0,
+            "bootstrap_ci95": {
+              "recall": [
+                0.0,
+                0.0
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "recall_minus_cav": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "B7_logistic_transfer": {
+            "precision": 1.0,
+            "recall": 0.09815950920245399,
+            "fpr": 0.0,
+            "pr_auc": 0.9625332511358637,
+            "flagged": 48,
+            "bootstrap_ci95": {
+              "recall": [
+                0.07096070015424855,
+                0.12449000081960494
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "precision": [
+                1.0,
+                1.0
+              ],
+              "recall_minus_cav": [
+                0.07096070015424855,
+                0.12449000081960494
+              ]
+            }
+          },
+          "B9_nonneg_logistic_transfer": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "pr_auc": 0.9821904683792089,
+            "flagged": 0,
+            "bootstrap_ci95": {
+              "recall": [
+                0.0,
+                0.0
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "recall_minus_cav": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "B8a_zxcvbn_meter": {
+            "precision": 0.5053995680345572,
+            "recall": 0.4785276073619632,
+            "fpr": 0.4481409001956947,
+            "pr_auc": 0.4963077399215905,
+            "flagged": 463,
+            "bootstrap_ci95": {
+              "recall": [
+                0.4353135617881281,
+                0.5293080287410183
+              ],
+              "fpr": [
+                0.4055132139921923,
+                0.49080483508473544
+              ],
+              "precision": [
+                0.46153846153846156,
+                0.552180049088359
+              ],
+              "recall_minus_cav": [
+                0.4353135617881281,
+                0.5293080287410183
+              ]
+            }
+          },
+          "B8b_zxcvbn_history_inputs": {
+            "precision": 0.6606648199445984,
+            "recall": 0.9754601226993865,
+            "fpr": 0.4794520547945205,
+            "pr_auc": 0.9672351117269172,
+            "flagged": 722,
+            "bootstrap_ci95": {
+              "recall": [
+                0.9613130106975092,
+                0.9884404158299402
+              ],
+              "fpr": [
+                0.43748434368737477,
+                0.520619651413387
+              ],
+              "precision": [
+                0.6229236270220152,
+                0.6974579449693564
+              ],
+              "recall_minus_cav": [
+                0.9613130106975092,
+                0.9884404158299402
+              ]
+            }
+          },
+          "B5_reuse_or_derivative": {
+            "precision": 0.8698752228163993,
+            "recall": 0.9979550102249489,
+            "fpr": 0.14285714285714285,
+            "pr_auc": null,
+            "flagged": 561,
+            "bootstrap_ci95": {
+              "recall": [
+                0.9934768306636156,
+                1.0
+              ],
+              "fpr": [
+                0.11427606177606177,
+                0.17580831758034027
+              ],
+              "precision": [
+                0.839447463768116,
+                0.8953089394986814
+              ],
+              "recall_minus_cav": [
+                0.9934768306636156,
+                1.0
+              ]
+            }
+          },
+          "R1_gate_rule_no_profile": {
+            "precision": 0.5196599362380446,
+            "recall": 1.0,
+            "fpr": 0.8845401174168297,
+            "pr_auc": null,
+            "flagged": 941,
+            "bootstrap_ci95": {
+              "recall": [
+                1.0,
+                1.0
+              ],
+              "fpr": [
+                0.8585021997809501,
+                0.91200163599182
+              ],
+              "precision": [
+                0.4861911828458999,
+                0.5503711558854719
+              ],
+              "recall_minus_cav": [
+                1.0,
+                1.0
+              ]
+            }
+          }
+        }
+      },
+      "S6@1000": {
+        "recovered": 489,
+        "rate": 0.489,
+        "rate_ci95": [
+          0.4581191521232714,
+          0.5199650365634109
+        ],
+        "methods": {
+          "CAV_current": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "pr_auc": 0.9681504703289749,
+            "flagged": 0,
+            "bootstrap_ci95": {
+              "recall": [
+                0.0,
+                0.0
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "recall_minus_cav": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "B7_logistic_transfer": {
+            "precision": 1.0,
+            "recall": 0.09815950920245399,
+            "fpr": 0.0,
+            "pr_auc": 0.9625332511358637,
+            "flagged": 48,
+            "bootstrap_ci95": {
+              "recall": [
+                0.07096070015424855,
+                0.12449000081960494
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "precision": [
+                1.0,
+                1.0
+              ],
+              "recall_minus_cav": [
+                0.07096070015424855,
+                0.12449000081960494
+              ]
+            }
+          },
+          "B9_nonneg_logistic_transfer": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "pr_auc": 0.9821904683792089,
+            "flagged": 0,
+            "bootstrap_ci95": {
+              "recall": [
+                0.0,
+                0.0
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "recall_minus_cav": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "B8a_zxcvbn_meter": {
+            "precision": 0.5053995680345572,
+            "recall": 0.4785276073619632,
+            "fpr": 0.4481409001956947,
+            "pr_auc": 0.4963077399215905,
+            "flagged": 463,
+            "bootstrap_ci95": {
+              "recall": [
+                0.4353135617881281,
+                0.5293080287410183
+              ],
+              "fpr": [
+                0.4055132139921923,
+                0.49080483508473544
+              ],
+              "precision": [
+                0.46153846153846156,
+                0.552180049088359
+              ],
+              "recall_minus_cav": [
+                0.4353135617881281,
+                0.5293080287410183
+              ]
+            }
+          },
+          "B8b_zxcvbn_history_inputs": {
+            "precision": 0.6606648199445984,
+            "recall": 0.9754601226993865,
+            "fpr": 0.4794520547945205,
+            "pr_auc": 0.9672351117269172,
+            "flagged": 722,
+            "bootstrap_ci95": {
+              "recall": [
+                0.9613130106975092,
+                0.9884404158299402
+              ],
+              "fpr": [
+                0.43748434368737477,
+                0.520619651413387
+              ],
+              "precision": [
+                0.6229236270220152,
+                0.6974579449693564
+              ],
+              "recall_minus_cav": [
+                0.9613130106975092,
+                0.9884404158299402
+              ]
+            }
+          },
+          "B5_reuse_or_derivative": {
+            "precision": 0.8698752228163993,
+            "recall": 0.9979550102249489,
+            "fpr": 0.14285714285714285,
+            "pr_auc": null,
+            "flagged": 561,
+            "bootstrap_ci95": {
+              "recall": [
+                0.9934768306636156,
+                1.0
+              ],
+              "fpr": [
+                0.11427606177606177,
+                0.17580831758034027
+              ],
+              "precision": [
+                0.839447463768116,
+                0.8953089394986814
+              ],
+              "recall_minus_cav": [
+                0.9934768306636156,
+                1.0
+              ]
+            }
+          },
+          "R1_gate_rule_no_profile": {
+            "precision": 0.5196599362380446,
+            "recall": 1.0,
+            "fpr": 0.8845401174168297,
+            "pr_auc": null,
+            "flagged": 941,
+            "bootstrap_ci95": {
+              "recall": [
+                1.0,
+                1.0
+              ],
+              "fpr": [
+                0.8585021997809501,
+                0.91200163599182
+              ],
+              "precision": [
+                0.4861911828458999,
+                0.5503711558854719
+              ],
+              "recall_minus_cav": [
+                1.0,
+                1.0
+              ]
+            }
+          }
+        }
+      },
+      "S6@10000": {
+        "recovered": 489,
+        "rate": 0.489,
+        "rate_ci95": [
+          0.4581191521232714,
+          0.5199650365634109
+        ],
+        "methods": {
+          "CAV_current": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "pr_auc": 0.9681504703289749,
+            "flagged": 0,
+            "bootstrap_ci95": {
+              "recall": [
+                0.0,
+                0.0
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "recall_minus_cav": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "B7_logistic_transfer": {
+            "precision": 1.0,
+            "recall": 0.09815950920245399,
+            "fpr": 0.0,
+            "pr_auc": 0.9625332511358637,
+            "flagged": 48,
+            "bootstrap_ci95": {
+              "recall": [
+                0.07096070015424855,
+                0.12449000081960494
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "precision": [
+                1.0,
+                1.0
+              ],
+              "recall_minus_cav": [
+                0.07096070015424855,
+                0.12449000081960494
+              ]
+            }
+          },
+          "B9_nonneg_logistic_transfer": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "pr_auc": 0.9821904683792089,
+            "flagged": 0,
+            "bootstrap_ci95": {
+              "recall": [
+                0.0,
+                0.0
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "recall_minus_cav": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "B8a_zxcvbn_meter": {
+            "precision": 0.5053995680345572,
+            "recall": 0.4785276073619632,
+            "fpr": 0.4481409001956947,
+            "pr_auc": 0.4963077399215905,
+            "flagged": 463,
+            "bootstrap_ci95": {
+              "recall": [
+                0.4353135617881281,
+                0.5293080287410183
+              ],
+              "fpr": [
+                0.4055132139921923,
+                0.49080483508473544
+              ],
+              "precision": [
+                0.46153846153846156,
+                0.552180049088359
+              ],
+              "recall_minus_cav": [
+                0.4353135617881281,
+                0.5293080287410183
+              ]
+            }
+          },
+          "B8b_zxcvbn_history_inputs": {
+            "precision": 0.6606648199445984,
+            "recall": 0.9754601226993865,
+            "fpr": 0.4794520547945205,
+            "pr_auc": 0.9672351117269172,
+            "flagged": 722,
+            "bootstrap_ci95": {
+              "recall": [
+                0.9613130106975092,
+                0.9884404158299402
+              ],
+              "fpr": [
+                0.43748434368737477,
+                0.520619651413387
+              ],
+              "precision": [
+                0.6229236270220152,
+                0.6974579449693564
+              ],
+              "recall_minus_cav": [
+                0.9613130106975092,
+                0.9884404158299402
+              ]
+            }
+          },
+          "B5_reuse_or_derivative": {
+            "precision": 0.8698752228163993,
+            "recall": 0.9979550102249489,
+            "fpr": 0.14285714285714285,
+            "pr_auc": null,
+            "flagged": 561,
+            "bootstrap_ci95": {
+              "recall": [
+                0.9934768306636156,
+                1.0
+              ],
+              "fpr": [
+                0.11427606177606177,
+                0.17580831758034027
+              ],
+              "precision": [
+                0.839447463768116,
+                0.8953089394986814
+              ],
+              "recall_minus_cav": [
+                0.9934768306636156,
+                1.0
+              ]
+            }
+          },
+          "R1_gate_rule_no_profile": {
+            "precision": 0.5196599362380446,
+            "recall": 1.0,
+            "fpr": 0.8845401174168297,
+            "pr_auc": null,
+            "flagged": 941,
+            "bootstrap_ci95": {
+              "recall": [
+                1.0,
+                1.0
+              ],
+              "fpr": [
+                0.8585021997809501,
+                0.91200163599182
+              ],
+              "precision": [
+                0.4861911828458999,
+                0.5503711558854719
+              ],
+              "recall_minus_cav": [
+                1.0,
+                1.0
+              ]
+            }
+          }
+        }
+      }
+    },
+    "paired_B5_minus_B8b_S6_1000": {
+      "recall_difference": 0.02249488752556239,
+      "recall_difference_ci95": [
+        0.009633911368015391,
+        0.03755209453090116
+      ],
+      "fpr_difference": -0.33659491193737767,
+      "fpr_difference_ci95": [
+        -0.3825792648709315,
+        -0.28543006528611775
+      ]
+    },
+    "non_reuse_targets": {
+      "cases": 575,
+      "note": "exploratory post-hoc subset: target differs from every history password",
+      "S3@1000": {
+        "recovered": 24,
+        "rate": 0.04173913043478261,
+        "rate_ci95": [
+          0.028206663216069985,
+          0.06135405851646383
+        ],
+        "methods": {
+          "CAV_current": {
+            "recall": 0.0,
+            "fpr": 0.0,
+            "precision": 0.0,
+            "flagged": 0
+          },
+          "B7_logistic_transfer": {
+            "recall": 0.0,
+            "fpr": 0.0,
+            "precision": 0.0,
+            "flagged": 0
+          },
+          "B9_nonneg_logistic_transfer": {
+            "recall": 0.0,
+            "fpr": 0.0,
+            "precision": 0.0,
+            "flagged": 0
+          },
+          "B8a_zxcvbn_meter": {
+            "recall": 0.5,
+            "fpr": 0.455535390199637,
+            "precision": 0.045627376425855515,
+            "flagged": 263
+          },
+          "B8b_zxcvbn_history_inputs": {
+            "recall": 1.0,
+            "fpr": 0.4954627949183303,
+            "precision": 0.08080808080808081,
+            "flagged": 297
+          },
+          "B5_reuse_or_derivative": {
+            "recall": 1.0,
+            "fpr": 0.20326678765880218,
+            "precision": 0.17647058823529413,
+            "flagged": 136
+          },
+          "R1_gate_rule_no_profile": {
+            "recall": 1.0,
+            "fpr": 0.8929219600725953,
+            "precision": 0.046511627906976744,
+            "flagged": 516
+          }
+        }
+      },
+      "S6@1000": {
+        "recovered": 64,
+        "rate": 0.11130434782608696,
+        "rate_ci95": [
+          0.08813310022119783,
+          0.139634722576606
+        ],
+        "methods": {
+          "CAV_current": {
+            "recall": 0.0,
+            "fpr": 0.0,
+            "precision": 0.0,
+            "flagged": 0
+          },
+          "B7_logistic_transfer": {
+            "recall": 0.0,
+            "fpr": 0.0,
+            "precision": 0.0,
+            "flagged": 0
+          },
+          "B9_nonneg_logistic_transfer": {
+            "recall": 0.0,
+            "fpr": 0.0,
+            "precision": 0.0,
+            "flagged": 0
+          },
+          "B8a_zxcvbn_meter": {
+            "recall": 0.53125,
+            "fpr": 0.4481409001956947,
+            "precision": 0.12927756653992395,
+            "flagged": 263
+          },
+          "B8b_zxcvbn_history_inputs": {
+            "recall": 0.8125,
+            "fpr": 0.4794520547945205,
+            "precision": 0.1750841750841751,
+            "flagged": 297
+          },
+          "B5_reuse_or_derivative": {
+            "recall": 0.984375,
+            "fpr": 0.14285714285714285,
+            "precision": 0.4632352941176471,
+            "flagged": 136
+          },
+          "R1_gate_rule_no_profile": {
+            "recall": 1.0,
+            "fpr": 0.8845401174168297,
+            "precision": 0.12403100775193798,
+            "flagged": 516
+          }
+        }
+      },
+      "paired_B5_minus_B8b_S6_1000": {
+        "recall_difference": 0.171875,
+        "recall_difference_ci95": [
+          0.06776836158192094,
+          0.2742227676484338
+        ],
+        "fpr_difference": -0.33659491193737767,
+        "fpr_difference_ci95": [
+          -0.3880388536941935,
+          -0.2873780828032586
+        ]
+      }
+    }
+  },
+  "secondary_every_password_as_target": {
+    "cases": 2111,
+    "users": 1000,
+    "signal_prevalence": {
+      "exact_reuse": 0.4334438654666035,
+      "derivative": 0.5646612979630506,
+      "weak_syntax": 0.8839412600663192,
+      "reuse_or_derivative": 0.5646612979630506
+    },
+    "outcomes": {
+      "S3@100": {
+        "recovered": 965,
+        "rate": 0.4571293225959261,
+        "rate_ci95": [
+          0.4359757352650987,
+          0.47843865298841537
+        ],
+        "methods": {
+          "CAV_current": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "pr_auc": 0.9687552319038901,
+            "flagged": 0,
+            "bootstrap_ci95": {
+              "recall": [
+                0.0,
+                0.0
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "recall_minus_cav": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "B7_logistic_transfer": {
+            "precision": 1.0,
+            "recall": 0.10569948186528498,
+            "fpr": 0.0,
+            "pr_auc": 0.9697946470753572,
+            "flagged": 102,
+            "bootstrap_ci95": {
+              "recall": [
+                0.07521766312622848,
+                0.13319469397312547
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "precision": [
+                1.0,
+                1.0
+              ],
+              "recall_minus_cav": [
+                0.07521766312622848,
+                0.13319469397312547
+              ]
+            }
+          },
+          "B9_nonneg_logistic_transfer": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "pr_auc": 0.9901328372222415,
+            "flagged": 0,
+            "bootstrap_ci95": {
+              "recall": [
+                0.0,
+                0.0
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "recall_minus_cav": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "B8a_zxcvbn_meter": {
+            "precision": 0.46611909650924027,
+            "recall": 0.47046632124352333,
+            "fpr": 0.4537521815008726,
+            "pr_auc": 0.4555626071467139,
+            "flagged": 974,
+            "bootstrap_ci95": {
+              "recall": [
+                0.42530276741279993,
+                0.5178087465685227
+              ],
+              "fpr": [
+                0.42462414846135776,
+                0.48065514017245536
+              ],
+              "precision": [
+                0.42785026579420976,
+                0.506391978031898
+              ],
+              "recall_minus_cav": [
+                0.42530276741279993,
+                0.5178087465685227
+              ]
+            }
+          },
+          "B8b_zxcvbn_history_inputs": {
+            "precision": 0.6298955613577023,
+            "recall": 1.0,
+            "fpr": 0.49476439790575916,
+            "pr_auc": 0.9811792825848189,
+            "flagged": 1532,
+            "bootstrap_ci95": {
+              "recall": [
+                1.0,
+                1.0
+              ],
+              "fpr": [
+                0.4641863803570895,
+                0.5233615868051901
+              ],
+              "precision": [
+                0.5993234395750332,
+                0.6615982645870244
+              ],
+              "recall_minus_cav": [
+                1.0,
+                1.0
+              ]
+            }
+          },
+          "B5_reuse_or_derivative": {
+            "precision": 0.8095637583892618,
+            "recall": 1.0,
+            "fpr": 0.1980802792321117,
+            "pr_auc": null,
+            "flagged": 1192,
+            "bootstrap_ci95": {
+              "recall": [
+                1.0,
+                1.0
+              ],
+              "fpr": [
+                0.16886739327883743,
+                0.23117418485769547
+              ],
+              "precision": [
+                0.7804190154782703,
+                0.8359583165724058
+              ],
+              "recall_minus_cav": [
+                1.0,
+                1.0
+              ]
+            }
+          },
+          "R1_gate_rule_no_profile": {
+            "precision": 0.4827413706853427,
+            "recall": 1.0,
+            "fpr": 0.9022687609075044,
+            "pr_auc": null,
+            "flagged": 1999,
+            "bootstrap_ci95": {
+              "recall": [
+                1.0,
+                1.0
+              ],
+              "fpr": [
+                0.8847470222558965,
+                0.9202788385277443
+              ],
+              "precision": [
+                0.4517876793764676,
+                0.5130832566757582
+              ],
+              "recall_minus_cav": [
+                1.0,
+                1.0
+              ]
+            }
+          }
+        }
+      },
+      "S3@1000": {
+        "recovered": 965,
+        "rate": 0.4571293225959261,
+        "rate_ci95": [
+          0.4359757352650987,
+          0.47843865298841537
+        ],
+        "methods": {
+          "CAV_current": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "pr_auc": 0.9687552319038901,
+            "flagged": 0,
+            "bootstrap_ci95": {
+              "recall": [
+                0.0,
+                0.0
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "recall_minus_cav": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "B7_logistic_transfer": {
+            "precision": 1.0,
+            "recall": 0.10569948186528498,
+            "fpr": 0.0,
+            "pr_auc": 0.9697946470753572,
+            "flagged": 102,
+            "bootstrap_ci95": {
+              "recall": [
+                0.07521766312622848,
+                0.13319469397312547
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "precision": [
+                1.0,
+                1.0
+              ],
+              "recall_minus_cav": [
+                0.07521766312622848,
+                0.13319469397312547
+              ]
+            }
+          },
+          "B9_nonneg_logistic_transfer": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "pr_auc": 0.9901328372222415,
+            "flagged": 0,
+            "bootstrap_ci95": {
+              "recall": [
+                0.0,
+                0.0
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "recall_minus_cav": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "B8a_zxcvbn_meter": {
+            "precision": 0.46611909650924027,
+            "recall": 0.47046632124352333,
+            "fpr": 0.4537521815008726,
+            "pr_auc": 0.4555626071467139,
+            "flagged": 974,
+            "bootstrap_ci95": {
+              "recall": [
+                0.42530276741279993,
+                0.5178087465685227
+              ],
+              "fpr": [
+                0.42462414846135776,
+                0.48065514017245536
+              ],
+              "precision": [
+                0.42785026579420976,
+                0.506391978031898
+              ],
+              "recall_minus_cav": [
+                0.42530276741279993,
+                0.5178087465685227
+              ]
+            }
+          },
+          "B8b_zxcvbn_history_inputs": {
+            "precision": 0.6298955613577023,
+            "recall": 1.0,
+            "fpr": 0.49476439790575916,
+            "pr_auc": 0.9811792825848189,
+            "flagged": 1532,
+            "bootstrap_ci95": {
+              "recall": [
+                1.0,
+                1.0
+              ],
+              "fpr": [
+                0.4641863803570895,
+                0.5233615868051901
+              ],
+              "precision": [
+                0.5993234395750332,
+                0.6615982645870244
+              ],
+              "recall_minus_cav": [
+                1.0,
+                1.0
+              ]
+            }
+          },
+          "B5_reuse_or_derivative": {
+            "precision": 0.8095637583892618,
+            "recall": 1.0,
+            "fpr": 0.1980802792321117,
+            "pr_auc": null,
+            "flagged": 1192,
+            "bootstrap_ci95": {
+              "recall": [
+                1.0,
+                1.0
+              ],
+              "fpr": [
+                0.16886739327883743,
+                0.23117418485769547
+              ],
+              "precision": [
+                0.7804190154782703,
+                0.8359583165724058
+              ],
+              "recall_minus_cav": [
+                1.0,
+                1.0
+              ]
+            }
+          },
+          "R1_gate_rule_no_profile": {
+            "precision": 0.4827413706853427,
+            "recall": 1.0,
+            "fpr": 0.9022687609075044,
+            "pr_auc": null,
+            "flagged": 1999,
+            "bootstrap_ci95": {
+              "recall": [
+                1.0,
+                1.0
+              ],
+              "fpr": [
+                0.8847470222558965,
+                0.9202788385277443
+              ],
+              "precision": [
+                0.4517876793764676,
+                0.5130832566757582
+              ],
+              "recall_minus_cav": [
+                1.0,
+                1.0
+              ]
+            }
+          }
+        }
+      },
+      "S3@10000": {
+        "recovered": 965,
+        "rate": 0.4571293225959261,
+        "rate_ci95": [
+          0.4359757352650987,
+          0.47843865298841537
+        ],
+        "methods": {
+          "CAV_current": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "pr_auc": 0.9687552319038901,
+            "flagged": 0,
+            "bootstrap_ci95": {
+              "recall": [
+                0.0,
+                0.0
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "recall_minus_cav": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "B7_logistic_transfer": {
+            "precision": 1.0,
+            "recall": 0.10569948186528498,
+            "fpr": 0.0,
+            "pr_auc": 0.9697946470753572,
+            "flagged": 102,
+            "bootstrap_ci95": {
+              "recall": [
+                0.07521766312622848,
+                0.13319469397312547
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "precision": [
+                1.0,
+                1.0
+              ],
+              "recall_minus_cav": [
+                0.07521766312622848,
+                0.13319469397312547
+              ]
+            }
+          },
+          "B9_nonneg_logistic_transfer": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "pr_auc": 0.9901328372222415,
+            "flagged": 0,
+            "bootstrap_ci95": {
+              "recall": [
+                0.0,
+                0.0
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "recall_minus_cav": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "B8a_zxcvbn_meter": {
+            "precision": 0.46611909650924027,
+            "recall": 0.47046632124352333,
+            "fpr": 0.4537521815008726,
+            "pr_auc": 0.4555626071467139,
+            "flagged": 974,
+            "bootstrap_ci95": {
+              "recall": [
+                0.42530276741279993,
+                0.5178087465685227
+              ],
+              "fpr": [
+                0.42462414846135776,
+                0.48065514017245536
+              ],
+              "precision": [
+                0.42785026579420976,
+                0.506391978031898
+              ],
+              "recall_minus_cav": [
+                0.42530276741279993,
+                0.5178087465685227
+              ]
+            }
+          },
+          "B8b_zxcvbn_history_inputs": {
+            "precision": 0.6298955613577023,
+            "recall": 1.0,
+            "fpr": 0.49476439790575916,
+            "pr_auc": 0.9811792825848189,
+            "flagged": 1532,
+            "bootstrap_ci95": {
+              "recall": [
+                1.0,
+                1.0
+              ],
+              "fpr": [
+                0.4641863803570895,
+                0.5233615868051901
+              ],
+              "precision": [
+                0.5993234395750332,
+                0.6615982645870244
+              ],
+              "recall_minus_cav": [
+                1.0,
+                1.0
+              ]
+            }
+          },
+          "B5_reuse_or_derivative": {
+            "precision": 0.8095637583892618,
+            "recall": 1.0,
+            "fpr": 0.1980802792321117,
+            "pr_auc": null,
+            "flagged": 1192,
+            "bootstrap_ci95": {
+              "recall": [
+                1.0,
+                1.0
+              ],
+              "fpr": [
+                0.16886739327883743,
+                0.23117418485769547
+              ],
+              "precision": [
+                0.7804190154782703,
+                0.8359583165724058
+              ],
+              "recall_minus_cav": [
+                1.0,
+                1.0
+              ]
+            }
+          },
+          "R1_gate_rule_no_profile": {
+            "precision": 0.4827413706853427,
+            "recall": 1.0,
+            "fpr": 0.9022687609075044,
+            "pr_auc": null,
+            "flagged": 1999,
+            "bootstrap_ci95": {
+              "recall": [
+                1.0,
+                1.0
+              ],
+              "fpr": [
+                0.8847470222558965,
+                0.9202788385277443
+              ],
+              "precision": [
+                0.4517876793764676,
+                0.5130832566757582
+              ],
+              "recall_minus_cav": [
+                1.0,
+                1.0
+              ]
+            }
+          }
+        }
+      },
+      "S6@100": {
+        "recovered": 1048,
+        "rate": 0.4964471814306016,
+        "rate_ci95": [
+          0.47514438100381007,
+          0.5177628887409564
+        ],
+        "methods": {
+          "CAV_current": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "pr_auc": 0.9683314681779306,
+            "flagged": 0,
+            "bootstrap_ci95": {
+              "recall": [
+                0.0,
+                0.0
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "recall_minus_cav": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "B7_logistic_transfer": {
+            "precision": 1.0,
+            "recall": 0.09732824427480916,
+            "fpr": 0.0,
+            "pr_auc": 0.9669999090946054,
+            "flagged": 102,
+            "bootstrap_ci95": {
+              "recall": [
+                0.06896307742355237,
+                0.12304937486755668
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "precision": [
+                1.0,
+                1.0
+              ],
+              "recall_minus_cav": [
+                0.06896307742355237,
+                0.12304937486755668
+              ]
+            }
+          },
+          "B9_nonneg_logistic_transfer": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "pr_auc": 0.9827948570631989,
+            "flagged": 0,
+            "bootstrap_ci95": {
+              "recall": [
+                0.0,
+                0.0
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "recall_minus_cav": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "B8a_zxcvbn_meter": {
+            "precision": 0.5184804928131417,
+            "recall": 0.4818702290076336,
+            "fpr": 0.4412041392285983,
+            "pr_auc": 0.5147988621613584,
+            "flagged": 974,
+            "bootstrap_ci95": {
+              "recall": [
+                0.43916322800520385,
+                0.529426224767193
+              ],
+              "fpr": [
+                0.41106583340134706,
+                0.46912762840662864
+              ],
+              "precision": [
+                0.4807887011742152,
+                0.5585617307448293
+              ],
+              "recall_minus_cav": [
+                0.43916322800520385,
+                0.529426224767193
+              ]
+            }
+          },
+          "B8b_zxcvbn_history_inputs": {
+            "precision": 0.6723237597911227,
+            "recall": 0.982824427480916,
+            "fpr": 0.4722483537158984,
+            "pr_auc": 0.9738337635421123,
+            "flagged": 1532,
+            "bootstrap_ci95": {
+              "recall": [
+                0.9746525872342784,
+                0.9902658952329352
+              ],
+              "fpr": [
+                0.4418685246948623,
+                0.5009098157939621
+              ],
+              "precision": [
+                0.643739921669686,
+                0.7036114131018627
+              ],
+              "recall_minus_cav": [
+                0.9746525872342784,
+                0.9902658952329352
+              ]
+            }
+          },
+          "B5_reuse_or_derivative": {
+            "precision": 0.8758389261744967,
+            "recall": 0.9961832061068703,
+            "fpr": 0.13922859830667922,
+            "pr_auc": null,
+            "flagged": 1192,
+            "bootstrap_ci95": {
+              "recall": [
+                0.9919997997997998,
+                0.9990893152275875
+              ],
+              "fpr": [
+                0.1142276818666448,
+                0.16866570851038393
+              ],
+              "precision": [
+                0.8499043488143041,
+                0.8985257247804516
+              ],
+              "recall_minus_cav": [
+                0.9919997997997998,
+                0.9990893152275875
+              ]
+            }
+          },
+          "R1_gate_rule_no_profile": {
+            "precision": 0.5242621310655328,
+            "recall": 1.0,
+            "fpr": 0.8946378174976481,
+            "pr_auc": null,
+            "flagged": 1999,
+            "bootstrap_ci95": {
+              "recall": [
+                1.0,
+                1.0
+              ],
+              "fpr": [
+                0.8760584592896824,
+                0.9140769443765252
+              ],
+              "precision": [
+                0.4942131681181164,
+                0.5551103690326773
+              ],
+              "recall_minus_cav": [
+                1.0,
+                1.0
+              ]
+            }
+          }
+        }
+      },
+      "S6@1000": {
+        "recovered": 1048,
+        "rate": 0.4964471814306016,
+        "rate_ci95": [
+          0.47514438100381007,
+          0.5177628887409564
+        ],
+        "methods": {
+          "CAV_current": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "pr_auc": 0.9683314681779306,
+            "flagged": 0,
+            "bootstrap_ci95": {
+              "recall": [
+                0.0,
+                0.0
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "recall_minus_cav": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "B7_logistic_transfer": {
+            "precision": 1.0,
+            "recall": 0.09732824427480916,
+            "fpr": 0.0,
+            "pr_auc": 0.9669999090946054,
+            "flagged": 102,
+            "bootstrap_ci95": {
+              "recall": [
+                0.06896307742355237,
+                0.12304937486755668
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "precision": [
+                1.0,
+                1.0
+              ],
+              "recall_minus_cav": [
+                0.06896307742355237,
+                0.12304937486755668
+              ]
+            }
+          },
+          "B9_nonneg_logistic_transfer": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "pr_auc": 0.9827948570631989,
+            "flagged": 0,
+            "bootstrap_ci95": {
+              "recall": [
+                0.0,
+                0.0
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "recall_minus_cav": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "B8a_zxcvbn_meter": {
+            "precision": 0.5184804928131417,
+            "recall": 0.4818702290076336,
+            "fpr": 0.4412041392285983,
+            "pr_auc": 0.5147988621613584,
+            "flagged": 974,
+            "bootstrap_ci95": {
+              "recall": [
+                0.43916322800520385,
+                0.529426224767193
+              ],
+              "fpr": [
+                0.41106583340134706,
+                0.46912762840662864
+              ],
+              "precision": [
+                0.4807887011742152,
+                0.5585617307448293
+              ],
+              "recall_minus_cav": [
+                0.43916322800520385,
+                0.529426224767193
+              ]
+            }
+          },
+          "B8b_zxcvbn_history_inputs": {
+            "precision": 0.6723237597911227,
+            "recall": 0.982824427480916,
+            "fpr": 0.4722483537158984,
+            "pr_auc": 0.9738337635421123,
+            "flagged": 1532,
+            "bootstrap_ci95": {
+              "recall": [
+                0.9746525872342784,
+                0.9902658952329352
+              ],
+              "fpr": [
+                0.4418685246948623,
+                0.5009098157939621
+              ],
+              "precision": [
+                0.643739921669686,
+                0.7036114131018627
+              ],
+              "recall_minus_cav": [
+                0.9746525872342784,
+                0.9902658952329352
+              ]
+            }
+          },
+          "B5_reuse_or_derivative": {
+            "precision": 0.8758389261744967,
+            "recall": 0.9961832061068703,
+            "fpr": 0.13922859830667922,
+            "pr_auc": null,
+            "flagged": 1192,
+            "bootstrap_ci95": {
+              "recall": [
+                0.9919997997997998,
+                0.9990893152275875
+              ],
+              "fpr": [
+                0.1142276818666448,
+                0.16866570851038393
+              ],
+              "precision": [
+                0.8499043488143041,
+                0.8985257247804516
+              ],
+              "recall_minus_cav": [
+                0.9919997997997998,
+                0.9990893152275875
+              ]
+            }
+          },
+          "R1_gate_rule_no_profile": {
+            "precision": 0.5242621310655328,
+            "recall": 1.0,
+            "fpr": 0.8946378174976481,
+            "pr_auc": null,
+            "flagged": 1999,
+            "bootstrap_ci95": {
+              "recall": [
+                1.0,
+                1.0
+              ],
+              "fpr": [
+                0.8760584592896824,
+                0.9140769443765252
+              ],
+              "precision": [
+                0.4942131681181164,
+                0.5551103690326773
+              ],
+              "recall_minus_cav": [
+                1.0,
+                1.0
+              ]
+            }
+          }
+        }
+      },
+      "S6@10000": {
+        "recovered": 1048,
+        "rate": 0.4964471814306016,
+        "rate_ci95": [
+          0.47514438100381007,
+          0.5177628887409564
+        ],
+        "methods": {
+          "CAV_current": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "pr_auc": 0.9683314681779306,
+            "flagged": 0,
+            "bootstrap_ci95": {
+              "recall": [
+                0.0,
+                0.0
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "recall_minus_cav": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "B7_logistic_transfer": {
+            "precision": 1.0,
+            "recall": 0.09732824427480916,
+            "fpr": 0.0,
+            "pr_auc": 0.9669999090946054,
+            "flagged": 102,
+            "bootstrap_ci95": {
+              "recall": [
+                0.06896307742355237,
+                0.12304937486755668
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "precision": [
+                1.0,
+                1.0
+              ],
+              "recall_minus_cav": [
+                0.06896307742355237,
+                0.12304937486755668
+              ]
+            }
+          },
+          "B9_nonneg_logistic_transfer": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "pr_auc": 0.9827948570631989,
+            "flagged": 0,
+            "bootstrap_ci95": {
+              "recall": [
+                0.0,
+                0.0
+              ],
+              "fpr": [
+                0.0,
+                0.0
+              ],
+              "recall_minus_cav": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "B8a_zxcvbn_meter": {
+            "precision": 0.5184804928131417,
+            "recall": 0.4818702290076336,
+            "fpr": 0.4412041392285983,
+            "pr_auc": 0.5147988621613584,
+            "flagged": 974,
+            "bootstrap_ci95": {
+              "recall": [
+                0.43916322800520385,
+                0.529426224767193
+              ],
+              "fpr": [
+                0.41106583340134706,
+                0.46912762840662864
+              ],
+              "precision": [
+                0.4807887011742152,
+                0.5585617307448293
+              ],
+              "recall_minus_cav": [
+                0.43916322800520385,
+                0.529426224767193
+              ]
+            }
+          },
+          "B8b_zxcvbn_history_inputs": {
+            "precision": 0.6723237597911227,
+            "recall": 0.982824427480916,
+            "fpr": 0.4722483537158984,
+            "pr_auc": 0.9738337635421123,
+            "flagged": 1532,
+            "bootstrap_ci95": {
+              "recall": [
+                0.9746525872342784,
+                0.9902658952329352
+              ],
+              "fpr": [
+                0.4418685246948623,
+                0.5009098157939621
+              ],
+              "precision": [
+                0.643739921669686,
+                0.7036114131018627
+              ],
+              "recall_minus_cav": [
+                0.9746525872342784,
+                0.9902658952329352
+              ]
+            }
+          },
+          "B5_reuse_or_derivative": {
+            "precision": 0.8758389261744967,
+            "recall": 0.9961832061068703,
+            "fpr": 0.13922859830667922,
+            "pr_auc": null,
+            "flagged": 1192,
+            "bootstrap_ci95": {
+              "recall": [
+                0.9919997997997998,
+                0.9990893152275875
+              ],
+              "fpr": [
+                0.1142276818666448,
+                0.16866570851038393
+              ],
+              "precision": [
+                0.8499043488143041,
+                0.8985257247804516
+              ],
+              "recall_minus_cav": [
+                0.9919997997997998,
+                0.9990893152275875
+              ]
+            }
+          },
+          "R1_gate_rule_no_profile": {
+            "precision": 0.5242621310655328,
+            "recall": 1.0,
+            "fpr": 0.8946378174976481,
+            "pr_auc": null,
+            "flagged": 1999,
+            "bootstrap_ci95": {
+              "recall": [
+                1.0,
+                1.0
+              ],
+              "fpr": [
+                0.8760584592896824,
+                0.9140769443765252
+              ],
+              "precision": [
+                0.4942131681181164,
+                0.5551103690326773
+              ],
+              "recall_minus_cav": [
+                1.0,
+                1.0
+              ]
+            }
+          }
+        }
+      }
+    },
+    "paired_B5_minus_B8b_S6_1000": {
+      "recall_difference": 0.013358778625954248,
+      "recall_difference_ci95": [
+        0.004843798821586404,
+        0.02241909733433786
+      ],
+      "fpr_difference": -0.3330197554092192,
+      "fpr_difference_ci95": [
+        -0.3669936161723633,
+        -0.2912329604409176
+      ]
+    },
+    "non_reuse_targets": {
+      "cases": 1196,
+      "note": "exploratory post-hoc subset: target differs from every history password",
+      "S3@1000": {
+        "recovered": 50,
+        "rate": 0.04180602006688963,
+        "rate_ci95": [
+          0.03185352869787118,
+          0.054692454571250326
+        ],
+        "methods": {
+          "CAV_current": {
+            "recall": 0.0,
+            "fpr": 0.0,
+            "precision": 0.0,
+            "flagged": 0
+          },
+          "B7_logistic_transfer": {
+            "recall": 0.0,
+            "fpr": 0.0,
+            "precision": 0.0,
+            "flagged": 0
+          },
+          "B9_nonneg_logistic_transfer": {
+            "recall": 0.0,
+            "fpr": 0.0,
+            "precision": 0.0,
+            "flagged": 0
+          },
+          "B8a_zxcvbn_meter": {
+            "recall": 0.44,
+            "fpr": 0.4537521815008726,
+            "precision": 0.04059040590405904,
+            "flagged": 542
+          },
+          "B8b_zxcvbn_history_inputs": {
+            "recall": 1.0,
+            "fpr": 0.49476439790575916,
+            "precision": 0.08103727714748785,
+            "flagged": 617
+          },
+          "B5_reuse_or_derivative": {
+            "recall": 1.0,
+            "fpr": 0.1980802792321117,
+            "precision": 0.18050541516245489,
+            "flagged": 277
+          },
+          "R1_gate_rule_no_profile": {
+            "recall": 1.0,
+            "fpr": 0.9022687609075044,
+            "precision": 0.046125461254612546,
+            "flagged": 1084
+          }
+        }
+      },
+      "S6@1000": {
+        "recovered": 133,
+        "rate": 0.11120401337792642,
+        "rate_ci95": [
+          0.0946164666315073,
+          0.1302811286607217
+        ],
+        "methods": {
+          "CAV_current": {
+            "recall": 0.0,
+            "fpr": 0.0,
+            "precision": 0.0,
+            "flagged": 0
+          },
+          "B7_logistic_transfer": {
+            "recall": 0.0,
+            "fpr": 0.0,
+            "precision": 0.0,
+            "flagged": 0
+          },
+          "B9_nonneg_logistic_transfer": {
+            "recall": 0.0,
+            "fpr": 0.0,
+            "precision": 0.0,
+            "flagged": 0
+          },
+          "B8a_zxcvbn_meter": {
+            "recall": 0.5488721804511278,
+            "fpr": 0.4412041392285983,
+            "precision": 0.13468634686346864,
+            "flagged": 542
+          },
+          "B8b_zxcvbn_history_inputs": {
+            "recall": 0.8646616541353384,
+            "fpr": 0.4722483537158984,
+            "precision": 0.18638573743922204,
+            "flagged": 617
+          },
+          "B5_reuse_or_derivative": {
+            "recall": 0.9699248120300752,
+            "fpr": 0.13922859830667922,
+            "precision": 0.4657039711191336,
+            "flagged": 277
+          },
+          "R1_gate_rule_no_profile": {
+            "recall": 1.0,
+            "fpr": 0.8946378174976481,
+            "precision": 0.12269372693726938,
+            "flagged": 1084
+          }
+        }
+      },
+      "paired_B5_minus_B8b_S6_1000": {
+        "recall_difference": 0.10526315789473684,
+        "recall_difference_ci95": [
+          0.03937007874015752,
+          0.16965348639455788
+        ],
+        "fpr_difference": -0.3330197554092192,
+        "fpr_difference_ci95": [
+          -0.36953595771317294,
+          -0.2933213084598214
+        ]
+      }
+    }
+  },
+  "amendment": "docs/REVIEW2_PROTOCOL_AMENDMENT2.md",
+  "amendment_sha256": "4c46480a342670cdb37b5f8ef7ef25c23bbe473fdcc31ab62a94fd6a4880b2ab",
+  "source_tree_sha256": "9a14cd8d628d50363b7d09be6899d5e5181918142871a83e01abf3621a9c4f38",
+  "git": {
+    "base_commit": "4492cf364a07b174d222b61674e7e72e9c90a198",
+    "branch": "review1-revision",
+    "dirty_files": 18
+  },
+  "python": "3.14.7",
+  "platform": "macOS-27.3-arm64-arm-64bit-Mach-O",
+  "runtime_seconds": 16.4
+}

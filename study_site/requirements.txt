@@ -1,0 +1,6 @@
+# Hosted study site only (the full vault app is not deployed). Versions match requirements-lock.txt.
+streamlit==1.67.0
+zxcvbn-python==4.4.24
+RapidFuzz==3.14.6
+requests==2.34.2
+psycopg[binary]>=3.2,<4

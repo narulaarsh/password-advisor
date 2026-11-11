@@ -14,11 +14,11 @@
   ],
   "bootstrap_replicates": 1000,
   "review1_rank_mismatches": 0,
-  "source_tree_sha256": "ef9d259ce535c2c4a646615f8716976bc21ac9494a031b3554946caf01e4be7f",
+  "source_tree_sha256": "9a14cd8d628d50363b7d09be6899d5e5181918142871a83e01abf3621a9c4f38",
   "git": {
-    "base_commit": "786bd9459e059ad8b9bb38f06c477ebf647ee1fb",
+    "base_commit": "4492cf364a07b174d222b61674e7e72e9c90a198",
     "branch": "review1-revision",
-    "dirty_files": 24
+    "dirty_files": 14
   },
   "python": "3.14.7",
   "platform": "macOS-27.3-arm64-arm-64bit-Mach-O",
@@ -30,7 +30,7 @@
     "zxcvbn-python": "4.4.24",
     "rapidfuzz": "3.14.6"
   },
-  "runtime_seconds": 30.1,
+  "runtime_seconds": 32.3,
   "command": ".venv/bin/python scripts/review2_experiments.py --out results/review2",
   "dataset_type": "synthetic_smoke_not_independent",
   "input": null

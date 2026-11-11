@@ -8,7 +8,8 @@ import os
 import time
 import streamlit as st
 from vault.models import Profile
-from vault.study import assignment, log_study_event, log_questionnaire, SUS_ITEMS, TASKS
+from vault.study import (assignment, claim_next_slot, log_study_event, log_questionnaire,
+                         schedule_from_environment, SUS_ITEMS, TASKS)
 from vault.gate import GateEvaluation
 from vault.generator import generate_passphrase
 from modules.syntactic import evaluate_syntactic_strength, BreachStatus
@@ -16,6 +17,17 @@ from modules.semantic import calculate_thematic_coverage
 from vault.research import attack_rank, FEATURES, features
 
 PROFILE = dict(first_name='Maya',surname='Carter',city='Denver',birth_year=1998)
+INFORMATION = ('You will create three made-up passwords for a fictional person and answer ten short questions '
+               '(about 15 minutes). Never type a password you use or have used for a real account. '
+               'We record which version of the tool you saw, whether a warning appeared, your choices, how long you took, '
+               'whether a simple offline guessing program would recover your final made-up password, and your '
+               'questionnaire answers. The study does not record your name, any password you type, or your IP address '
+               '(the hosting provider may keep standard server logs). '
+               'Participation is voluntary and you can stop at any time.')
+DEBRIEF = ('Thank you. You saw one of four versions of the tool, which differ in whether feedback appeared '
+           'before or after saving and whether a safer alternative was offered. We are testing whether feedback '
+           'shown before saving helps people choose less guessable passwords. No real password was collected. '
+           'For your real accounts, use a password manager and a different password for every account.')
 PREVIOUS = 'Summer2024!'
 
 
@@ -34,12 +46,32 @@ def render():
     st.title('Controlled fictional credential study')
     st.caption('Feasibility interface for G1–G4. No real account passwords. Outcomes use a limited offline attacker, not the warning rules.')
     human=os.environ.get('STUDY_MODE')=='1'
-    if human and (not os.environ.get('STUDY_ETHICS_REFERENCE') or not os.environ.get('STUDY_ALLOCATION_FILE')):
-        st.error('Human collection requires the institutional ethics reference and a concealed allocation schedule (STUDY_ALLOCATION_FILE). Demo is available with STUDY_MODE unset.')
+    has_schedule=bool(os.environ.get('STUDY_ALLOCATION_FILE') or os.environ.get('STUDY_ALLOCATION_CSV'))
+    if human and (not os.environ.get('STUDY_ETHICS_REFERENCE') or not has_schedule):
+        st.error('Human collection requires the institutional ethics reference and a concealed allocation schedule (STUDY_ALLOCATION_FILE or STUDY_ALLOCATION_CSV). Demo is available with STUDY_MODE unset.')
         st.stop()
-    pid=st.text_input('Pseudonymous participant ID',key='study_participant')
-    consent=st.checkbox('I consent to recording fictional-task decisions and will not enter real credentials.',key='study_consent')
-    if not pid.strip() or not consent:st.stop()
+    with st.expander('Information for participants', expanded=human):
+        st.write(INFORMATION)
+        if human:
+            st.caption(f"Ethics reference: {os.environ.get('STUDY_ETHICS_REFERENCE')}")
+    auto_slot=human and os.environ.get('STUDY_AUTO_SLOT')=='1'
+    if auto_slot:
+        consent=st.checkbox('I consent to recording fictional-task decisions and will not enter real credentials.',key='study_consent')
+        if not consent:st.stop()
+        if 'study_slot' not in st.session_state:
+            if not st.button('Start the study'):st.stop()
+            slot=claim_next_slot(schedule_from_environment())
+            if slot is None:
+                st.error('This study is full. Thank you for your interest.')
+                st.stop()
+            st.session_state.study_slot=slot
+            st.rerun()
+        pid=st.session_state.study_slot
+        st.info(f'Your participant code is {pid}. Note it down if you may later want your data withdrawn.')
+    else:
+        pid=st.text_input('Pseudonymous participant ID',key='study_participant')
+        consent=st.checkbox('I consent to recording fictional-task decisions and will not enter real credentials.',key='study_consent')
+        if not pid.strip() or not consent:st.stop()
     try:
         condition,order=assignment(pid,human=human,schedule_path=os.environ.get('STUDY_ALLOCATION_FILE'))
     except ValueError as exc:
@@ -50,6 +82,7 @@ def render():
     if trial>=len(TASKS):
         if st.session_state.get('study_sus_done'):
             st.success('All tasks and the questionnaire are complete. No real passwords were changed.')
+            st.write(DEBRIEF)
             return
         st.subheader('Usability questionnaire (System Usability Scale)')
         st.caption('Rate each statement from 1 (strongly disagree) to 5 (strongly agree).')
