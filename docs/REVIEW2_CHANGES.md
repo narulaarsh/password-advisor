@@ -77,3 +77,12 @@ Behavioural efficacy is not claimed, and the study is presented as an instrument
 Also added: a labelled simulation that validates the E4 analysis pipeline (`scripts/study_pipeline_simulation.py`, coverage 94.2%), and an AI-use acknowledgment in the IEEE paper, which becomes the JISA AI declaration.
 
 Tests: 152 pass.
+
+
+## Faculty follow-up (11 November 2026, evening)
+
+- **Independent benchmark.** The public PASS sample (Wang et al., CODASPY 2018) was evaluated under Amendment 2, which was frozen before analysis. On 1,000 real users, CAV's cross-account rule matched or exceeded zxcvbn-with-history recall with a 33.7-point lower FPR, including on non-reused targets. The fixed score and the synthetic-trained models failed to transfer. The personal-context component still lacks real data, because no authorized dataset pairs passwords with profile fields. A request email for the full PASS dataset is drafted (`docs/PASS_DATA_REQUEST.md`).
+- **Online study.** `study_site/` and `docs/DEPLOY_STUDY.md` host the study only, with PostgreSQL logging and automatic slot assignment, on Streamlit Community Cloud (Vercel cannot run Streamlit). It still needs ethics clearance, a database and the deployment by the authors.
+- **Pasted pilot CSV.** The 30-row file the faculty shared is the seeded simulator output (all rows logged within 58 seconds). It is not real user data and must not be reported as such.
+
+Tests: 157 pass.

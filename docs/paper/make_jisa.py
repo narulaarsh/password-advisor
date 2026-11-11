@@ -11,7 +11,7 @@ OUT = HERE / 'jisa' / 'cav_jisa.tex'
 
 HIGHLIGHTS = [
     'A fixed-weight contextual score cannot flag context-only risk below its threshold',
-    'Frozen-protocol evaluation against matched baselines, rules and fitted models',
+    'On 1,000 real users, the cross-account rule beat zxcvbn given the same history',
     'zxcvbn with user inputs doubled the fixed score\'s recall at the same operating rule',
     'A stronger attacker turned most context-rule false alarms into recovered passwords',
     'Authenticated backups, Argon2id calibration and concealed clipboard copies added',
@@ -98,6 +98,8 @@ def main():
                          (r'{@{}p{1.0cm}p{2.3cm}p{1.9cm}p{2.2cm}@{}}', r'{@{}p{0.15\textwidth}p{0.27\textwidth}p{0.22\textwidth}p{0.24\textwidth}@{}}')):
         assert body.count(ieee) == 1, ieee
         body = body.replace(ieee, single)
+    # The PASS table is a full-width IEEE table; tighten its spacing for the single-column page.
+    body = body.replace('\\centering\\footnotesize\n\\setlength{\\tabcolsep}{5pt}', '\\centering\\footnotesize\n\\setlength{\\tabcolsep}{3.5pt}', 1)
     bibliography = src[src.index(r'\begin{thebibliography}'):src.index(r'\end{thebibliography}') + len(r'\end{thebibliography}')]
     doc = (PREAMBLE.replace('TITLE', title).replace('ABSTRACT', abstract)
            .replace('HIGHLIGHTS', '\n'.join(r'\item ' + h.replace("'", "'") for h in HIGHLIGHTS))

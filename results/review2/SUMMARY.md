@@ -93,3 +93,21 @@ Recovery does not grow beyond 1,000 guesses. S1–S4 streams are exhausted at 80
 ## E4 pipeline validation (simulated, not human data)
 
 `simulated_study.json` comes from 1,000 simulated studies (80 per arm; planted rates 0.60/0.60/0.40/0.35; within-participant correlation 0.4) run through the real logger and the real analysis. The G3−G2 estimate averaged −0.197 against −0.200 planted, and 95% interval coverage was 94.2%. This validates the analysis only.
+
+## Amendment 2: independent real data (PASS sample, `pass_benchmark.json`)
+
+1,000 real users (2,111 breached passwords; Wang et al., CODASPY 2018). Only the cross-account component can be tested, and every threshold and model is frozen from Review 2.
+
+- **Exact reuse.** 43.9% of users.
+- **Derivative rule.** It links 21.9% of distinct within-user pairs, against 0.015% of random cross-user pairs.
+- **History attacker (S6, 1,000 guesses).** Recovered 48.9% of targets.
+
+| Method | Recall | FPR |
+|---|---:|---:|
+| B5 reuse/derivative rule | 0.998 | 0.143 |
+| B8b zxcvbn with history | 0.975 | 0.479 |
+| CAV fixed score | 0.000 | 0.000 |
+| B7 / B9 (synthetic-trained, transfer) | 0.098 / 0.000 | 0.000 |
+
+- **Paired B5 − B8b.** Recall +0.022 (CI 0.010–0.038); FPR −0.337 (CI −0.383 to −0.285).
+- **Non-reuse targets (575, post hoc).** S6 recovered 11.1%. B5 reached recall 0.984 at FPR 0.143, against 0.813 at 0.479 for B8b. Paired: recall +0.172 (CI 0.068–0.274), FPR −0.337.
