@@ -15,6 +15,13 @@ from vault.study import (claim_next_slot, load_allocation_schedule_text, log_que
 PAGE = str(Path(__file__).parents[1] / 'pages/7_Controlled_Study.py')
 
 
+def fill_profile(app, first='Fictional', year=1999):
+    app.text_input(key='profile_first').set_value(first)
+    app.number_input(key='profile_year').set_value(year)
+    next(b for b in app.button if b.label == 'Continue').click().run()
+    return app
+
+
 def schedule_csv(slots=8):
     rows = make_allocation_schedule('fixture-seed', slots)
     return 'slot_id,block,condition,task_order\n' + '\n'.join(
@@ -67,8 +74,9 @@ def test_online_flow_assigns_a_code_and_logs_human_records(tmp_path, monkeypatch
     app.checkbox(key='study_consent').check().run()
     next(b for b in app.button if b.label == 'Start the study').click().run()
     assert any('participant code is S001' in i.value for i in app.info)
+    fill_profile(app)
     app.text_input(key='study_password').set_value('Correct-Horse-Battery-Staple-77!')
-    next(b for b in app.button if b.label == 'Save fictional credential').click().run()
+    next(b for b in app.button if b.label == 'Save password').click().run()
     if any(b.label in ('Save anyway', 'Keep saved credential') for b in app.button):
         next(b for b in app.button if b.label in ('Save anyway', 'Keep saved credential')).click().run()
     assert not app.exception

@@ -25,7 +25,7 @@ Draft for submission to [institution ethics committee]. Items in [brackets] must
   - **G4:** G3 plus a locally generated alternative.
 - **Allocation.** A concealed permuted-block schedule (blocks of 4) is created with `scripts/make_allocation_schedule.py` by a person who does not recruit. Participants receive slot IDs in enrollment order.
 - **Task order.** The order of the three tasks is counterbalanced within each arm.
-- **Tasks.** Three fictional tasks (a shop, an email service, a social account) using one fictional profile (Maya Carter, Denver, 1998) and a fictional previous password. Participants never use or reveal their own passwords.
+- **Tasks.** Participants enter their own first name, surname, home city and birth year. These are held in session memory only and never stored. They then make up passwords for three new accounts (a shop, an email service, a social account). Each password is checked against those details, against the participant's earlier passwords from the session, and against public breach lists (5-character hash prefix only). Participants never use or reveal their own passwords.
 - **Duration.** About [15] minutes, to be confirmed in a pilot.
 
 ## 4. Participants
@@ -44,7 +44,7 @@ Draft for submission to [institution ethics committee]. Items in [brackets] must
 
 ## 5. Outcomes
 
-- **Primary.** The participant-level share of final fictional credentials that the prespecified offline attacker (S5) recovers within 1,000 guesses. The share is computed automatically and independently of the warning rules.
+- **Primary.** The participant-level share of final made-up passwords that the prespecified offline attacker (S5), given the participant's entered details and earlier session passwords, recovers within 1,000 guesses. The share is computed automatically and independently of the warning rules.
 - **Secondary.** Override rate, acceptance of the alternative, total task time, and System Usability Scale score (Brooke, 1996).
 - **Optional, if approved.** Comprehension of the warning, and delayed recall of the final credential after [x] days.
 
@@ -54,14 +54,14 @@ The analysis uses participant-level rates, with clustered bootstrap 95% interval
 
 ## 7. Risks and mitigations
 
-- **Disclosure of real passwords.** The tasks use a fictional profile; the consent text and on-screen instructions forbid real passwords; and no password or password hash is stored.
+- **Disclosure of real passwords and personal details.** The consent text and on-screen instructions forbid real passwords. Personal details are used in session memory only, and no password, hash or personal detail is stored. The participant sees their own results only at the end.
 - **Identifiability.** Only pseudonymous slot IDs are used. The slot-to-person mapping, if one is kept at all, is held separately by [coordinator] and destroyed after [date].
 - **Burden.** About 15 minutes, with no deception. Participants can stop at any time.
 
 ## 8. Data management
 
 - **Stored data.** The event log (`data/private/study_events.csv`, mode 0600) holds the slot ID, condition, task, task position and order, whether a warning was shown, override, alternative accepted, decision time, the attacker outcome, source label, protocol ID and timestamp. The questionnaire log holds the slot ID, condition, ten SUS answers, SUS score, source label, protocol ID and timestamp.
-- **Not stored.** Names, contact details, passwords, password hashes or IP addresses.
+- **Not stored.** Names and the other entered details, contact details, passwords, password hashes or IP addresses.
 - **Storage and retention.** [Encrypted institutional storage]. Data are kept for [x years] and then deleted.
 - **Withdrawal.** A participant can withdraw before [date or analysis lock]; all rows with their slot ID are then deleted.
 - **Sharing.** Only aggregated results are published. [Whether de-identified logs will be shared.]

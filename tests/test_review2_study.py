@@ -14,6 +14,13 @@ from vault.study import (CONDITIONS, SUS_ITEMS, TASK_ORDERS, assignment, load_al
 PAGE = str(Path(__file__).parents[1] / 'pages/7_Controlled_Study.py')
 
 
+def fill_profile(app, first='Fictional', year=1999):
+    app.text_input(key='profile_first').set_value(first)
+    app.number_input(key='profile_year').set_value(year)
+    next(b for b in app.button if b.label == 'Continue').click().run()
+    return app
+
+
 def test_every_block_contains_each_condition_once():
     rows = make_allocation_schedule('fixture-seed', 200)
     assert len(rows) == 200 and len({r['slot_id'] for r in rows}) == 200
@@ -99,6 +106,7 @@ def run_page(monkeypatch, pid='FictionalP1'):
     app = AppTest.from_file(PAGE).run()
     app.text_input(key='study_participant').set_value(pid).run()
     app.checkbox(key='study_consent').check().run()
+    fill_profile(app)
     return app, events, surveys
 
 
@@ -108,7 +116,7 @@ def test_full_demo_flow_uses_counterbalanced_order_then_sus(monkeypatch):
     expected_condition, expected_order = vault.study.assignment('FictionalP1')
     for _ in range(3):
         app.text_input(key='study_password').set_value('Correct-Horse-Battery-Staple-77!')
-        next(b for b in app.button if b.label == 'Save fictional credential').click().run()
+        next(b for b in app.button if b.label == 'Save password').click().run()
         if any(b.label in ('Save anyway', 'Keep saved credential') for b in app.button):
             next(b for b in app.button if b.label in ('Save anyway', 'Keep saved credential')).click().run()
         assert not app.exception

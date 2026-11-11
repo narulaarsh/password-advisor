@@ -2,6 +2,13 @@ from pathlib import Path
 import pytest
 from streamlit.testing.v1 import AppTest
 
+
+def fill_profile(app, first='Fictional', year=1999):
+    app.text_input(key='profile_first').set_value(first)
+    app.number_input(key='profile_year').set_value(year)
+    next(b for b in app.button if b.label == 'Continue').click().run()
+    return app
+
 @pytest.mark.parametrize('condition',['G1','G2','G3','G4'])
 def test_controlled_study_intervention_timing(condition,monkeypatch):
     import vault.study
@@ -12,8 +19,9 @@ def test_controlled_study_intervention_timing(condition,monkeypatch):
     app=AppTest.from_file(str(Path(__file__).parents[1]/'pages/7_Controlled_Study.py')).run()
     app.text_input(key='study_participant').set_value('FictionalP1').run()
     app.checkbox(key='study_consent').check().run()
+    fill_profile(app)
     app.text_input(key='study_password').set_value('password123!')
-    next(b for b in app.button if b.label=='Save fictional credential').click().run()
+    next(b for b in app.button if b.label=='Save password').click().run()
     assert not app.exception
     assert len(app.warning)==1 and not recorded
     assert ('study_saved' in app.session_state)==(condition=='G2')
