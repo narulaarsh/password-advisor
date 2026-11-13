@@ -10,6 +10,7 @@ System Usability Scale questionnaire and a personal results summary follow the t
 """
 import os
 import time
+import uuid
 import streamlit as st
 from vault.study import (assignment, claim_next_slot, log_participant, log_questionnaire, log_report, log_response,
                          log_study_event, schedule_from_environment, SUS_ITEMS, TASKS)
@@ -18,7 +19,7 @@ from modules.semantic import calculate_thematic_coverage
 from modules.syntactic import check_hibp_status, evaluate_syntactic_strength, BreachStatus
 from vault.research import attack_rank, features
 
-PROTOCOL = 'review2-v3-stored-responses'
+PROTOCOL = 'review2-v4-single-log'
 TASK_SCENARIOS = {
     'a shop': 'You are signing up for a new **online shopping** account.',
     'an email service': 'You are creating a new **email** account.',
@@ -178,17 +179,17 @@ def render():
             st.subheader('Your password report')
             st.caption('Every participant gets this full report at the end, whichever version of the tool they saw.')
             if 'study_report' not in st.session_state:
-                report = []
-                for k, r in enumerate(results):
+                report = [dict(r, suggestion=generate_passphrase(num_words=4).password
+                               if (r['check']['all_reasons'] or r['vulnerable']) else '') for r in results]
+                # Set the state before the slow database writes: a click during a write starts a
+                # second run at once, and it must see that the report is already being logged.
+                st.session_state.study_report = report
+                for r in report:
                     check = r['check']
-                    risky = bool(check['all_reasons']) or r['vulnerable']
-                    suggestion = generate_passphrase(num_words=4).password if risky else ''
-                    report.append(dict(r, suggestion=suggestion))
                     log_report(pid, condition, r['task_id'], r['label'], r['password'], r['vulnerable'],
                                check['detected'], check['all_reasons'], check['matched_fields'],
-                               check['zxcvbn_score'], check['breach_count'], suggestion,
+                               check['zxcvbn_score'], check['breach_count'], r['suggestion'],
                                source=source, protocol_id=PROTOCOL)
-                st.session_state.study_report = report
             for k, r in enumerate(st.session_state.study_report):
                 with st.container(border=True):
                     st.markdown(f"**Account {k + 1}: {r['label']}**")
@@ -215,9 +216,11 @@ def render():
         if done:
             if any(a is None for a in answers):
                 st.error('Please answer all ten statements.')
-            else:
-                log_questionnaire(pid, condition, answers, source=source, protocol_id=PROTOCOL)
+            elif not st.session_state.get('study_sus_done'):  # a double click must not log twice
                 st.session_state.study_sus_done = True
+                log_questionnaire(pid, condition, answers, source=source, protocol_id=PROTOCOL)
+                st.rerun()
+            else:
                 st.rerun()
         return
 
@@ -236,33 +239,52 @@ def render():
         st.error('Finish the current account before changing the participant code.')
         st.stop()
 
-    def record(entered, check, action, final='', vulnerable=None, suggestion=None):
+    def claim(key):
+        """True the first time only. A click during a slow database write starts a second run at once,
+        while the first is still writing; both runs share st.session_state, so the second must not log again."""
+        handled = st.session_state.setdefault('study_handled', set())
+        if key in handled:
+            return False
+        handled.add(key)
+        return True
+
+    def next_attempt():
         st.session_state.study_attempt = st.session_state.get('study_attempt', 0) + 1
-        log_response(pid, condition, f'T{task_index + 1}', label, trial + 1, st.session_state.study_attempt, entered,
+        return st.session_state.study_attempt
+
+    def record(attempt, entered, check, action, final='', vulnerable=None, suggestion=None):
+        log_response(pid, condition, f'T{task_index + 1}', label, trial + 1, attempt, entered,
                      check['detected'], check['shown'], check['reasons'], check['matched_fields'],
                      check['zxcvbn_score'], check['breach_count'], suggestion, action, final, vulnerable,
                      source=source, protocol_id=PROTOCOL)
 
     def finish(password, warning, override=False, adopt=False, entered=None, check=None, suggestion=None):
+        if not claim(('task', pid, trial)):
+            st.rerun()
+        attempt = next_attempt()
+        elapsed = (time.monotonic() - st.session_state.study_started) * 1000
         vulnerable = outcome(password, profile, earlier)
         action = ('used_suggestion' if adopt else 'kept_after_warning' if override else 'saved_without_warning')
-        record(entered if entered is not None else password, check, action, password, vulnerable, suggestion)
-        log_study_event(pid, condition, f'T{task_index + 1}', password, warning, override, adopt,
-                        (time.monotonic() - st.session_state.study_started) * 1000,
-                        vulnerable=vulnerable, source=source, task_label=label,
-                        task_position=trial + 1, task_order=order_text, protocol_id=PROTOCOL)
         final_check = check if (check is not None and password == (entered if entered is not None else password)) \
             else assess(password, condition, profile, earlier)
+        # Move the participant on first, then write to the database.
         results.append(dict(label=label, password=password, vulnerable=vulnerable, check=final_check,
                             task_id=f'T{task_index + 1}'))
-        for key in ('study_pending', 'study_started', 'study_password', 'study_saved', 'study_warned', 'study_attempt'):
+        for key in ('study_pending', 'study_started', 'study_password', 'study_saved', 'study_warned', 'study_attempt',
+                    'study_last_edited'):
             st.session_state.pop(key, None)
         st.session_state.study_trial = trial + 1
         nxt = ('Now the next account.' if trial + 1 < len(TASKS) else 'Now the last step.')
         st.session_state.study_saved_note = f'Saved your password for {label}. {nxt}'
+        record(attempt, entered if entered is not None else password, check, action, password, vulnerable, suggestion)
+        log_study_event(pid, condition, f'T{task_index + 1}', password, warning, override, adopt, elapsed,
+                        vulnerable=vulnerable, source=source, task_label=label,
+                        task_position=trial + 1, task_order=order_text, protocol_id=PROTOCOL)
         st.rerun()
 
     if not pending:
+        if st.session_state.get('study_last_edited'):
+            st.info('Type a changed password below and save it again.')
         with st.form('study_candidate'):
             password = st.text_input('New password', type='password', key='study_password')
             submit = st.form_submit_button('Save password', type='primary')
@@ -271,15 +293,20 @@ def render():
             if not check['reasons']:
                 finish(password, st.session_state.get('study_warned', False), check=check)
             st.session_state.study_warned = True
-            st.session_state.study_pending = dict(password=password, reasons=check['reasons'], check=check, pid=pid,
-                                                  trial=trial,
-                                                  alternative=generate_passphrase(num_words=4).password if condition == 'G4' else None)
+            st.session_state.study_pending = dict(
+                password=password, reasons=check['reasons'], check=check, pid=pid, trial=trial, id=uuid.uuid4().hex,
+                same_as_before=password == st.session_state.get('study_last_edited'),
+                alternative=generate_passphrase(num_words=4).password if condition == 'G4' else None)
             if condition == 'G2':
                 st.session_state.study_saved = password
             st.rerun()
     else:
+        keep_label = 'Keep saved credential' if condition == 'G2' else 'Save anyway'
         st.warning('Your password has been saved, but please review this:' if condition == 'G2'
                    else 'Before saving, please review this:')
+        if pending.get('same_as_before'):
+            st.write(f'This is the same password as before. Change it with **Edit password**, '
+                     f'or choose **{keep_label}** to keep it.')
         for reason in pending['reasons']:
             st.write(f'- {reason}')
         if pending['alternative']:
@@ -289,11 +316,15 @@ def render():
                 finish(pending['alternative'], True, adopt=True, entered=pending['password'], check=pending['check'],
                        suggestion=pending['alternative'])
         if st.button('Edit password'):
-            record(pending['password'], pending['check'], 'edited_after_warning', suggestion=pending['alternative'])
-            st.session_state.pop('study_pending', None)
+            if claim(('edit', pending['id'])):
+                attempt = next_attempt()
+                st.session_state.pop('study_pending', None)
+                st.session_state.study_password = ''  # start from an empty box, so the change is deliberate
+                st.session_state.study_last_edited = pending['password']
+                record(attempt, pending['password'], pending['check'], 'edited_after_warning',
+                       suggestion=pending['alternative'])
             st.rerun()
-        if st.button('Keep saved credential' if condition == 'G2' else 'Save anyway'):
+        if st.button(keep_label):
             finish(pending['password'], True, override=True, check=pending['check'], suggestion=pending['alternative'])
-
 
 render()

@@ -81,7 +81,7 @@ def test_consented_details_and_every_password_are_stored_and_results_are_shown(m
     assert [r[0] for r in rows] == ['Velvet-Harbor-Lantern-91', 'Zebedee2003!', 'Amber-Fjord-Wren-7731']
     assert 'personal_info' in rows[1][1] and 'personal_info' in rows[1][2] and rows[1][3] == 'kept_after_warning'
     assert rows[0][3] == 'saved_without_warning' and rows[0][4] == 'Velvet-Harbor-Lantern-91'
-    assert all(r[5] == 'review2-v3-stored-responses' for r in rows)
+    assert all(r[5] == 'review2-v4-single-log' for r in rows)
     assert len(db.execute('SELECT * FROM study_events').fetchall()) == 3
 
 
@@ -132,3 +132,35 @@ def test_every_group_gets_a_full_stored_report_with_suggestions(monkeypatch, tmp
 def test_breach_count_is_reported(monkeypatch, tmp_path):
     app = save(start(monkeypatch, 'G3', tmp_path), 'password123!')
     assert 'times in public lists of leaked passwords' in reasons(app)
+
+
+def test_edit_clears_the_box_and_flags_an_unchanged_resubmission(monkeypatch, tmp_path):
+    app = save(start(monkeypatch, 'G1', tmp_path), 'Adi@Vit')
+    next(b for b in app.button if b.label == 'Edit password').click().run()
+    assert app.text_input(key='study_password').value == ''  # no silent resubmission of the same password
+    assert any('Type a changed password' in i.value for i in app.info)
+    save(app, 'Adi@Vit')
+    assert 'This is the same password as before' in reasons(app) and 'Save anyway' in reasons(app)
+    next(b for b in app.button if b.label == 'Save anyway').click().run()
+    assert any('Saved your password' in s.value for s in app.success)
+
+
+def test_a_repeated_click_while_a_save_is_in_progress_is_not_logged_twice(monkeypatch, tmp_path):
+    app = save(start(monkeypatch, 'G2', tmp_path), 'hehehe')
+    # Simulate the first click's run having already claimed this task while it writes to the database.
+    app.session_state['study_handled'] = {('task', 'P1', 0)}
+    next(b for b in app.button if b.label == 'Keep saved credential').click().run()
+    assert not app.exception
+    db = sqlite3.connect(tmp_path / 's.db')
+    assert db.execute("SELECT name FROM sqlite_master WHERE name='study_events'").fetchall() == []
+
+
+def test_questionnaire_is_logged_once(monkeypatch, tmp_path):
+    app = start(monkeypatch, 'G3', tmp_path)
+    for pw in ('Velvet-Harbor-Lantern-91', 'Amber-Fjord-Wren-7731', 'Copper-Lagoon-Thistle-58'):
+        save(app, pw)
+    for k in range(10):
+        app.radio(key=f'study_sus_{k}').set_value(4)
+    next(b for b in app.button if b.label == 'Submit questionnaire').click().run()
+    app.run()
+    assert len(sqlite3.connect(tmp_path / 's.db').execute('SELECT * FROM study_questionnaire').fetchall()) == 1
