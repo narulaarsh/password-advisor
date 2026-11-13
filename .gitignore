@@ -17,3 +17,7 @@ real_dataset.csv
 
 .venv/
 results/review1/private/
+
+# Local study exports and generated files (contain names and passwords)
+output/
+*.log
