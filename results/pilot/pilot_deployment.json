@@ -1,0 +1,168 @@
+{
+  "slots_claimed": 22,
+  "duplicates_removed": {
+    "events": 1,
+    "questionnaire": 1,
+    "responses": 11
+  },
+  "team_slots": 4,
+  "all_records": {
+    "participants_with_any_task": 10,
+    "participants_completing_tasks": 10,
+    "participants_completing_questionnaire": 9,
+    "complete_by_protocol": {
+      "review2-v3-stored-responses": 6,
+      "review2-v2-own-profile": 2,
+      "review2-v1": 2
+    },
+    "by_condition": {
+      "G1": {
+        "participants": 2,
+        "tasks": 6,
+        "tasks_with_warning": 4,
+        "kept_after_warning": 4,
+        "changed_after_warning": 0,
+        "accepted_alternative": 0,
+        "median_task_seconds": 16.6,
+        "sus_n": 2,
+        "sus_mean": 72.5
+      },
+      "G2": {
+        "participants": 3,
+        "tasks": 9,
+        "tasks_with_warning": 7,
+        "kept_after_warning": 5,
+        "changed_after_warning": 2,
+        "accepted_alternative": 0,
+        "median_task_seconds": 24.4,
+        "sus_n": 2,
+        "sus_mean": 66.3
+      },
+      "G3": {
+        "participants": 3,
+        "tasks": 9,
+        "tasks_with_warning": 5,
+        "kept_after_warning": 4,
+        "changed_after_warning": 1,
+        "accepted_alternative": 0,
+        "median_task_seconds": 28.3,
+        "sus_n": 3,
+        "sus_mean": 75.0
+      },
+      "G4": {
+        "participants": 2,
+        "tasks": 6,
+        "tasks_with_warning": 3,
+        "kept_after_warning": 2,
+        "changed_after_warning": 1,
+        "accepted_alternative": 1,
+        "median_task_seconds": 33.0,
+        "sus_n": 2,
+        "sus_mean": 90.0
+      }
+    },
+    "all_conditions": {
+      "tasks": 30,
+      "tasks_with_warning": 19,
+      "kept_after_warning": 15,
+      "changed_after_warning": 4,
+      "sus_mean": 75.8
+    },
+    "stored_passwords": {
+      "participants": 6,
+      "final_passwords": 18,
+      "with_any_detected_issue": 9,
+      "issue_counts": {
+        "personal_info": 5,
+        "breach": 4,
+        "weak_structure": 5
+      },
+      "breach_listed": 4,
+      "recovered_by_s5_within_1000": 0,
+      "recovered_by_s6_within_1000": 0,
+      "first_attempts_warned": 10,
+      "edited_after_warning": 3,
+      "edits_ending_with_no_detected_issue": 3,
+      "g1_first_attempts_with_hidden_contextual_issue": 3
+    }
+  },
+  "excluding_team": {
+    "participants_with_any_task": 6,
+    "participants_completing_tasks": 6,
+    "participants_completing_questionnaire": 5,
+    "complete_by_protocol": {
+      "review2-v3-stored-responses": 2,
+      "review2-v2-own-profile": 2,
+      "review2-v1": 2
+    },
+    "by_condition": {
+      "G1": {
+        "participants": 1,
+        "tasks": 3,
+        "tasks_with_warning": 3,
+        "kept_after_warning": 3,
+        "changed_after_warning": 0,
+        "accepted_alternative": 0,
+        "median_task_seconds": 5.8,
+        "sus_n": 1,
+        "sus_mean": 50.0
+      },
+      "G2": {
+        "participants": 1,
+        "tasks": 3,
+        "tasks_with_warning": 2,
+        "kept_after_warning": 2,
+        "changed_after_warning": 0,
+        "accepted_alternative": 0,
+        "median_task_seconds": 24.4,
+        "sus_n": 0,
+        "sus_mean": null
+      },
+      "G3": {
+        "participants": 2,
+        "tasks": 6,
+        "tasks_with_warning": 3,
+        "kept_after_warning": 2,
+        "changed_after_warning": 1,
+        "accepted_alternative": 0,
+        "median_task_seconds": 29.3,
+        "sus_n": 2,
+        "sus_mean": 68.8
+      },
+      "G4": {
+        "participants": 2,
+        "tasks": 6,
+        "tasks_with_warning": 3,
+        "kept_after_warning": 2,
+        "changed_after_warning": 1,
+        "accepted_alternative": 1,
+        "median_task_seconds": 33.0,
+        "sus_n": 2,
+        "sus_mean": 90.0
+      }
+    },
+    "all_conditions": {
+      "tasks": 18,
+      "tasks_with_warning": 11,
+      "kept_after_warning": 9,
+      "changed_after_warning": 2,
+      "sus_mean": 73.5
+    },
+    "stored_passwords": {
+      "participants": 2,
+      "final_passwords": 6,
+      "with_any_detected_issue": 1,
+      "issue_counts": {
+        "breach": 1,
+        "weak_structure": 1
+      },
+      "breach_listed": 1,
+      "recovered_by_s5_within_1000": 0,
+      "recovered_by_s6_within_1000": 0,
+      "first_attempts_warned": 2,
+      "edited_after_warning": 1,
+      "edits_ending_with_no_detected_issue": 1,
+      "g1_first_attempts_with_hidden_contextual_issue": 0
+    }
+  }
+}
